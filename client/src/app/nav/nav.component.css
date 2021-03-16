@@ -1,0 +1,12 @@
+#homeSpan {
+    cursor: pointer;
+}
+
+#homeSpan:focus {
+    outline: none;
+}
+
+/* dodao zbog materiala */
+.example-spacer {
+    flex: 1 1 auto;
+  }
