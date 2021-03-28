@@ -1,0 +1,21 @@
+<div fxLayoutAlign="center center">
+    <button mat-button (click)="openDialog()">
+        <mat-icon>add_circle</mat-icon> Add Crew
+    </button>
+</div>
+
+<div>
+    <mat-form-field fxFlex="100" appearance="fill">
+        <mat-label>Crew Id</mat-label>
+        <input disabled matInput formControlName='crewId'>
+    </mat-form-field>
+    <mat-form-field fxFlex="100" appearance="fill">
+        <mat-label>Crew Name</mat-label>
+        <input disabled matInput formControlName='crewName'>
+    </mat-form-field>
+    <mat-form-field fxFlex="100" appearance="fill">
+        <mat-label>Crew Members</mat-label>
+        <input disabled matInput formControlName='crewMembers'>
+    </mat-form-field>
+</div>
+

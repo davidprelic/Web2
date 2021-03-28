@@ -1,0 +1,90 @@
+<div fxLayoutAlign="center center">
+    <form [formGroup]="basicInfoForm" (ngSubmit)="basicInfoForm.valid && saveBasicInfo()" autocomplete="off" fxFlex="80" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Incident ID</mat-label>
+            <input matInput formControlName="id" value="INC00015" disabled>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Affected customers</mat-label>
+            <input matInput formControlName='affectedCustomers'>
+        </mat-form-field>
+        
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Type:</mat-label>
+            <mat-select formControlName="typeInc">
+              <mat-option value="plannedWork">Planned Work</mat-option>
+              <mat-option value="unplannedWork">Unplanned Work</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Outage time:</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName='outageTime'>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Priority:</mat-label>
+            <mat-select formControlName="priority">
+              <mat-option value="one">1</mat-option>
+              <mat-option value="two">2</mat-option>
+              <mat-option value="three">3</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>ETR:</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName='etr'>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-slide-toggle fxFlex="45" formControlName="confirmed">Confirmed</mat-slide-toggle>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Calls</mat-label>
+            <input matInput formControlName='calls'>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Status</mat-label>
+            <input matInput formControlName='status'>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Voltage [kV]</mat-label>
+            <input matInput formControlName='voltage'>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Description</mat-label>
+            <input matInput formControlName='description'>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>ETA:</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName='eta'>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>ATA:</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName='ata'>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Scheduled time:</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName='scheduledTime'>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        
+        <button [disabled]='!basicInfoForm.valid' fxFlex="30" mat-flat-button color="accent" type="submit">Save</button>
+        <button fxFlex="30" mat-flat-button color="warn" type="submit">Cancel</button>
+    </form>
+</div>

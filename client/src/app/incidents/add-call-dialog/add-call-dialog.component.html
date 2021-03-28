@@ -1,0 +1,34 @@
+<div fxLayoutAlign="center center">
+    <form [formGroup]="addCallForm" (ngSubmit)="addCallForm.valid && addCall()" autocomplete="off" fxFlex="80" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Reason:</mat-label>
+            <mat-select formControlName="reason">
+              <mat-option value="noElectricity">No electricity</mat-option>
+              <mat-option value="malfunction">There is a malfunction</mat-option>
+              <mat-option value="flickeringLights">Flickering lights</mat-option>
+              <mat-option value="powerBack">Power back</mat-option>
+              <mat-option value="partialCurrent">Partial current</mat-option>
+              <mat-option value="voltageProblems">Voltage problems</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Comment:</mat-label>
+            <input matInput formControlName="comment">
+        </mat-form-field>
+
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Hazard:</mat-label>
+            <input matInput formControlName='hazard'>
+        </mat-form-field>
+
+        <button (click)="openDialog()" fxFlex="60"  mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+            <mat-icon>person_add</mat-icon> Select customer
+        </button>
+        
+        <!-- <button [disabled]='!addCallForm.valid' fxFlex="30" mat-flat-button color="accent" type="submit">Add</button> -->
+        <button fxFlex="50" mat-flat-button color="warn" type="submit">Cancel</button>
+        <button fxFlex="50" mat-flat-button color="accent" type="submit">Add</button>
+    </form>
+    
+</div>
