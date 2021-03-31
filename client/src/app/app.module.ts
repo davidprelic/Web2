@@ -28,6 +28,13 @@ import { DeviceListDialogComponent } from './incidents/device-list-dialog/device
 import { CrewListDialogComponent } from './incidents/crew-list-dialog/crew-list-dialog.component';
 import { AddCallDialogComponent } from './incidents/add-call-dialog/add-call-dialog.component';
 import { SelectCustomerDialogComponent } from './incidents/select-customer-dialog/select-customer-dialog.component';
+import { WorkPlansListComponent } from './work-plans/work-plans-list/work-plans-list.component';
+import { NewWorkPlansComponent } from './work-plans/new-work-plans/new-work-plans.component';
+import { NewWorkPlansBasicInfoComponent } from './work-plans/new-work-plans-basic-info/new-work-plans-basic-info.component';
+import { NewWorkPlansHistoryComponent } from './work-plans/new-work-plans-history/new-work-plans-history.component';
+import { NewWorkPlansMultimediaComponent } from './work-plans/new-work-plans-multimedia/new-work-plans-multimedia.component';
+import { NewWorkPlansEquipmentComponent } from './work-plans/new-work-plans-equipment/new-work-plans-equipment.component';
+import { NewWorkPlansSwitchingInstructionsComponent } from './work-plans/new-work-plans-switching-instructions/new-work-plans-switching-instructions.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +60,13 @@ import { SelectCustomerDialogComponent } from './incidents/select-customer-dialo
     CrewListDialogComponent,
     AddCallDialogComponent,
     SelectCustomerDialogComponent,
+    WorkPlansListComponent,
+    NewWorkPlansComponent,
+    NewWorkPlansBasicInfoComponent,
+    NewWorkPlansHistoryComponent,
+    NewWorkPlansMultimediaComponent,
+    NewWorkPlansEquipmentComponent,
+    NewWorkPlansSwitchingInstructionsComponent,
   ],
   imports: [
     BrowserModule,

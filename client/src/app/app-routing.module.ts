@@ -8,6 +8,8 @@ import { MapComponent } from './map/map.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { ProfileComponent } from './profile/profile.component';
 import { SafetyDocsComponent } from './safety-docs/safety-docs.component';
+import { WorkPlansListComponent} from './work-plans/work-plans-list/work-plans-list.component';
+import { NewWorkPlansComponent} from './work-plans/new-work-plans/new-work-plans.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -18,6 +20,8 @@ const routes: Routes = [
   {path: 'dashboard/incidents', component: IncidentListComponent},
   {path: 'dashboard/incidents/new-incident', component: NewIncidentComponent},
   {path: 'dashboard/safety-docs', component: SafetyDocsComponent},
+  {path: 'dashboard/work-plans', component: WorkPlansListComponent},
+  {path: 'dashboard/work-plans/new-work-plans', component: NewWorkPlansComponent},
 ];
 
 @NgModule({
