@@ -1,6 +1,6 @@
 <div>
     <div class="dashboard" fxLayout="row wrap" fxLayoutGap="26px grid">
-        <div fxFlex="33%">
+        <div fxFlex="25%">
             <mat-card class="example-card">
                 <mat-card-header>
                     <div mat-card-avatar class="example-header-image"></div>
@@ -18,8 +18,27 @@
                 </mat-card-actions>
             </mat-card>
         </div>
+
+        <div fxFlex="25%">
+            <mat-card class="example-card">
+                <mat-card-header>
+                    <div mat-card-avatar class="example-header-image"></div>
+                    <mat-card-title routerLink="/dashboard/work-requests">MY REQUESTS</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <p>0 Drafts</p>
+                    <p>0 Canceled</p>
+                    <p>1 Executing</p>
+                    <p>2 Completed</p>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-button>LIKE</button>
+                    <button mat-button>SHARE</button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
         
-        <div fxFlex="33%">
+        <div fxFlex="25%">
             <mat-card class="example-card">
                 <mat-card-header>
                     <div mat-card-avatar class="example-header-image"></div>
@@ -38,7 +57,7 @@
             </mat-card>
         </div>
 
-        <div fxFlex="33%">
+        <div fxFlex="25%">
             <mat-card class="example-card">
                 <mat-card-header>
                     <div mat-card-avatar class="example-header-image"></div>
