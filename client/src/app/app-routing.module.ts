@@ -11,12 +11,16 @@ import { WorkPlansListComponent} from './work-plans/work-plans-list/work-plans-l
 import { NewWorkPlansComponent} from './work-plans/new-work-plans/new-work-plans.component';
 import { SafetyDocsListComponent } from './safety-docs/safety-docs-list/safety-docs-list.component';
 import { SafetyDocComponent } from './safety-docs/safety-doc/safety-doc.component';
+import { DevicesListComponent } from './devices/devices-list/devices-list.component';
+import { NewDeviceComponent } from './devices/new-device/new-device.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'notifications', component: NotificationsComponent},
   {path: 'map', component: MapComponent},
   {path: 'profile', component: ProfileComponent},
+  {path: 'devices', component: DevicesListComponent},
+  {path: 'devices/0', component: NewDeviceComponent},
   {path: 'dashboard', component: DashboardComponent},
   {path: 'dashboard/incidents', component: IncidentListComponent},
   {path: 'dashboard/incidents/new-incident', component: NewIncidentComponent},
