@@ -21,13 +21,9 @@
     <button mat-icon-button class="example-icon" routerLink="/" aria-label="Example icon-button with heart icon">
       <mat-icon>settings</mat-icon>
     </button>
-    <button mat-icon-button class="example-icon" routerLink="/" aria-label="Example icon-button with heart icon">
+    <button mat-icon-button class="example-icon" routerLink="/search-elements" aria-label="Example icon-button with heart icon">
       <mat-icon>search</mat-icon>
     </button>
-    <!-- <button mat-icon-button class="example-icon" routerLink="/" aria-label="Example icon-button with heart icon">
-      <mat-icon>add_box</mat-icon>
-    </button> -->
-
     <button mat-button [matMenuTriggerFor]="menu"><mat-icon>add_box</mat-icon></button>
     <mat-menu #menu="matMenu">
       <button routerLink="/devices" mat-menu-item>add devices</button>
