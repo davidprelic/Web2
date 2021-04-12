@@ -40,6 +40,8 @@ import { SafetyDocBasicInfoComponent } from './safety-docs/safety-doc-basic-info
 import { SafetyDocHistoryComponent } from './safety-docs/safety-doc-history/safety-doc-history.component';
 import { SafetyDocMultimediaComponent } from './safety-docs/safety-doc-multimedia/safety-doc-multimedia.component';
 import { SafetyDocChecklistComponent } from './safety-docs/safety-doc-checklist/safety-doc-checklist.component';
+import { DevicesListComponent } from './devices/devices-list/devices-list.component';
+import { NewDeviceComponent } from './devices/new-device/new-device.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +79,8 @@ import { SafetyDocChecklistComponent } from './safety-docs/safety-doc-checklist/
     SafetyDocHistoryComponent,
     SafetyDocMultimediaComponent,
     SafetyDocChecklistComponent,
+    DevicesListComponent,
+    NewDeviceComponent,
   ],
   imports: [
     BrowserModule,
