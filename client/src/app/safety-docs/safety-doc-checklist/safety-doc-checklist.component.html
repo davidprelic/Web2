@@ -1,0 +1,10 @@
+
+<div fxLayoutAlign="center center">
+    <form [formGroup]="checklistForm" (ngSubmit)="checklistForm.valid && saveBasicInfo()" autocomplete="off" fxFlex="20" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
+        <mat-slide-toggle fxFlex="100" formControlName="workOperationsCompleted">All work operations completed?</mat-slide-toggle>
+        <mat-slide-toggle fxFlex="100" formControlName="tagsRemoved">All tags removed?</mat-slide-toggle>
+        <mat-slide-toggle fxFlex="100" formControlName="groundingRemoved">Grounding removed?</mat-slide-toggle>
+        <mat-slide-toggle fxFlex="100" formControlName="readyForService">Ready for service?</mat-slide-toggle>
+    </form>
+</div>
+

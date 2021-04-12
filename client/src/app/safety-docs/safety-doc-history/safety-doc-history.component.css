@@ -1,0 +1,24 @@
+table {
+    width: 100%;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 20%;
+  }
+  
+  td, th {
+    width: 20%;
+  }
+
+  span {
+    margin-left: 200px;
+  }
+
+  /* mat-button-toggle-group {
+      margin-right: 20px;
+  }
+
+  #addNew {
+    margin-right: 20px;
+  } */

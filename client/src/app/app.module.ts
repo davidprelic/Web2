@@ -12,7 +12,6 @@ import { RegisterComponent } from './register/register.component';
 import { NavComponent } from './nav/nav.component';
 import { ProfileComponent } from './profile/profile.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { SafetyDocsComponent } from './safety-docs/safety-docs.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { MapComponent } from './map/map.component';
 import { IncidentListComponent } from './incidents/incident-list/incident-list.component';
@@ -35,6 +34,12 @@ import { NewWorkPlansHistoryComponent } from './work-plans/new-work-plans-histor
 import { NewWorkPlansMultimediaComponent } from './work-plans/new-work-plans-multimedia/new-work-plans-multimedia.component';
 import { NewWorkPlansEquipmentComponent } from './work-plans/new-work-plans-equipment/new-work-plans-equipment.component';
 import { NewWorkPlansSwitchingInstructionsComponent } from './work-plans/new-work-plans-switching-instructions/new-work-plans-switching-instructions.component';
+import { SafetyDocsListComponent } from './safety-docs/safety-docs-list/safety-docs-list.component';
+import { SafetyDocComponent } from './safety-docs/safety-doc/safety-doc.component';
+import { SafetyDocBasicInfoComponent } from './safety-docs/safety-doc-basic-info/safety-doc-basic-info.component';
+import { SafetyDocHistoryComponent } from './safety-docs/safety-doc-history/safety-doc-history.component';
+import { SafetyDocMultimediaComponent } from './safety-docs/safety-doc-multimedia/safety-doc-multimedia.component';
+import { SafetyDocChecklistComponent } from './safety-docs/safety-doc-checklist/safety-doc-checklist.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +49,6 @@ import { NewWorkPlansSwitchingInstructionsComponent } from './work-plans/new-wor
     NavComponent,
     ProfileComponent,
     DashboardComponent,
-    SafetyDocsComponent,
     NotificationsComponent,
     MapComponent,
     IncidentListComponent,
@@ -67,6 +71,12 @@ import { NewWorkPlansSwitchingInstructionsComponent } from './work-plans/new-wor
     NewWorkPlansMultimediaComponent,
     NewWorkPlansEquipmentComponent,
     NewWorkPlansSwitchingInstructionsComponent,
+    SafetyDocsListComponent,
+    SafetyDocComponent,
+    SafetyDocBasicInfoComponent,
+    SafetyDocHistoryComponent,
+    SafetyDocMultimediaComponent,
+    SafetyDocChecklistComponent,
   ],
   imports: [
     BrowserModule,
