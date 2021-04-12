@@ -13,12 +13,14 @@ import { SafetyDocsListComponent } from './safety-docs/safety-docs-list/safety-d
 import { SafetyDocComponent } from './safety-docs/safety-doc/safety-doc.component';
 import { DevicesListComponent } from './devices/devices-list/devices-list.component';
 import { NewDeviceComponent } from './devices/new-device/new-device.component';
+import { SearchElementsComponent } from './search-elements/search-elements.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'notifications', component: NotificationsComponent},
   {path: 'map', component: MapComponent},
   {path: 'profile', component: ProfileComponent},
+  {path: 'search-elements', component: SearchElementsComponent},
   {path: 'devices', component: DevicesListComponent},
   {path: 'devices/0', component: NewDeviceComponent},
   {path: 'dashboard', component: DashboardComponent},
