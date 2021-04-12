@@ -1,0 +1,64 @@
+<div fxLayoutAlign="center center">
+    <form [formGroup]="basicInfoForm" (ngSubmit)="basicInfoForm.valid && saveBasicInfo()" autocomplete="off" fxFlex="80" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Type:</mat-label>
+            <mat-select formControlName="type">
+              <mat-option value="plannedWork">Planned Work</mat-option>
+              <mat-option value="unplannedWork">Unplanned Work</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Status</mat-label>
+            <input matInput formControlName='status'>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Switching plan</mat-label>
+            <input matInput formControlName="planId" value="SP150" disabled>
+        </mat-form-field>
+
+        <!-- <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Safety doc type:</mat-label>
+            <mat-select formControlName="safetyDocType">
+              <mat-option value="clearance">Clearance</mat-option>
+              <mat-option value="clearance2">Clearance2</mat-option>
+            </mat-select>
+        </mat-form-field> -->
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Date/time created:</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName='dateTimeCreated'>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Created By:</mat-label>
+            <input matInput formControlName='createdBy' value="Peter_Peterson" disabled>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Details:</mat-label>
+            <input matInput formControlName='details'>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Notes:</mat-label>
+            <input matInput formControlName='notes'>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Phone No:</mat-label>
+            <input matInput formControlName='phoneNo'>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="75" appearance="fill">
+            <mat-label>Field crew:</mat-label>
+            <input matInput formControlName='fieldCrew' value="NS_Crew" disabled>
+        </mat-form-field>
+        
+        <button [disabled]='!basicInfoForm.valid' fxFlex="30" mat-flat-button color="accent" type="submit">Save</button>
+        <button fxFlex="30" mat-flat-button color="warn" type="submit">Cancel</button>
+    </form>
+</div>
