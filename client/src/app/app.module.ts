@@ -43,6 +43,11 @@ import { SafetyDocChecklistComponent } from './safety-docs/safety-doc-checklist/
 import { DevicesListComponent } from './devices/devices-list/devices-list.component';
 import { NewDeviceComponent } from './devices/new-device/new-device.component';
 import { SearchElementsComponent } from './search-elements/search-elements.component';
+import { WorkRequestListComponent } from './work-requests/work-request-list/work-request-list.component';
+import { WorkRequestComponent } from './work-requests/work-request/work-request.component';
+import { WorkRequestBasicInfoComponent } from './work-requests/work-request-basic-info/work-request-basic-info.component';
+import { WorkRequestHistoryComponent } from './work-requests/work-request-history/work-request-history.component';
+import { WorkRequestMultimediaComponent } from './work-requests/work-request-multimedia/work-request-multimedia.component';
 
 @NgModule({
   declarations: [
@@ -83,6 +88,11 @@ import { SearchElementsComponent } from './search-elements/search-elements.compo
     DevicesListComponent,
     NewDeviceComponent,
     SearchElementsComponent,
+    WorkRequestListComponent,
+    WorkRequestComponent,
+    WorkRequestBasicInfoComponent,
+    WorkRequestHistoryComponent,
+    WorkRequestMultimediaComponent,
   ],
   imports: [
     BrowserModule,
