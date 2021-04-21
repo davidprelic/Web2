@@ -48,6 +48,9 @@ import { WorkRequestComponent } from './work-requests/work-request/work-request.
 import { WorkRequestBasicInfoComponent } from './work-requests/work-request-basic-info/work-request-basic-info.component';
 import { WorkRequestHistoryComponent } from './work-requests/work-request-history/work-request-history.component';
 import { WorkRequestMultimediaComponent } from './work-requests/work-request-multimedia/work-request-multimedia.component';
+import { CrewsListComponent } from './crews/crews-list/crews-list.component';
+import { NewCrewComponent } from './crews/new-crew/new-crew.component';
+import { SelectMembersDialogComponent } from './crews/select-members-dialog/select-members-dialog.component';
 
 @NgModule({
   declarations: [
@@ -93,6 +96,9 @@ import { WorkRequestMultimediaComponent } from './work-requests/work-request-mul
     WorkRequestBasicInfoComponent,
     WorkRequestHistoryComponent,
     WorkRequestMultimediaComponent,
+    CrewsListComponent,
+    NewCrewComponent,
+    SelectMembersDialogComponent,
   ],
   imports: [
     BrowserModule,

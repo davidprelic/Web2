@@ -1,0 +1,21 @@
+
+<h1 fxLayoutAlign="center center">Add new crew</h1>
+<div id="register" fxLayoutAlign="center center">
+    <form [formGroup]="newCrewForm" (ngSubmit)="newCrewForm.valid && add()" autocomplete="off" fxFlex="40" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Name</mat-label>
+            <input matInput placeholder="PRE1" formControlName="name">
+        </mat-form-field>
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Id</mat-label>
+            <input matInput formControlName="id">
+        </mat-form-field>
+        
+        <button (click)="openDialog()" fxFlex="60"  mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+            <mat-icon>person_add</mat-icon> Select members
+        </button>
+        
+        <button fxFlex="45" mat-raised-button color="warn" (click)="cancel()">Cancel</button>
+        <button [disabled]='!newCrewForm.valid' fxFlex="45" mat-flat-button color="accent" type="submit">Add</button>
+    </form>
+</div>
