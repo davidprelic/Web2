@@ -14,6 +14,8 @@ import { SafetyDocComponent } from './safety-docs/safety-doc/safety-doc.componen
 import { DevicesListComponent } from './devices/devices-list/devices-list.component';
 import { NewDeviceComponent } from './devices/new-device/new-device.component';
 import { SearchElementsComponent } from './search-elements/search-elements.component';
+import { WorkRequestListComponent } from './work-requests/work-request-list/work-request-list.component';
+import { WorkRequestComponent } from './work-requests/work-request/work-request.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -30,6 +32,8 @@ const routes: Routes = [
   {path: 'dashboard/safety-docs/0', component: SafetyDocComponent},
   {path: 'dashboard/work-plans', component: WorkPlansListComponent},
   {path: 'dashboard/work-plans/new-work-plans', component: NewWorkPlansComponent},
+  {path: 'dashboard/work-requests', component: WorkRequestListComponent},
+  {path: 'dashboard/work-requests/0', component: WorkRequestComponent},
 ];
 
 @NgModule({
