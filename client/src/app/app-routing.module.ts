@@ -16,6 +16,8 @@ import { NewDeviceComponent } from './devices/new-device/new-device.component';
 import { SearchElementsComponent } from './search-elements/search-elements.component';
 import { WorkRequestListComponent } from './work-requests/work-request-list/work-request-list.component';
 import { WorkRequestComponent } from './work-requests/work-request/work-request.component';
+import { CrewsListComponent } from './crews/crews-list/crews-list.component';
+import { NewCrewComponent } from './crews/new-crew/new-crew.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -25,6 +27,8 @@ const routes: Routes = [
   {path: 'search-elements', component: SearchElementsComponent},
   {path: 'devices', component: DevicesListComponent},
   {path: 'devices/0', component: NewDeviceComponent},
+  {path: 'crews', component: CrewsListComponent},
+  {path: 'crews/0', component: NewCrewComponent},
   {path: 'dashboard', component: DashboardComponent},
   {path: 'dashboard/incidents', component: IncidentListComponent},
   {path: 'dashboard/incidents/new-incident', component: NewIncidentComponent},
