@@ -1,0 +1,41 @@
+
+<h1 fxLayoutAlign="center center">Add new consumer</h1>
+<div id="register" fxLayoutAlign="center center">
+    <form [formGroup]="newConsumerForm" (ngSubmit)="newConsumerForm.valid && add()" autocomplete="off" fxFlex="40" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Id</mat-label>
+            <input matInput formControlName="id">
+        </mat-form-field> 
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="firstName">
+        </mat-form-field>
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="lastName">
+        </mat-form-field>
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Address</mat-label>
+            <input matInput formControlName="address">
+        </mat-form-field>  
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Type:</mat-label>
+            <mat-select formControlName="type">
+              <mat-option value="Residental">Residental</mat-option>
+              <mat-option value="Commercial">Commercial</mat-option>
+            </mat-select>
+        </mat-form-field> 
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Phone Number</mat-label>
+            <input matInput formControlName="number">
+        </mat-form-field> 
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Priority</mat-label>
+            <input matInput formControlName="priority">
+        </mat-form-field> 
+        
+        
+        <button fxFlex="45" mat-raised-button color="warn" (click)="cancel()">Cancel</button>
+        <button [disabled]='!newConsumerForm.valid' fxFlex="45" mat-flat-button color="accent" type="submit">Add</button>
+    </form>
+</div>
