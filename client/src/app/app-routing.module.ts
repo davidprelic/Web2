@@ -18,13 +18,17 @@ import { WorkRequestListComponent } from './work-requests/work-request-list/work
 import { WorkRequestComponent } from './work-requests/work-request/work-request.component';
 import { CrewsListComponent } from './crews/crews-list/crews-list.component';
 import { NewCrewComponent } from './crews/new-crew/new-crew.component';
+
+import { MapViewComponent } from './map-view/map-view.component';
+
 import { ConsumersListComponent } from './consumers/consumers-list/consumers-list.component';
 import { NewConsumerComponent } from './consumers/new-consumer/new-consumer.component';
+
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'notifications', component: NotificationsComponent},
-  {path: 'map', component: MapComponent},
+  {path: 'map', component: MapViewComponent},
   {path: 'profile', component: ProfileComponent},
   {path: 'search-elements', component: SearchElementsComponent},
   {path: 'devices', component: DevicesListComponent},
