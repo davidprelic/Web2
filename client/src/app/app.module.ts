@@ -51,6 +51,10 @@ import { WorkRequestMultimediaComponent } from './work-requests/work-request-mul
 import { CrewsListComponent } from './crews/crews-list/crews-list.component';
 import { NewCrewComponent } from './crews/new-crew/new-crew.component';
 import { SelectMembersDialogComponent } from './crews/select-members-dialog/select-members-dialog.component';
+import { AddSwitchingInstructionComponent } from './work-plans/add-switching-instruction/add-switching-instruction.component';
+import { SelectDeviceDialogComponent } from './work-plans/select-device-dialog/select-device-dialog.component';
+import { ConsumersListComponent } from './consumers/consumers-list/consumers-list.component';
+import { NewConsumerComponent } from './consumers/new-consumer/new-consumer.component';
 
 @NgModule({
   declarations: [
@@ -99,6 +103,10 @@ import { SelectMembersDialogComponent } from './crews/select-members-dialog/sele
     CrewsListComponent,
     NewCrewComponent,
     SelectMembersDialogComponent,
+    AddSwitchingInstructionComponent,
+    SelectDeviceDialogComponent,
+    ConsumersListComponent,
+    NewConsumerComponent,
   ],
   imports: [
     BrowserModule,

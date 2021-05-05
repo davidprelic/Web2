@@ -1,1 +1,25 @@
-<p>new-work-plans-switching-instructions works!</p>
+<div fxLayoutAlign="space-around center">
+    <button id="addNew" mat-raised-button (click)="openDialog()">
+        <mat-icon>add_circle</mat-icon>
+    </button>
+
+    <button id="addNew" mat-raised-button>
+        <mat-icon>delete</mat-icon>
+    </button>
+
+    <button id="addNew" mat-raised-button>
+        <mat-icon>delete_sweep</mat-icon>
+    </button>
+
+    <button id="addNew" mat-raised-button>
+        <mat-icon>check_circle_outline</mat-icon>
+    </button>
+</div>
+
+<div fxLayout="column" fxLayoutAlign="center center" >
+    <mat-selection-list #shoes [multiple]="false">
+        <mat-list-option *ngFor="let shoe of typesOfShoes" [value]="shoe">
+          {{shoe}}
+        </mat-list-option>
+      </mat-selection-list>     
+</div>

@@ -1,0 +1,17 @@
+<div fxLayoutAlign="center center">
+    <form [formGroup]="addInstructionForm" (ngSubmit)="addInstructionForm.valid && addInstruction()" autocomplete="off" fxFlex="80" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">       
+        <button (click)="openDialog()" fxFlex="60"  mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+            <mat-icon>extension</mat-icon> Select equipment
+        </button>
+
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Comment:</mat-label>
+            <input matInput formControlName="comment">
+        </mat-form-field>
+        
+        <!-- <button [disabled]='!addCallForm.valid' fxFlex="30" mat-flat-button color="accent" type="submit">Add</button> -->
+        <button fxFlex="50" mat-flat-button color="warn" type="submit">Cancel</button>
+        <button fxFlex="50" mat-flat-button color="accent" type="submit">Add</button>
+    </form>
+    
+</div>
