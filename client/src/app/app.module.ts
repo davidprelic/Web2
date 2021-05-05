@@ -51,6 +51,8 @@ import { WorkRequestMultimediaComponent } from './work-requests/work-request-mul
 import { CrewsListComponent } from './crews/crews-list/crews-list.component';
 import { NewCrewComponent } from './crews/new-crew/new-crew.component';
 import { SelectMembersDialogComponent } from './crews/select-members-dialog/select-members-dialog.component';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { MapViewComponent } from './map-view/map-view.component';
 
 @NgModule({
   declarations: [
@@ -99,6 +101,7 @@ import { SelectMembersDialogComponent } from './crews/select-members-dialog/sele
     CrewsListComponent,
     NewCrewComponent,
     SelectMembersDialogComponent,
+    MapViewComponent,
   ],
   imports: [
     BrowserModule,
@@ -107,7 +110,8 @@ import { SelectMembersDialogComponent } from './crews/select-members-dialog/sele
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    LeafletModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
