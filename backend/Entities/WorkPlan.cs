@@ -1,0 +1,39 @@
+using System;
+using System.Collections.Generic;
+
+namespace backend.Entities
+{
+    public class WorkPlan
+    {
+        public int Id { get; set; }
+        public string Type { get; set; }
+        public string Status { get; set; }
+        public string Address { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
+        public DateTime? StartDateTime { get; set; }
+        public DateTime? EndDateTime { get; set; }
+        public string Purpose { get; set; }
+        public string Notes { get; set; }
+        public string Company { get; set; }
+        public string PhoneNumber { get; set; }
+        public DateTime DateTimeCreated { get; set; } = DateTime.Now;
+        public int CreatedBy { get; set; }
+
+
+        public int? WorkRequestId { get; set; }
+        public WorkRequest WorkRequest { get; set; }
+
+        public int? CrewId { get; set; }
+        public Crew Crew { get; set; }
+        
+        public int? IncidentId { get; set; }
+        public Incident Incident { get; set; }
+
+        public ICollection<HistoryOfWorkPlanStateChange> HistoryOfWorkPlanStateChanges { get; set; }
+        public ICollection<WorkPlanPhoto> Photos { get; set; }
+        public ICollection<WorkInstruction> WorkInstructions { get; set; }  
+        public ICollection<SafetyDocument> SafetyDocuments { get; set; }
+
+    }
+}
