@@ -1,20 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Fax\\WEB\\Web2\\backend\\backend.csproj": {}
+    "C:\\Users\\David\\Desktop\\PROJEKTI 2020\\Web2 projekat\\backend\\backend.csproj": {}
   },
   "projects": {
-    "D:\\Fax\\WEB\\Web2\\backend\\backend.csproj": {
+    "C:\\Users\\David\\Desktop\\PROJEKTI 2020\\Web2 projekat\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Fax\\WEB\\Web2\\backend\\backend.csproj",
+        "projectUniqueName": "C:\\Users\\David\\Desktop\\PROJEKTI 2020\\Web2 projekat\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "D:\\Fax\\WEB\\Web2\\backend\\backend.csproj",
-        "packagesPath": "C:\\Users\\Krstici\\.nuget\\packages\\",
-        "outputPath": "D:\\Fax\\WEB\\Web2\\backend\\obj\\",
+        "projectPath": "C:\\Users\\David\\Desktop\\PROJEKTI 2020\\Web2 projekat\\backend\\backend.csproj",
+        "packagesPath": "C:\\Users\\David\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\David\\Desktop\\PROJEKTI 2020\\Web2 projekat\\backend\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Krstici\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\David\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +25,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\Microsoft SDKs\\Azure\\.NET SDK\\v2.9\\packages": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -40,10 +44,6 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
-            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
-              "target": "Package",
-              "version": "[8.1.1, )"
-            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[5.0.7, )"
@@ -93,7 +93,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.200\\RuntimeIdentifierGraph.json"
         }
       }
     }
