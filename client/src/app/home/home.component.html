@@ -1,21 +1,23 @@
 <div fxLayoutAlign="center center">
     <div *ngIf="!registerMode" class="loginDiv" fxFlex="30" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center" >
         <h1>TESLA Distribution</h1>
-        <mat-form-field fxFlex="100" appearance="fill">
-          <mat-label>Enter your email</mat-label>
-          <input matInput placeholder="pat@example.com" [formControl]="email" required>
-          <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
-        </mat-form-field>
-        <mat-form-field fxFlex="100" appearance="fill">
-            <mat-label>Enter your password</mat-label>
-            <input matInput [type]="hide ? 'password' : 'text'">
-            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button>
-        </mat-form-field>
-        <button fxFlex="100" mat-flat-button color="accent">Login</button>
-        <button (click)="registerToggle()" fxFlex="100" mat-button color="accent">Create account</button>
-        <button fxFlex="100" mat-raised-button color="warn"><mat-icon>call</mat-icon> Report outage</button>
+        <form *ngIf="(accountService.currentUser$ | async) === null" fxFlex="100" fxFlex.lt-lg="100" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center" #loginForm="ngForm" (ngSubmit)="login()" autocomplete="off">
+          <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Enter your email</mat-label>
+            <input matInput required name="email" placeholder="pat@example.com" [(ngModel)]="model.email" required>
+            <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+          </mat-form-field>
+          <mat-form-field fxFlex="100" appearance="fill">
+              <mat-label>Enter your password</mat-label>
+              <input matInput required name="password" [(ngModel)]="model.password" [type]="hide ? 'password' : 'text'">
+              <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+          </mat-form-field>
+          <button fxFlex="100" [disabled]='!loginForm.valid' mat-flat-button color="accent" type="submit">Login</button>
+        </form>
+        <button *ngIf="(accountService.currentUser$ | async) === null" (click)="registerToggle()" fxFlex="100" mat-button color="accent">Create account</button>
+        <button fxFlex="100" routerLink="/report-outage" mat-raised-button color="warn"><mat-icon>call</mat-icon> Report outage</button>
       </div>
 
       <div *ngIf="registerMode">

@@ -2,3 +2,8 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+button.active {
+    border-bottom: 4px solid #C0C0C0;
+    position: relative;
+}

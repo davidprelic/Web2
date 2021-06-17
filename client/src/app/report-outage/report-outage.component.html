@@ -1,0 +1,37 @@
+<div id="reportOutage" fxLayoutAlign="center center">
+    <form [formGroup]="reportOutageForm" (ngSubmit)="reportOutageForm.valid && report()" autocomplete="off" fxFlex="40" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
+        <h1>Report outage</h1>
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Enter your email</mat-label>
+            <input matInput placeholder="pat@example.com" formControlName="email" required>
+            <mat-error>{{getErrorMessage('email')}}</mat-error>
+        </mat-form-field>
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Address</mat-label>
+            <input matInput formControlName='address'>
+            <mat-error>{{getErrorMessage('address')}}</mat-error>
+        </mat-form-field>
+        
+            
+        <input hidden="true" matInput formControlName='latitude'>
+        
+        <input hidden="true" matInput formControlName='longitude'>
+        
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Reason</mat-label>
+            <input matInput formControlName='reason'>
+            <mat-error>{{getErrorMessage('reason')}}</mat-error>
+        </mat-form-field>
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Hazard</mat-label>
+            <input matInput formControlName='hazard'>
+            <mat-error>{{getErrorMessage('hazard')}}</mat-error>
+        </mat-form-field>
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Comment</mat-label>
+            <input matInput formControlName='comment'>
+            <mat-error>{{getErrorMessage('comment')}}</mat-error>
+        </mat-form-field>
+        <button [disabled]='!reportOutageForm.valid' fxFlex="100" mat-flat-button color="warn" type="submit">Report</button>
+    </form>
+</div>

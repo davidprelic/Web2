@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AccountService } from '../_services/account.service';
 
 @Component({
   selector: 'app-home',
@@ -10,8 +12,9 @@ export class HomeComponent implements OnInit {
   email = new FormControl('', [Validators.required, Validators.email]);
   hide = true;
   registerMode = false;
+  model: any = {}
 
-  constructor() { }
+  constructor(public accountService: AccountService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -30,6 +33,17 @@ export class HomeComponent implements OnInit {
   
   cancelRegisterMode(event: boolean) {
     this.registerMode = event;
+  }
+
+  login() {
+    this.accountService.login(this.model).subscribe(response => {
+      this.router.navigateByUrl('/dashboard');
+    })
+  }
+
+  logout() {
+    this.accountService.logout();
+    this.router.navigateByUrl('/');
   }
 
 }
