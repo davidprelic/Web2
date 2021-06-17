@@ -23,29 +23,40 @@ import { MapViewComponent } from './map-view/map-view.component';
 
 import { ConsumersListComponent } from './consumers/consumers-list/consumers-list.component';
 import { NewConsumerComponent } from './consumers/new-consumer/new-consumer.component';
+import { AuthGuard } from './_guards/auth.guard';
+import { ReportOutageComponent } from './report-outage/report-outage.component';
 
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
-  {path: 'notifications', component: NotificationsComponent},
-  {path: 'map', component: MapViewComponent},
-  {path: 'profile', component: ProfileComponent},
-  {path: 'search-elements', component: SearchElementsComponent},
-  {path: 'devices', component: DevicesListComponent},
-  {path: 'devices/0', component: NewDeviceComponent},
-  {path: 'crews', component: CrewsListComponent},
-  {path: 'crews/0', component: NewCrewComponent},
-  {path: 'consumers', component: ConsumersListComponent},
-  {path: 'consumers/0', component: NewConsumerComponent},
-  {path: 'dashboard', component: DashboardComponent},
-  {path: 'dashboard/incidents', component: IncidentListComponent},
-  {path: 'dashboard/incidents/new-incident', component: NewIncidentComponent},
-  {path: 'dashboard/safety-docs', component: SafetyDocsListComponent},
-  {path: 'dashboard/safety-docs/0', component: SafetyDocComponent},
-  {path: 'dashboard/work-plans', component: WorkPlansListComponent},
-  {path: 'dashboard/work-plans/new-work-plans', component: NewWorkPlansComponent},
-  {path: 'dashboard/work-requests', component: WorkRequestListComponent},
-  {path: 'dashboard/work-requests/0', component: WorkRequestComponent},
+  {path: 'report-outage', component: ReportOutageComponent},
+  {
+    path: '',
+    runGuardsAndResolvers: 'always',
+    canActivate: [AuthGuard],
+    children: [
+      {path: 'notifications', component: NotificationsComponent},
+      {path: 'map', component: MapViewComponent},
+      {path: 'profile', component: ProfileComponent},
+      {path: 'search-elements', component: SearchElementsComponent},
+      {path: 'devices', component: DevicesListComponent},
+      {path: 'devices/0', component: NewDeviceComponent},
+      {path: 'crews', component: CrewsListComponent},
+      {path: 'crews/0', component: NewCrewComponent},
+      {path: 'consumers', component: ConsumersListComponent},
+      {path: 'consumers/0', component: NewConsumerComponent},
+      {path: 'dashboard', component: DashboardComponent},
+      {path: 'dashboard/incidents', component: IncidentListComponent},
+      {path: 'dashboard/incidents/new-incident', component: NewIncidentComponent},
+      {path: 'dashboard/safety-docs', component: SafetyDocsListComponent},
+      {path: 'dashboard/safety-docs/0', component: SafetyDocComponent},
+      {path: 'dashboard/work-plans', component: WorkPlansListComponent},
+      {path: 'dashboard/work-plans/new-work-plans', component: NewWorkPlansComponent},
+      {path: 'dashboard/work-requests', component: WorkRequestListComponent},
+      {path: 'dashboard/work-requests/0', component: WorkRequestComponent},
+    ]
+  },
+  
 ];
 
 @NgModule({

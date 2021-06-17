@@ -59,6 +59,8 @@ import { AddSwitchingInstructionComponent } from './work-plans/add-switching-ins
 import { SelectDeviceDialogComponent } from './work-plans/select-device-dialog/select-device-dialog.component';
 import { ConsumersListComponent } from './consumers/consumers-list/consumers-list.component';
 import { NewConsumerComponent } from './consumers/new-consumer/new-consumer.component';
+import { HttpClientModule } from '@angular/common/http';
+import { ReportOutageComponent } from './report-outage/report-outage.component';
 
 
 @NgModule({
@@ -115,17 +117,19 @@ import { NewConsumerComponent } from './consumers/new-consumer/new-consumer.comp
     SelectDeviceDialogComponent,
     ConsumersListComponent,
     NewConsumerComponent,
+    ReportOutageComponent,
 
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule,
-    LeafletModule,
+    LeafletModule
   ],
   providers: [],
   bootstrap: [AppComponent]
