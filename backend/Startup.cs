@@ -44,6 +44,8 @@ namespace backend
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "backend", Version = "v1" });
             });
             services.AddIdentityServices(_config);
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

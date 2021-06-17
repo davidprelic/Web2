@@ -5742,23 +5742,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\David\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\Krstici\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\David\\Desktop\\PROJEKTI 2020\\Web2 projekat\\backend\\backend.csproj",
+      "projectUniqueName": "D:\\Fax\\WEB\\Web2\\backend\\backend.csproj",
       "projectName": "backend",
-      "projectPath": "C:\\Users\\David\\Desktop\\PROJEKTI 2020\\Web2 projekat\\backend\\backend.csproj",
-      "packagesPath": "C:\\Users\\David\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\David\\Desktop\\PROJEKTI 2020\\Web2 projekat\\backend\\obj\\",
+      "projectPath": "D:\\Fax\\WEB\\Web2\\backend\\backend.csproj",
+      "packagesPath": "C:\\Users\\Krstici\\.nuget\\packages\\",
+      "outputPath": "D:\\Fax\\WEB\\Web2\\backend\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\David\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Krstici\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5766,7 +5762,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\Microsoft SDKs\\Azure\\.NET SDK\\v2.9\\packages": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -5838,7 +5833,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.200\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   }
