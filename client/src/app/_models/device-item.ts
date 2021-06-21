@@ -1,4 +1,5 @@
-export interface Device {
+export interface DeviceItem {
+    id: number;
     type: string;
     name: string;
     address: string;

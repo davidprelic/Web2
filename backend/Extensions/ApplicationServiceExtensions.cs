@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
 using backend.Helpers;
+using backend.Data.Repo;
 
 namespace backend.Extensions
 {
@@ -15,6 +16,7 @@ namespace backend.Extensions
         {
             services.AddScoped<ITokenService, TokenService>();
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
+            services.AddScoped<IDeviceRepository, DeviceRepository>();
             services.AddDbContext<DataContext>(options =>
             {
                 options.UseSqlServer(config.GetConnectionString("DefaultConnection"));

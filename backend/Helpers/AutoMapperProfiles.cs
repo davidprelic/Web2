@@ -9,6 +9,9 @@ namespace backend.Helpers
         public AutoMapperProfiles()
         {
             CreateMap<RegisterDto, User>();
+            CreateMap<CreateDeviceDto, Device>();
+            CreateMap<DeviceUpdateDto, Device>();
+            CreateMap<Device, DeviceDto>();
             CreateMap<Customer, ConsumerDto>().ReverseMap();
         }
     }

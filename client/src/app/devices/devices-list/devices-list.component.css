@@ -18,3 +18,11 @@ table {
   #addNew {
     margin-right: 20px;
   }
+
+  .smallField {
+    width: 10%;
+  }
+
+  .mapField {
+    width: 5%;
+  }
