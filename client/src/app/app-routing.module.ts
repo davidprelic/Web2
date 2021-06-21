@@ -25,6 +25,7 @@ import { ConsumersListComponent } from './consumers/consumers-list/consumers-lis
 import { NewConsumerComponent } from './consumers/new-consumer/new-consumer.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { ReportOutageComponent } from './report-outage/report-outage.component';
+import { DeviceDetailsComponent } from './devices/device-details/device-details.component';
 
 
 const routes: Routes = [
@@ -41,6 +42,7 @@ const routes: Routes = [
       {path: 'search-elements', component: SearchElementsComponent},
       {path: 'devices', component: DevicesListComponent},
       {path: 'devices/0', component: NewDeviceComponent},
+      {path: 'devices/:id', component: DeviceDetailsComponent},
       {path: 'crews', component: CrewsListComponent},
       {path: 'crews/0', component: NewCrewComponent},
       {path: 'consumers', component: ConsumersListComponent},
