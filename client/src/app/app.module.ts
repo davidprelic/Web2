@@ -42,7 +42,6 @@ import { SafetyDocMultimediaComponent } from './safety-docs/safety-doc-multimedi
 import { SafetyDocChecklistComponent } from './safety-docs/safety-doc-checklist/safety-doc-checklist.component';
 import { DevicesListComponent } from './devices/devices-list/devices-list.component';
 import { NewDeviceComponent } from './devices/new-device/new-device.component';
-import { SearchElementsComponent } from './search-elements/search-elements.component';
 import { WorkRequestListComponent } from './work-requests/work-request-list/work-request-list.component';
 import { WorkRequestComponent } from './work-requests/work-request/work-request.component';
 import { WorkRequestBasicInfoComponent } from './work-requests/work-request-basic-info/work-request-basic-info.component';
@@ -102,7 +101,6 @@ import { DeviceDetailsComponent } from './devices/device-details/device-details.
     SafetyDocChecklistComponent,
     DevicesListComponent,
     NewDeviceComponent,
-    SearchElementsComponent,
     WorkRequestListComponent,
     WorkRequestComponent,
     WorkRequestBasicInfoComponent,

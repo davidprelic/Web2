@@ -9,6 +9,35 @@
       <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
     </mat-form-field>
   </div>
+
+  <form [formGroup]="searchForm" fxLayoutAlign="space-around center">
+    <mat-form-field fxFlex="15">
+        <mat-label>Type</mat-label>
+        <input matInput formControlName="type" placeholder="Ex. Fuse" #input>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="15">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" placeholder="Ex. PRE1" #input>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="15">
+        <mat-label>Address</mat-label>
+        <input matInput formControlName="address" placeholder="Ex. Narodnog fronta" #input>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="15">
+        <mat-label>Latitude</mat-label>
+        <input matInput formControlName="latitude" placeholder="Ex. 123456" #input>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="15">
+      <mat-label>Longitude</mat-label>
+      <input matInput formControlName="longitude" placeholder="Ex. 123456" #input>
+  </mat-form-field>
+
+    <button fxFlex="15" (click)="applySearch()" mat-flat-button color="accent" type="submit">Search</button>
+  </form>
     
     <div class="mat-elevation-z8">
       <table mat-table [dataSource]="dataSource" matSort>

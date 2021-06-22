@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Device } from '../_models/device';
 import { DeviceItem } from '../_models/device-item';
 import { DeviceUpdate } from '../_models/device-update';
@@ -10,7 +11,7 @@ import { DeviceUpdate } from '../_models/device-update';
 export class DeviceService {
   baseUrl = 'https://localhost:5001/api/';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   addNewDevice(model: Device) {
     return this.http.post<Device>(this.baseUrl + 'device', model);
@@ -18,6 +19,20 @@ export class DeviceService {
 
   getDevices() {
     return this.http.get<DeviceItem[]>(this.baseUrl + 'device')
+  }
+
+  getDevicesAfterSearch(model: Device) {
+    let params = new HttpParams();
+    params = params.append("type", model.type);
+    params = params.append("name", model.name);
+    params = params.append("address", model.address);
+    params = params.append("latitude", model.latitude.toString());
+    params = params.append("longitude", model.longitude.toString());
+
+    this.router.navigate(['/devices'], { queryParams: { type: model.type, name: model.name, address: model.address, 
+                                                        latitude: model.latitude, longitude: model.longitude } });
+
+    return this.http.get<DeviceItem[]>(this.baseUrl + 'device/search', {params: params});
   }
 
   getDeviceById(id: number) {
@@ -31,5 +46,16 @@ export class DeviceService {
   deleteDevice(id: number) {
     return this.http.delete(this.baseUrl + 'device/' + id);
   }
+
+  private toQueryString(query): string {
+    var parts = [];
+    for (var property in query) {
+      var value = query[property];
+      if (value != null && value != undefined)
+         parts.push(encodeURIComponent(property) + '=' + encodeURIComponent(value))
+    }
+    
+    return parts.join('&');
+ }
 
 }

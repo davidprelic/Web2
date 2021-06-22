@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using backend.DTOs;
 using backend.Entities;
+using backend.Helpers;
 using backend.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,6 +43,29 @@ namespace backend.Controllers
 
             return Ok(finalDevices);
         }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<Device>>> GetDevicesSearch([FromQuery]DeviceSearchParameters deviceParams)
+        {
+            var devices = await _deviceRepository.GetDevicesAsync();
+            
+            if (!String.IsNullOrWhiteSpace(deviceParams.Type))
+                devices = devices.Where(d => d.Type.ToLower().Contains(deviceParams.Type.Trim().ToLower()));
+            if (!String.IsNullOrWhiteSpace(deviceParams.Name))
+                devices = devices.Where(d => d.Name.ToLower().Contains(deviceParams.Name.Trim().ToLower()));
+            if (!String.IsNullOrWhiteSpace(deviceParams.Address))
+                devices = devices.Where(d => d.Address.ToLower().Contains(deviceParams.Address.Trim().ToLower()));
+
+            if (deviceParams.Latitude != null)
+                devices = devices.Where(d => d.Latitude == deviceParams.Latitude);
+
+            if (deviceParams.Longitude != null)
+                devices = devices.Where(d => d.Longitude == deviceParams.Longitude);
+
+            var finalDevices = _mapper.Map<List<DeviceDto>>(devices);
+
+            return Ok(finalDevices);
+        }        
 
         [HttpGet("{id}")]
         public async Task<ActionResult<DeviceDto>> GetDevice(int id)
