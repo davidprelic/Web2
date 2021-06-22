@@ -13,7 +13,6 @@ import { SafetyDocsListComponent } from './safety-docs/safety-docs-list/safety-d
 import { SafetyDocComponent } from './safety-docs/safety-doc/safety-doc.component';
 import { DevicesListComponent } from './devices/devices-list/devices-list.component';
 import { NewDeviceComponent } from './devices/new-device/new-device.component';
-import { SearchElementsComponent } from './search-elements/search-elements.component';
 import { WorkRequestListComponent } from './work-requests/work-request-list/work-request-list.component';
 import { WorkRequestComponent } from './work-requests/work-request/work-request.component';
 import { CrewsListComponent } from './crews/crews-list/crews-list.component';
@@ -39,7 +38,6 @@ const routes: Routes = [
       {path: 'notifications', component: NotificationsComponent},
       {path: 'map', component: MapViewComponent},
       {path: 'profile', component: ProfileComponent},
-      {path: 'search-elements', component: SearchElementsComponent},
       {path: 'devices', component: DevicesListComponent},
       {path: 'devices/0', component: NewDeviceComponent},
       {path: 'devices/:id', component: DeviceDetailsComponent},

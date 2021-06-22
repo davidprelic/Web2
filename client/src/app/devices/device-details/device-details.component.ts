@@ -45,8 +45,8 @@ export class DeviceDetailsComponent implements OnInit {
       type: this.currentDevice.type,
       name: this.currentDevice.name,
       address: this.currentDevice.address,
-      latitude: this.currentDevice.latitude,
-      longitude: this.currentDevice.longitude
+      latitude: this.currentDevice.latitude.toString(),
+      longitude: this.currentDevice.longitude.toString()
     };
 
     this.map.on('click', <LeafletMouseEvent>(e) => { 
