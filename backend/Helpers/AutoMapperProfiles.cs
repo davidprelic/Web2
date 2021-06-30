@@ -13,6 +13,7 @@ namespace backend.Helpers
             CreateMap<DeviceUpdateDto, Device>();
             CreateMap<Device, DeviceDto>();
             CreateMap<Customer, ConsumerDto>().ReverseMap();
+            CreateMap<CreateConsumerDto, Customer>().ReverseMap();
         }
     }
 }

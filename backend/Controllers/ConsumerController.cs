@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using backend.DTOs;
 using backend.Entities;
+using backend.Helpers;
 using backend.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -22,45 +23,88 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAsync()
+        public async Task<ActionResult<IEnumerable<Customer>>> GetAsync()
         {
             var consumers = await uow.ConsumerRepository.GetCustomerAsync();
             var consumersDto = mapper.Map<IEnumerable<ConsumerDto>>(consumers);
             return Ok(consumersDto);
         }
 
-        [HttpPost("addConsumer")]
-        public async Task<IActionResult> AddConsumer(ConsumerDto consumerDto)
+        [HttpPost]
+        public async Task<IActionResult> AddConsumer(CreateConsumerDto consumerDto)
         {
             var consumer = mapper.Map<Customer>(consumerDto);
-            //namesti latitude i longitude na vrednosti koje zavise od lokacije
-            consumer.Latitude = 1;
-            consumer.Longitude = 1;
 
             uow.ConsumerRepository.AddCustomer(consumer);
-            await uow.SaveAsync();
-            return Ok(consumer);
+            if (await uow.SaveAsync()) return Ok(mapper.Map<ConsumerDto>(consumer));
+            return BadRequest("Failed to add consumer");
         }
 
-        [HttpPut("updateConsumer/{id}")]
-        public async Task<IActionResult> UpdateConsumer(int id, ConsumerDto consumerDto)
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<Customer>>> GetConsumerSearch([FromQuery] ConsumerSearchParameters consumerParameters) 
         {
-            var consFromDb = await uow.ConsumerRepository.FindCustomer(id);
-            consFromDb.Latitude = 1;
-            consFromDb.Longitude = 1;
+            var consumers = await uow.ConsumerRepository.GetCustomerAsync();
 
-            mapper.Map(consumerDto, consFromDb);
-            await uow.SaveAsync();
-            //Promeni kod ako se lose promenio consumer
-            return StatusCode(200);
+            if (!String.IsNullOrEmpty(consumerParameters.Type))
+                consumers = consumers.Where(c => c.Type.ToLower().Contains(consumerParameters.Type.Trim().ToLower()));
+            if (!String.IsNullOrWhiteSpace(consumerParameters.Name))
+                consumers = consumers.Where(c => c.Name.ToLower().Contains(consumerParameters.Name.Trim().ToLower()));
+            if (!String.IsNullOrWhiteSpace(consumerParameters.LastName))
+                consumers = consumers.Where(c => c.LastName.ToLower().Contains(consumerParameters.LastName.Trim().ToLower()));
+            if (!String.IsNullOrWhiteSpace(consumerParameters.Location))
+                consumers = consumers.Where(c => c.Location.ToLower().Contains(consumerParameters.Location.Trim().ToLower()));
+            if (!String.IsNullOrWhiteSpace(consumerParameters.PhoneNumber))
+                consumers = consumers.Where(c => c.PhoneNumber.ToLower().Contains(consumerParameters.PhoneNumber.Trim().ToLower()));
+
+            if (consumerParameters.Latitude != null)
+                consumers = consumers.Where(c => c.Latitude == consumerParameters.Latitude);
+
+            if (consumerParameters.Longitude != null)
+                consumers = consumers.Where(c => c.Longitude == consumerParameters.Longitude);
+
+            if (consumerParameters.Priority != null)
+                consumers = consumers.Where(c => c.Priority == consumerParameters.Priority);
+
+            var finalConsumer = mapper.Map<List<ConsumerDto>>(consumers);
+
+            return Ok(finalConsumer);
+
         }
 
-        [HttpDelete("deleteConsumer")]
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ConsumerDto>> GetConsumer(int id)
+        {
+            var consumer = await uow.ConsumerRepository.GetCustomerByIdAsync(id);
+
+            return Ok(mapper.Map<ConsumerDto>(consumer));
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateConsumer(ConsumerDto consumerDto)
+        {
+            var consumer = await uow.ConsumerRepository.GetCustomerByIdAsync(consumerDto.Id);
+
+            mapper.Map(consumerDto, consumer);
+
+            uow.ConsumerRepository.Update(consumer);
+
+            if (await uow.SaveAsync()) return NoContent();
+
+            return BadRequest("Failed to update consumer");
+
+        }
+
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteConsumer(int id)
         {
-            uow.ConsumerRepository.DeleteCustomer(id);
-            await uow.SaveAsync();
-            return Ok(id);
+            var consumer = await uow.ConsumerRepository.GetCustomerByIdAsync(id);
+
+            uow.ConsumerRepository.DeleteCustomer(consumer);
+
+            if (await uow.SaveAsync()) return Ok();
+
+            return BadRequest("Failed to delete consumer");
+
         }
     }
 }

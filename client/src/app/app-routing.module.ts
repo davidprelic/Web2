@@ -22,6 +22,7 @@ import { MapViewComponent } from './map-view/map-view.component';
 
 import { ConsumersListComponent } from './consumers/consumers-list/consumers-list.component';
 import { NewConsumerComponent } from './consumers/new-consumer/new-consumer.component';
+import { ConsumerDetailsComponent } from './consumers/consumer-details/consumer-details.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { ReportOutageComponent } from './report-outage/report-outage.component';
 import { DeviceDetailsComponent } from './devices/device-details/device-details.component';
@@ -45,6 +46,7 @@ const routes: Routes = [
       {path: 'crews/0', component: NewCrewComponent},
       {path: 'consumers', component: ConsumersListComponent},
       {path: 'consumers/0', component: NewConsumerComponent},
+      {path: 'consumers/:id', component: ConsumerDetailsComponent},
       {path: 'dashboard', component: DashboardComponent},
       {path: 'dashboard/incidents', component: IncidentListComponent},
       {path: 'dashboard/incidents/new-incident', component: NewIncidentComponent},
