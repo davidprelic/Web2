@@ -1,16 +1,17 @@
-<h1 fxLayoutAlign="center center">Add new consumer</h1>
+
+<h1 fxLayoutAlign="center center">Details of consumer</h1>
 <div id="register" fxLayoutAlign="center center">
-    <form [formGroup]="newConsumerForm" (ngSubmit)="newConsumerForm.valid && add()" autocomplete="off" fxFlex="40" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
+    <form [formGroup]="consumerForm" autocomplete="off" fxFlex="40" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
         <mat-form-field fxFlex="100" appearance="fill">
             <mat-label>First Name</mat-label>
-            <input matInput formControlName="name">
+            <input matInput placeholder="Server defined" formControlName="name">
         </mat-form-field>
         <mat-form-field fxFlex="100" appearance="fill">
             <mat-label>Last Name</mat-label>
-            <input matInput formControlName="lastName">
+            <input matInput placeholder="Server defined" formControlName="lastName">
         </mat-form-field>        
         <mat-form-field fxFlex="100" appearance="fill">
-            <mat-label>Type:</mat-label>
+            <mat-label>Type</mat-label>
             <mat-select formControlName="type">
               <mat-option value="Residental">Residental</mat-option>
               <mat-option value="Commercial">Commercial</mat-option>
@@ -18,7 +19,7 @@
         </mat-form-field> 
         <mat-form-field fxFlex="100" appearance="fill">
             <mat-label>Phone Number</mat-label>
-            <input matInput formControlName="phoneNumber">
+            <input matInput placeholder="Server defined" formControlName="phoneNumber">
         </mat-form-field> 
         <mat-form-field fxFlex="100" appearance="fill">
             <mat-label>Priority</mat-label>
@@ -52,7 +53,8 @@
         </mat-form-field>
         
         
-        <button fxFlex="45" mat-raised-button color="warn" (click)="cancel()">Cancel</button>
-        <button [disabled]='!newConsumerForm.valid' fxFlex="45" mat-flat-button color="accent" type="submit">Add</button>
+        <button fxFlex="30" mat-raised-button color="basic" (click)="goBack()">Go Back</button>
+        <button fxFlex="30" mat-flat-button (click)="delete()" color="warn">Delete</button>
+        <button [disabled]='false' fxFlex="35" (click)="edit()" mat-flat-button color="accent" type="submit">Edit</button>
     </form>
 </div>

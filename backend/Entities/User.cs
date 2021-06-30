@@ -24,6 +24,5 @@ namespace backend.Entities
         public ICollection<HistoryOfWorkPlanStateChange> HistoryOfWorkPlanStateChanges { get; set; }
         public ICollection<HistoryOfSafetyDocumentStateChange> HistoryOfSafetyDocumentStateChanges { get; set; }
         public ICollection<AppUserRole> UserRoles { get; set; }
-
     }
 }

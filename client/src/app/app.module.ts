@@ -61,6 +61,7 @@ import { NewConsumerComponent } from './consumers/new-consumer/new-consumer.comp
 import { HttpClientModule } from '@angular/common/http';
 import { ReportOutageComponent } from './report-outage/report-outage.component';
 import { DeviceDetailsComponent } from './devices/device-details/device-details.component';
+import { ConsumerDetailsComponent } from './consumers/consumer-details/consumer-details.component';
 
 
 @NgModule({
@@ -118,6 +119,7 @@ import { DeviceDetailsComponent } from './devices/device-details/device-details.
     NewConsumerComponent,
     ReportOutageComponent,
     DeviceDetailsComponent,
+    ConsumerDetailsComponent,
 
   ],
   imports: [

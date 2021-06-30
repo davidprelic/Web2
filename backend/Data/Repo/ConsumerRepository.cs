@@ -22,10 +22,8 @@ namespace backend.Data.Repo
             dc.Customers.AddAsync(customer);
         }
 
-        public void DeleteCustomer(int CustomerId)
+        public void DeleteCustomer(Customer customer)
         {
-            var customer = dc.Customers.Find(CustomerId);
-
             dc.Customers.Remove(customer);
         }
 
@@ -37,6 +35,16 @@ namespace backend.Data.Repo
         public async Task<IEnumerable<Customer>> GetCustomerAsync()
         {
             return await dc.Customers.ToListAsync();
+        }
+
+        public async Task<Customer> GetCustomerByIdAsync(int id)
+        {
+            return await dc.Customers.FindAsync(id);
+        }
+
+        public void Update(Customer customer)
+        {
+            dc.Entry(customer).State = EntityState.Modified;
         }
     }
 }

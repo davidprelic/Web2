@@ -36,7 +36,7 @@ namespace backend.Controllers
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
             if (!result.Succeeded) return BadRequest(result.Errors);
-            
+
             var roleResult = await _userManager.AddToRoleAsync(user, registerDto.UserRole);
 
             if (!roleResult.Succeeded) return BadRequest(roleResult.Errors);

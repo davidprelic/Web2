@@ -1,4 +1,5 @@
-export interface Customer {
+export interface CustomerItem {
+    id: number;
     name: string;
     lastName: string;
     type: string;

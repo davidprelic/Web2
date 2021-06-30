@@ -10,9 +10,13 @@ namespace backend.Interfaces
     {
         Task<IEnumerable<Customer>> GetCustomerAsync();
 
+        Task<Customer> GetCustomerByIdAsync(int id);
+
+        void Update(Customer customer);
+
         void AddCustomer(Customer customer);
 
-        void DeleteCustomer(int CustomerId);
+        void DeleteCustomer(Customer customer);
 
         Task<Customer> FindCustomer(int id);
     }

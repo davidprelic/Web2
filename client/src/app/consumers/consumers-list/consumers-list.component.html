@@ -9,59 +9,118 @@
     </mat-form-field>
   </div>
     
-    <div class="mat-elevation-z8">
-      <table mat-table [dataSource]="dataSource" matSort>
+  <form [formGroup]="searchForm" fxLayoutAlign="space-around center" fxLayout="row wrap">
+    <mat-form-field fxFlex="21">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Ex. Milos" #input>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="21">
+      <mat-label>Last Name</mat-label>
+      <input matInput formControlName="lastName" placeholder="Ex. Milosevic" #input>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="21">
+      <mat-label>Type</mat-label>
+      <mat-select formControlName="type">
+        <mat-option value="Residental">Residental</mat-option>
+        <mat-option value="Commercial">Commercial</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="21">
+      <mat-label>Location</mat-label>
+      <input matInput formControlName="location" placeholder="Ex. Kralja Petra 1. 6" #input>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="17" >
+      <mat-label>Priority</mat-label>
+      <input matInput formControlName="prority" placeholder="Ex. 1-5" #input>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="17">
+      <mat-label>Phone Number</mat-label>
+      <input matInput formControlName="phoneNumber" placeholder="Ex. Milos" #input>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="17">
+      <mat-label>Latitude</mat-label>
+      <input matInput formControlName="latitude" placeholder="Ex. 123456" #input>
+  </mat-form-field>
+
+  <mat-form-field fxFlex="17">
+    <mat-label>Longitude</mat-label>
+    <input matInput formControlName="longitude" placeholder="Ex. 123456" #input>
+  </mat-form-field>
+
+  <button fxFlex="15" (click)="applySearch()" mat-flat-button color="accent" type="submit">Search</button>
+</form>
     
-        <!-- ID Column -->
-        <ng-container matColumnDef="id" sticky>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
-          <td mat-cell *matCellDef="let row"> {{row.id}} </td>
-        </ng-container>
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="id" >
+      <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+      <td class="smallField" mat-cell *matCellDef="let row"> {{row.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name" >
+      <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+      <td class="smallField" mat-cell *matCellDef="let row"> {{row.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="lastName" >
+      <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </th>
+      <td class="smallField" mat-cell *matCellDef="let row"> {{row.lastName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="type" >
+      <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+      <td class="smallField" mat-cell *matCellDef="let row"> {{row.type}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="location" >
+      <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
+      <td class="smallField" mat-cell *matCellDef="let row"> {{row.location}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="priority" >
+      <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> Priority </th>
+      <td class="smallField" mat-cell *matCellDef="let row"> {{row.priority}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="phoneNumber" >
+      <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> Phone Number </th>
+      <td class="smallField" mat-cell *matCellDef="let row"> {{row.phoneNumber}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="latitude" >
+      <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> Latitude </th>
+      <td class="smallField" mat-cell *matCellDef="let row"> {{row.latitude}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="longitude" >
+      <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> Longitude </th>
+      <td class="smallField" mat-cell *matCellDef="let row"> {{row.longitude}} </td>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="map">
+      <th class="mapField" mat-header-cell *matHeaderCellDef mat-sort-header> Map </th>
+      <td class="mapField" mat-cell *matCellDef="let row"> <mat-icon>place</mat-icon> </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row [routerLink]="['/consumers/', row.id]" *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <!-- Row shown when there is no matching data. -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="10">No data matching the filter "{{input.value}}"</td>
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
   
-        <!-- Start Date Column -->
-        <ng-container matColumnDef="name" sticky>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-          <td mat-cell *matCellDef="let row"> {{row.name}} </td>
-        </ng-container>
-    
-        <!-- Phone No. Column -->
-        <ng-container matColumnDef="type">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
-          <td mat-cell *matCellDef="let row"> {{row.progress}}% </td>
-        </ng-container>
-    
-        <!-- Status Column -->
-        <ng-container matColumnDef="coordinates">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Coordinates </th>
-          <td mat-cell *matCellDef="let row"> {{row.color}} </td>
-        </ng-container>
-  
-        <!-- Status Column -->
-        <ng-container matColumnDef="address">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Address </th>
-          <td mat-cell *matCellDef="let row"> {{row.color}} </td>
-        </ng-container>
-  
-        <!-- Status Column -->
-        <ng-container matColumnDef="map">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Map </th>
-          <td mat-cell *matCellDef="let row"> <mat-icon>place</mat-icon> </td>
-        </ng-container>
-    
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    
-        <!-- Row shown when there is no matching data. -->
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
-        </tr>
-      </table>
-    
-      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-    </div>
-  
-    <div fxLayoutAlign="space-around center">
-      <button fxFlex="15" mat-flat-button color="accent" type="submit">Submit</button>
-      <button fxFlex="15" mat-flat-button color="warn" type="submit">Delete</button>
-    </div>
-    
+        
+</div>

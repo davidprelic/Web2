@@ -40,15 +40,6 @@ export class DeviceDetailsComponent implements OnInit {
     this.map = map;
     this.map.setView(latLng(45.2329,19.7910), 12);
 
-    this.updateDevice = {
-      id: this.deviceId,
-      type: this.currentDevice.type,
-      name: this.currentDevice.name,
-      address: this.currentDevice.address,
-      latitude: this.currentDevice.latitude.toString(),
-      longitude: this.currentDevice.longitude.toString()
-    };
-
     this.map.on('click', <LeafletMouseEvent>(e) => { 
       this.deviceForm.get('latitude').setValue(e.latlng.lat);
       this.deviceForm.get('longitude').setValue(e.latlng.lng);
