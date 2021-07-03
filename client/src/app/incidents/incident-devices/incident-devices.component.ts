@@ -1,59 +1,42 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Device } from 'src/app/_models/device';
 import { DeviceService } from 'src/app/_services/device.service';
+import { DeviceListDialogComponent } from '../device-list-dialog/device-list-dialog.component';
 
 
 @Component({
-  selector: 'app-devices-list',
-  templateUrl: './devices-list.component.html',
-  styleUrls: ['./devices-list.component.css']
+  selector: 'app-incident-devices',
+  templateUrl: './incident-devices.component.html',
+  styleUrls: ['./incident-devices.component.css']
 })
-export class DevicesListComponent implements OnInit {
+export class IncidentDevicesComponent implements OnInit {
+  incidentId: number;
   displayedColumns: string[] = ['id', 'name', 'type', 'address','latitude', 'longitude', 'map'];
   dataSource: MatTableDataSource<Device>;
   devices: Device[];
-  searchForm: FormGroup;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private deviceService: DeviceService, private fb: FormBuilder, private router: Router) { 
+  constructor(public dialog: MatDialog, private deviceService: DeviceService,
+              private route: ActivatedRoute) { 
   }
 
   ngOnInit(): void {
-    this.initializeForm();
-    this.deviceService.getDevices().subscribe(response => {
+    this.incidentId = this.route.snapshot.params['id'];
+    this.deviceService.getDevicesByIncidentId(this.incidentId).subscribe(response => {
       this.dataSource = new MatTableDataSource(response); 
     });
-  }
-
-  initializeForm() {
-    this.searchForm = this.fb.group({
-      type: [''],
-      name: [''],
-      address: [''],
-      latitude: [''],
-      longitude: [''],
-    })
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-  }
-
-  applySearch() {
-
-    this.deviceService.getDevicesAfterSearch(this.searchForm.value).subscribe(response => {
-      this.dataSource = new MatTableDataSource(response); 
-      this.dataSource.data = [...this.dataSource.data];
-
-    });
   }
 
   applyFilter(event: Event) {
@@ -63,6 +46,19 @@ export class DevicesListComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  openDialog() {
+    this.dialog.open(DeviceListDialogComponent, {
+      data: {
+        incId: this.incidentId
+      }
+    }).afterClosed().subscribe(() => {
+      this.deviceService.getDevicesByIncidentId(this.incidentId).subscribe(response => {
+        this.dataSource = new MatTableDataSource(response); 
+        this.dataSource.data = [...this.dataSource.data];
+      }); 
+    });
   }
 
 }

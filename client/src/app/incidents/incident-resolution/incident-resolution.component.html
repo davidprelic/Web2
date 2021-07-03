@@ -1,0 +1,41 @@
+<div id="register" fxLayoutAlign="center center">
+    <form [formGroup]="resolutionForm" *ngIf="resolutionForm" (ngSubmit)="resolutionForm.valid && updateResolution()" autocomplete="off" fxFlex="40" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Cause:</mat-label>
+            <mat-select formControlName="cause">
+              <mat-option value="weather">Weather</mat-option>
+              <mat-option value="humanFactor">Human factor</mat-option>
+              <mat-option value="outage">Outage</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Subcause:</mat-label>
+            <mat-select formControlName="subcause">
+              <mat-option value="thunder">Thunder</mat-option>
+              <mat-option value="hurricane">Hurricane</mat-option>
+              <mat-option value="wind">Wind</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Construction type:</mat-label>
+            <mat-select formControlName="constructionType">
+              <mat-option value="underground">Underground</mat-option>
+              <mat-option value="overground">Overground</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="100" appearance="fill">
+            <mat-label>Material:</mat-label>
+            <mat-select formControlName="material">
+              <mat-option value="metal">Metal</mat-option>
+              <mat-option value="plastic">Plastic</mat-option>
+              <mat-option value="wood">Wood</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <button [disabled]='!resolutionForm.dirty' fxFlex="30" mat-flat-button color="accent" type="submit">Save Changes</button>
+        <button fxFlex="30" mat-flat-button color="warn" type="submit">Cancel</button>
+    </form>
+</div>

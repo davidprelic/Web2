@@ -11,6 +11,7 @@ namespace backend.Interfaces
         void Update(Device device);
         Task<bool> SaveAllAsync();
         Task<IEnumerable<Device>> GetDevicesAsync();
+        Task<IEnumerable<Device>> GetFreeDevicesAsync();
         Task<Device> GetDeviceByIdAsync(int id);
         Task<IEnumerable<Device>> GetDevicesByIncidentIdAsync(int id);
     }

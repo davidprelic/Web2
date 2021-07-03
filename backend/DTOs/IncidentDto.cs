@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 
-namespace backend.Entities
+namespace backend.DTOs
 {
-    public class Incident
+    public class IncidentDto
     {
         public int Id { get; set; }
         public string Type { get; set; }
@@ -23,19 +22,9 @@ namespace backend.Entities
         public DateTime? ScheduledTime { get; set; }
 
         public int? TakenToResolveUserId { get; set; } 
-        public User User { get; set; }
 
         public int? ResolutionId { get; set; }
-        public Resolution Resolution { get; set; }
 
         public int? CrewId { get; set; }
-        public Crew Crew { get; set; }
-        
-        public ICollection<Device> Devices { get; set; }
-        public ICollection<Call> Calls { get; set; }
-        public ICollection<IncidentPhoto> Photos { get; set; }
-        public ICollection<WorkRequest> WorkRequests { get; set; }
-        public ICollection<WorkPlan> WorkPlans { get; set; }
-
     }
 }

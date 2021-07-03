@@ -19,6 +19,7 @@ namespace backend.Entities
         public int? CrewId { get; set; }
         public Crew Crew { get; set; }
         // public ICollection<CrewMember> CrewMembers { get; set; }
+        public ICollection<Incident> Incidents { get; set; }
         public ICollection<NotificationUser> NotificationUsers { get; set; }
         public ICollection<HistoryOfWorkRequestStateChange> HistoryOfWorkRequestStateChanges { get; set; }
         public ICollection<HistoryOfWorkPlanStateChange> HistoryOfWorkPlanStateChanges { get; set; }

@@ -1,7 +1,7 @@
 
 <h1 fxLayoutAlign="center center">Device details</h1>
 <div id="register" fxLayoutAlign="center center">
-    <form [formGroup]="deviceForm" autocomplete="off" fxFlex="40" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
+    <form *ngIf="currentDevice && deviceForm" [formGroup]="deviceForm" autocomplete="off" fxFlex="40" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
         <mat-form-field fxFlex="100" appearance="fill">
             <mat-label>Type</mat-label>
             <mat-select formControlName="type">
