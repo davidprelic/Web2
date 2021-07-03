@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomeComponent } from './home/home.component';
 import { IncidentListComponent } from './incidents/incident-list/incident-list.component';
-import { NewIncidentComponent } from './incidents/new-incident/new-incident.component';
+import { IncidentComponent } from './incidents/incident/incident.component';
 import { MapComponent } from './map/map.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -25,6 +25,10 @@ import { NewConsumerComponent } from './consumers/new-consumer/new-consumer.comp
 import { AuthGuard } from './_guards/auth.guard';
 import { ReportOutageComponent } from './report-outage/report-outage.component';
 import { DeviceDetailsComponent } from './devices/device-details/device-details.component';
+import { IncidentBasicInfoComponent } from './incidents/incident-basic-info/incident-basic-info.component';
+import { IncidentDevicesComponent } from './incidents/incident-devices/incident-devices.component';
+import { IncidentResolutionComponent } from './incidents/incident-resolution/incident-resolution.component';
+import { IncidentCallsComponent } from './incidents/incident-calls/incident-calls.component';
 
 
 const routes: Routes = [
@@ -47,7 +51,8 @@ const routes: Routes = [
       {path: 'consumers/0', component: NewConsumerComponent},
       {path: 'dashboard', component: DashboardComponent},
       {path: 'dashboard/incidents', component: IncidentListComponent},
-      {path: 'dashboard/incidents/new-incident', component: NewIncidentComponent},
+      // {path: 'dashboard/incidents/0', component: IncidentComponent},
+      {path: 'dashboard/incidents/:id', component: IncidentComponent},
       {path: 'dashboard/safety-docs', component: SafetyDocsListComponent},
       {path: 'dashboard/safety-docs/0', component: SafetyDocComponent},
       {path: 'dashboard/work-plans', component: WorkPlansListComponent},

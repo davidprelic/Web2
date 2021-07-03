@@ -70,6 +70,13 @@ namespace backend.Data.Repo
             return await _context.Devices.ToListAsync();
         }
 
+        public async Task<IEnumerable<Device>> GetFreeDevicesAsync()
+        {
+            return await _context.Devices
+                .Where(x => x.IncidentId == null)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Device>> GetDevicesByIncidentIdAsync(int id)
         {
             return await _context.Devices

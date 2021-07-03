@@ -1,7 +1,9 @@
 export interface Device {
+    id?: number;
     type: string;
     name: string;
     address: string;
-    latitude: number;
-    longitude: number;
+    latitude: string;
+    longitude: string;
+    incidentId?: number;
 }

@@ -27,8 +27,8 @@
         </button>
         
         <!-- <button [disabled]='!addCallForm.valid' fxFlex="30" mat-flat-button color="accent" type="submit">Add</button> -->
-        <button fxFlex="50" mat-flat-button color="warn" type="submit">Cancel</button>
-        <button fxFlex="50" mat-flat-button color="accent" type="submit">Add</button>
+        <button fxFlex="50" [mat-dialog-close]="true" mat-flat-button color="warn" type="submit">Cancel</button>
+        <button fxFlex="50" [mat-dialog-close]="true" mat-flat-button color="accent" type="submit">Add</button>
     </form>
     
 </div>

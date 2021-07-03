@@ -17,6 +17,9 @@ namespace backend.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddScoped<IDeviceRepository, DeviceRepository>();
+            services.AddScoped<ICallRepository, CallRepository>();
+            services.AddScoped<IIncidentRepository, IncidentRepository>();
+            services.AddScoped<IResolutionRepository, ResolutionRepository>();
             services.AddDbContext<DataContext>(options =>
             {
                 options.UseSqlServer(config.GetConnectionString("DefaultConnection"));

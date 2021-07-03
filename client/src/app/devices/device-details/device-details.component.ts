@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Map, latLng } from 'leaflet';
 import { Device } from 'src/app/_models/device';
-import { DeviceUpdate } from 'src/app/_models/device-update';
 import { DeviceService } from 'src/app/_services/device.service';
 
 @Component({
@@ -20,7 +19,7 @@ export class DeviceDetailsComponent implements OnInit {
   private zoom: number;
   deviceId: number;
   currentDevice: Device;
-  updateDevice: DeviceUpdate;
+  updateDevice: Device;
   
   addrInfo = {};
 

@@ -10,6 +10,12 @@ namespace backend.Interfaces
         IConsumerRepository ConsumerRepository { get; }
 
         IWorkPlanRepository WorkPlanRepository { get; }
+
+        IIncidentRepository IncidentRepository { get; }
+
+        ICallRepository CallRepository { get; }
+        IResolutionRepository ResolutionRepository { get; }
+
         Task<bool> SaveAsync();
     }
 }
