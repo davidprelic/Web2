@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using backend.Data;
@@ -22,6 +23,54 @@ namespace backend.Controllers
             _userManager = userManager;
             _mapper = mapper;
             _tokenService = tokenService;
+        }
+
+        [HttpGet("{username}")]
+        public async Task<IActionResult> GetProfile(string username)
+        {
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username.ToLower());
+            EditProfileDto retval = new EditProfileDto()
+            {
+                FirstName = temp.FirstName,
+                LastName = temp.LastName,
+                UserName = temp.UserName,
+                Email = temp.Email,
+                UserRole = temp.UserRole,
+                Address = temp.Address,
+                DateOfBirth = temp.DateOfBirth
+            };
+            return Ok(new { retval });
+        }
+
+        [HttpPut("EditProfile")]
+        public async Task<IActionResult> EditProfile(EditProfileDto editProfileDto)
+        {
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == editProfileDto.UserName.ToLower());
+            temp.FirstName = editProfileDto.FirstName;
+            temp.LastName = editProfileDto.LastName;
+            temp.UserName = editProfileDto.UserName;
+            temp.Email = editProfileDto.Email;
+            temp.DateOfBirth = editProfileDto.DateOfBirth;
+            temp.Address = editProfileDto.Address;
+            if(temp.UserRole != editProfileDto.UserRole)
+            {
+                temp.UserRole = editProfileDto.UserRole;
+                temp.RegistrationStatus = "Waiting";
+            }
+            await _userManager.UpdateAsync(temp);
+            if (!string.IsNullOrWhiteSpace(editProfileDto.OldPassword))
+            {
+                if((await _userManager.ChangePasswordAsync(temp, editProfileDto.OldPassword, editProfileDto.NewPassword)).Succeeded)
+                {
+                    return Ok(new { msg = "changedpass" });
+                }
+                else
+                {
+                    return Ok(new { msg = "error" });
+                }
+            }
+            return Ok(new { msg = "ok" });
+        
         }
 
         [HttpPost("register")]

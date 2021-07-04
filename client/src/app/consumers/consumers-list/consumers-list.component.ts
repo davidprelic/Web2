@@ -35,7 +35,7 @@ export class ConsumersListComponent implements OnInit {
     this.searchForm = this.fb.group({
       name: [''],
       lastName: [''],
-      type: ['Residental'],
+      type: [''],
       location: [''],
       priority: [''],
       phoneNumber: [''],

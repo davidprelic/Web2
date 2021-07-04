@@ -25,40 +25,50 @@
       </div>
         <mat-form-field fxFlex="100" appearance="fill">
             <mat-label>Username</mat-label>
-            <input matInput formControlName="username">
+            <input matInput formControlName="username" required>
         </mat-form-field>
         <mat-form-field fxFlex="100" appearance="fill">
             <mat-label>Enter your email</mat-label>
             <input matInput placeholder="pat@example.com" formControlName="email" required>
         </mat-form-field>
+        <mat-form-field fxFlex="50" appearance="fill">
+          <mat-label>Enter old password</mat-label>
+          <input matInput formControlName="oldPassword">
+      </mat-form-field>
+      <mat-form-field fxFlex="50" appearance="fill">
+        <mat-label>Enter new password</mat-label>
+        <input matInput formControlName="newPassword">
+      </mat-form-field>
         <mat-form-field fxFlex="100" appearance="fill">
             <mat-label>First name</mat-label>
-            <input matInput formControlName='firstName'>
+            <input matInput formControlName='firstName' required>
         </mat-form-field>
         <mat-form-field fxFlex="100" appearance="fill">
             <mat-label>Last name</mat-label>
-            <input matInput formControlName='lastName'>
+            <input matInput formControlName='lastName' required>
         </mat-form-field>
         <mat-form-field fxFlex="100" appearance="fill">
             <mat-label>Birth date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName='dateOfBirth'>
+            <input matInput [matDatepicker]="picker" formControlName='dateOfBirth' required>
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
+            
         <mat-form-field fxFlex="100" appearance="fill">
             <mat-label>Address</mat-label>
-            <input matInput formControlName='address'>
+            <input matInput formControlName='address' required>
         </mat-form-field>
+
         <mat-form-field fxFlex="100" appearance="fill">
             <mat-label>Select</mat-label>
             <mat-select formControlName="userRole">
-              <mat-option value="teamMember">Team member</mat-option>
-              <mat-option value="dispatcher">Dispatcher</mat-option>
-              <mat-option value="edWorker">ED worker</mat-option>
+              <mat-option value="CrewMember">Crew member</mat-option>
+              <mat-option value="Dispatcher">Dispatcher</mat-option>
+              <mat-option value="EdWorker">ED worker</mat-option>
             </mat-select>
         </mat-form-field>
 
-        <button [disabled]='!editProfileForm.valid' fxFlex="100" mat-flat-button color="accent" type="submit">Save changes</button>
+        <button [disabled]='!editProfileForm.valid' (click)="saveChanges()" fxFlex="100" mat-flat-button color="accent" type="submit">Save changes</button>
     </form>
     
 </div>
