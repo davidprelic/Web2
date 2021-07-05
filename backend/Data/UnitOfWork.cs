@@ -22,6 +22,18 @@ namespace backend.Data
         public IWorkPlanRepository WorkPlanRepository =>
             new WorkPlanRepository(dc);
 
+        public IIncidentRepository IncidentRepository => 
+            new IncidentRepository(dc);
+
+        public ICallRepository CallRepository => 
+            new CallRepository(dc);
+
+        public IResolutionRepository ResolutionRepository => 
+            new ResolutionRepository(dc);
+
+        public IDeviceRepository DeviceRepository => 
+            new DeviceRepository(dc);
+
         public async Task<bool> SaveAsync()
         {
             return await dc.SaveChangesAsync() > 0;

@@ -20,6 +20,12 @@ namespace backend.Data.Repo
 
         }
 
+        public DeviceRepository(DataContext context)
+        {
+            _context = context;
+
+        }
+
         public void AddDevice(Device device)
         {
             int counter = 0;
@@ -68,6 +74,13 @@ namespace backend.Data.Repo
         public async Task<IEnumerable<Device>> GetDevicesAsync()
         {
             return await _context.Devices.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Device>> GetFreeDevicesAsync()
+        {
+            return await _context.Devices
+                .Where(x => x.IncidentId == null)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Device>> GetDevicesByIncidentIdAsync(int id)

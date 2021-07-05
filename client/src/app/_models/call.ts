@@ -1,10 +1,11 @@
-import { Customer } from "./customer";
-import { Reason } from "./enums";
 
 export interface Call {
     id?: number;
-    reason: Reason;
+    reason: string;
     comment: string;
     hazard: string;
-    customerInfo?: Customer;
+    location?: string;
+    latitude?: number;
+    longitude?: number;
+    customerId?: number;
 }

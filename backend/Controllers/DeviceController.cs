@@ -22,9 +22,9 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<DeviceDto>> CreateDevice(CreateDeviceDto createDeviceDto)
+        public async Task<ActionResult<DeviceDto>> CreateDevice(DeviceDto deviceDto)
         {
-            var device = _mapper.Map<Device>(createDeviceDto);
+            var device = _mapper.Map<Device>(deviceDto);
             _deviceRepository.AddDevice(device);
 
              if (await _deviceRepository.SaveAllAsync()) return Ok(_mapper.Map<DeviceDto>(device));
@@ -38,6 +38,27 @@ namespace backend.Controllers
         public async Task<ActionResult<IEnumerable<Device>>> GetDevices()
         {
             var devices = await _deviceRepository.GetDevicesAsync();
+
+            var finalDevices = _mapper.Map<List<DeviceDto>>(devices);
+
+            return Ok(finalDevices);
+        }
+
+        [HttpGet("free")]
+        public async Task<ActionResult<IEnumerable<Device>>> GetFreeDevices()
+        {
+            var devices = await _deviceRepository.GetFreeDevicesAsync();
+
+            var finalDevices = _mapper.Map<List<DeviceDto>>(devices);
+
+            return Ok(finalDevices);
+        }
+
+
+        [HttpGet("incident/{id}")]
+        public async Task<ActionResult<IEnumerable<Device>>> GetDevicesByIncidentId(int id)
+        {
+            var devices = await _deviceRepository.GetDevicesByIncidentIdAsync(id);
 
             var finalDevices = _mapper.Map<List<DeviceDto>>(devices);
 
@@ -76,11 +97,11 @@ namespace backend.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> UpdateDevice(DeviceUpdateDto deviceUpdateDto)
+        public async Task<ActionResult> UpdateDevice(DeviceDto deviceDto)
         {
-            var device = await _deviceRepository.GetDeviceByIdAsync(deviceUpdateDto.Id);
+            var device = await _deviceRepository.GetDeviceByIdAsync(deviceDto.Id);
 
-            _mapper.Map(deviceUpdateDto, device);
+            _mapper.Map(deviceDto, device);
 
             _deviceRepository.Update(device);
 

@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { DeviceItem } from 'src/app/_models/device-item';
+import { Device } from 'src/app/_models/device';
 import { DeviceService } from 'src/app/_services/device.service';
 
 
@@ -15,8 +15,8 @@ import { DeviceService } from 'src/app/_services/device.service';
 })
 export class DevicesListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'type', 'address','latitude', 'longitude', 'map'];
-  dataSource: MatTableDataSource<DeviceItem>;
-  devices: DeviceItem[];
+  dataSource: MatTableDataSource<Device>;
+  devices: Device[];
   searchForm: FormGroup;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;

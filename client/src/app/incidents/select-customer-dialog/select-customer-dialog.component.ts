@@ -1,29 +1,13 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
+import { Customer } from 'src/app/_models/customer';
+import { CustomerItem } from 'src/app/_models/customer-item';
+import { ConsumerService } from 'src/app/_services/consumer.service';
 
-export interface DialogData {
-  animal: 'panda' | 'unicorn' | 'lion';
-}
-
-export interface UserData {
-  name: string;
-  lastName: string;
-  location: string;
-  phoneNumber: string;
-}
-
-/** Constants used to fill up our data base. */
-const COLORS: string[] = [
-  'maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple', 'fuchsia', 'lime', 'teal',
-  'aqua', 'blue', 'navy', 'black', 'gray'
-];
-const NAMES: string[] = [
-  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
-  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
-];
 
 @Component({
   selector: 'app-select-customer-dialog',
@@ -32,21 +16,25 @@ const NAMES: string[] = [
 })
 export class SelectCustomerDialogComponent implements OnInit {
   displayedColumns: string[] = ['name', 'lastName', 'location', 'phoneNumber'];
-  dataSource: MatTableDataSource<UserData>;
+  dataSource: MatTableDataSource<CustomerItem>;
+  customers: CustomerItem[];
+  selectedCustomerId: number;
+  selectButtonToggle: boolean;
+  selectedCustomer: CustomerItem;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dialog: any;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) { 
-    // Create 100 users
-    const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
-
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(users);
+  constructor(@Inject(MAT_DIALOG_DATA) public data: {incId: number},
+              private consumerService: ConsumerService, private router: Router, private dialogRef: MatDialogRef<SelectCustomerDialogComponent>) { 
+    this.selectButtonToggle = true;
   }
 
   ngOnInit(): void {
+    this.consumerService.getConsumers().subscribe(response => {
+      this.dataSource = new MatTableDataSource(response);
+    })
   }
 
   ngAfterViewInit() {
@@ -63,17 +51,18 @@ export class SelectCustomerDialogComponent implements OnInit {
     }
   }
 
-}
+  getSelectedCustomerId(id: number) {
+    this.selectedCustomerId = id;
+    this.selectButtonToggle = false;
+  }
 
-/** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
+  cancel() {
+    // closing itself and sending data to parent component
+    this.dialogRef.close({ data: 0 })
+  }
 
-  return {
-    name: id.toString(),
-    lastName: name,
-    location: Math.round(Math.random() * 100).toString(),
-    phoneNumber: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
-  };
+  AddCustomer() {
+    this.dialogRef.close({ data: this.selectedCustomerId })
+  }
+
 }

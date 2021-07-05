@@ -12,6 +12,8 @@ namespace backend.Interfaces
 
         Task<Customer> GetCustomerByIdAsync(int id);
 
+        Task<IEnumerable<Customer>> GetCustomersByLocationAsync(string location);
+
         void Update(Customer customer);
 
         void AddCustomer(Customer customer);

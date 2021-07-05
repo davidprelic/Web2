@@ -1,0 +1,24 @@
+<h1 fxLayout="row" *ngIf="this.incidentId == 0" fxLayoutAlign="center center">INCIDENT - NEW</h1>
+<mat-tab-group mat-align-tabs="center" animationDuration="0ms">
+    <mat-tab label="Basic info">
+        <app-incident-basic-info></app-incident-basic-info>
+    </mat-tab>
+    <mat-tab [disabled]="this.incidentId == 0" label="Devices">
+        <app-incident-devices></app-incident-devices>
+    </mat-tab>
+    <mat-tab [disabled]="this.incidentId == 0" label="Resolution">
+        <app-incident-resolution></app-incident-resolution>
+    </mat-tab>
+    <mat-tab [disabled]="this.incidentId == 0" label="Calls">
+        <app-incident-calls></app-incident-calls>
+    </mat-tab>
+    <mat-tab [disabled]="this.incidentId == 0" label="Crew">
+        <app-incident-crew></app-incident-crew>
+    </mat-tab>
+    <mat-tab [disabled]="this.incidentId == 0" label="Multimedia">
+        <app-incident-multimedia></app-incident-multimedia>
+    </mat-tab>
+    <!-- <mat-tab label="Equipment">
+        <app-new-incident-equipment></app-new-incident-equipment>
+    </mat-tab> -->
+  </mat-tab-group>

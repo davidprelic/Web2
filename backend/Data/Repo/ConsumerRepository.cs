@@ -42,6 +42,13 @@ namespace backend.Data.Repo
             return await dc.Customers.FindAsync(id);
         }
 
+        public async Task<IEnumerable<Customer>> GetCustomersByLocationAsync(string location)
+        {
+            return await dc.Customers
+                .Where(x => x.Location == location)
+                .ToListAsync();
+        }
+
         public void Update(Customer customer)
         {
             dc.Entry(customer).State = EntityState.Modified;

@@ -2,8 +2,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Device } from '../_models/device';
-import { DeviceItem } from '../_models/device-item';
-import { DeviceUpdate } from '../_models/device-update';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +16,15 @@ export class DeviceService {
   }
 
   getDevices() {
-    return this.http.get<DeviceItem[]>(this.baseUrl + 'device')
+    return this.http.get<Device[]>(this.baseUrl + 'device')
+  }
+
+  getFreeDevices() {
+    return this.http.get<Device[]>(this.baseUrl + 'device/free')
+  }
+
+  getDevicesByIncidentId(id: number) {
+    return this.http.get<Device[]>(this.baseUrl + 'device/incident/' + id)
   }
 
   getDevicesAfterSearch(model: Device) {
@@ -32,14 +38,14 @@ export class DeviceService {
     this.router.navigate(['/devices'], { queryParams: { type: model.type, name: model.name, address: model.address, 
                                                         latitude: model.latitude, longitude: model.longitude } });
 
-    return this.http.get<DeviceItem[]>(this.baseUrl + 'device/search', {params: params});
+    return this.http.get<Device[]>(this.baseUrl + 'device/search', {params: params});
   }
 
   getDeviceById(id: number) {
     return this.http.get<Device>(this.baseUrl + 'device/' + id);
   }
 
-  updateDevice(device: DeviceUpdate) {
+  updateDevice(device: Device) {
     return this.http.put(this.baseUrl + 'device', device);
   }
 

@@ -414,6 +414,15 @@ namespace backend.Data.Migrations
                     b.Property<DateTime?>("EstimatedTimetoRestore")
                         .HasColumnType("datetime2");
 
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("float");
+
                     b.Property<int?>("NumberOfCalls")
                         .HasColumnType("int");
 
@@ -432,11 +441,14 @@ namespace backend.Data.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("TakenToResolve")
-                        .HasColumnType("bit");
+                    b.Property<int?>("TakenToResolveUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
 
                     b.Property<double?>("Voltage")
                         .HasColumnType("float");
@@ -451,6 +463,8 @@ namespace backend.Data.Migrations
                     b.HasIndex("ResolutionId")
                         .IsUnique()
                         .HasFilter("[ResolutionId] IS NOT NULL");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Incidents");
                 });
@@ -1049,9 +1063,15 @@ namespace backend.Data.Migrations
                         .WithOne("Incident")
                         .HasForeignKey("backend.Entities.Incident", "ResolutionId");
 
+                    b.HasOne("backend.Entities.User", "User")
+                        .WithMany("Incidents")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Crew");
 
                     b.Navigation("Resolution");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("backend.Entities.IncidentPhoto", b =>
@@ -1257,6 +1277,8 @@ namespace backend.Data.Migrations
                     b.Navigation("HistoryOfWorkPlanStateChanges");
 
                     b.Navigation("HistoryOfWorkRequestStateChanges");
+
+                    b.Navigation("Incidents");
 
                     b.Navigation("NotificationUsers");
 
