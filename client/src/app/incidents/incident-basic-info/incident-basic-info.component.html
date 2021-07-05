@@ -89,9 +89,9 @@
             <mat-datepicker #picker5></mat-datepicker>
         </mat-form-field>
 
-        <button fxFlex="45" (click)="TakeToResolve()" mat-flat-button color="accent">Take To Resolve</button>
+        <!-- <button fxFlex="45" (click)="TakeToResolve()" mat-flat-button color="accent">Take To Resolve</button> -->
         
         <button [disabled]='!basicInfoForm.valid' fxFlex="40" mat-flat-button color="accent" type="submit">Save</button>
-        <button fxFlex="40" mat-flat-button color="warn" type="submit">Cancel</button>
+        <button fxFlex="40" mat-flat-button color="warn" (click)="Cancel()" type="button">Cancel</button>
     </form>
 </div>

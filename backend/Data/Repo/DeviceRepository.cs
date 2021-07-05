@@ -20,6 +20,12 @@ namespace backend.Data.Repo
 
         }
 
+        public DeviceRepository(DataContext context)
+        {
+            _context = context;
+
+        }
+
         public void AddDevice(Device device)
         {
             int counter = 0;

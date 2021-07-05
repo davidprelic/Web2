@@ -31,6 +31,9 @@ namespace backend.Data
         public IResolutionRepository ResolutionRepository => 
             new ResolutionRepository(dc);
 
+        public IDeviceRepository DeviceRepository => 
+            new DeviceRepository(dc);
+
         public async Task<bool> SaveAsync()
         {
             return await dc.SaveChangesAsync() > 0;

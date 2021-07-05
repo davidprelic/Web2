@@ -22,13 +22,28 @@
             <input matInput formControlName='hazard'>
         </mat-form-field>
 
-        <button (click)="openDialog()" fxFlex="60"  mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+        <button (click)="openDialog()" fxFlex="60" type="button" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
             <mat-icon>person_add</mat-icon> Select customer
         </button>
+
+        <div [formGroup]="customerInfo">
+            <mat-form-field fxFlex="100" appearance="fill">
+                <mat-label>First Name</mat-label>
+                <input disabled matInput formControlName="name">
+            </mat-form-field>
+            <mat-form-field fxFlex="100" appearance="fill">
+                <mat-label>Last Name</mat-label>
+                <input disabled matInput formControlName="lastName">
+            </mat-form-field>
+            <mat-form-field fxFlex="100" appearance="fill">
+                <mat-label>Phone Number</mat-label>
+                <input disabled matInput formControlName="phoneNumber">
+            </mat-form-field>
+        </div>
         
         <!-- <button [disabled]='!addCallForm.valid' fxFlex="30" mat-flat-button color="accent" type="submit">Add</button> -->
-        <button fxFlex="50" [mat-dialog-close]="true" mat-flat-button color="warn" type="submit">Cancel</button>
-        <button fxFlex="50" [mat-dialog-close]="true" mat-flat-button color="accent" type="submit">Add</button>
+        <button fxFlex="50" [mat-dialog-close]="true" mat-flat-button color="warn" type="button">Cancel</button>
+        <button fxFlex="50" [mat-dialog-close]="true" [disabled]="!addCallForm.valid" mat-flat-button color="accent" type="submit">Add</button>
     </form>
     
 </div>

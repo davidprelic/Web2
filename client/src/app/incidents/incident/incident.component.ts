@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-incident',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class IncidentComponent implements OnInit {
 
-  constructor() { }
+  constructor(private route: ActivatedRoute) { }
+  incidentId: number;
 
   ngOnInit(): void {
+    this.incidentId = parseInt(this.route.snapshot.params['id']);
   }
 
 }

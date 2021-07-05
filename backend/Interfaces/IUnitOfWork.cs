@@ -15,6 +15,7 @@ namespace backend.Interfaces
 
         ICallRepository CallRepository { get; }
         IResolutionRepository ResolutionRepository { get; }
+        IDeviceRepository DeviceRepository { get; }
 
         Task<bool> SaveAsync();
     }

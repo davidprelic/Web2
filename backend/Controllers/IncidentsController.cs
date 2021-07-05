@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using backend.DTOs;
@@ -43,17 +44,41 @@ namespace backend.Controllers
         {
             var incidents = await _unitOfWork.IncidentRepository.GetIncidentsAsync();
 
+            foreach (var inc in incidents)
+            {
+                var callsByIncidentId = await _unitOfWork.CallRepository.GetCallsByIncidentIdAsync(inc.Id);
+            
+                inc.NumberOfCalls = callsByIncidentId.Count();
+            }
+
             var finalIncidents = _mapper.Map<List<IncidentDto>>(incidents);
 
             return Ok(finalIncidents);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Incident>> GetIncident(int id)
+        public async Task<ActionResult<IncidentDto>> GetIncident(int id)
         {
             var incident = await _unitOfWork.IncidentRepository.GetIncidentByIdAsync(id);
 
-            return Ok(_mapper.Map<Incident>(incident));
+            var callsByIncidentId = await _unitOfWork.CallRepository.GetCallsByIncidentIdAsync(id);
+            int numberOfCalls = callsByIncidentId.Count();
+            
+            incident.NumberOfCalls = numberOfCalls;
+
+            var devicesByIncidentId = await _unitOfWork.DeviceRepository.GetDevicesByIncidentIdAsync(id);
+            int affectedCustomers = 0;
+
+            foreach (var dev in devicesByIncidentId)
+            {
+                var customers = await _unitOfWork.ConsumerRepository.GetCustomersByLocationAsync(dev.Address);
+            
+                affectedCustomers += customers.Count();
+            }
+
+            incident.AffectedCustomers = affectedCustomers;
+
+            return Ok(_mapper.Map<IncidentDto>(incident));
         }
 
         [HttpPut]

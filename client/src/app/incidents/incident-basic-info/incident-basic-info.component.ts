@@ -73,10 +73,14 @@ export class IncidentBasicInfoComponent implements OnInit {
     }
   }
 
-  TakeToResolve() {
-    // this.accountService.currentUser$.subscribe(response => {
-    //   console.log(response.username);
-    // })
+  // TakeToResolve() {
+  //   this.accountService.currentUser$.subscribe(response => {
+  //     console.log(response.username);
+  //   })
+  // }
+
+  Cancel() {
+    this.router.navigateByUrl('/dashboard/incidents');
   }
 
 }
