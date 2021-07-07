@@ -34,6 +34,15 @@ namespace backend.Data
         public IDeviceRepository DeviceRepository => 
             new DeviceRepository(dc);
 
+        public ISafetyDocRepository SafetyDocRepository => 
+            new SafetyDocRepository(dc);
+        
+        public IHistorySafetyDocRepository HistorySafetyDocRepository => 
+            new HistorySafetyDocRepository(dc);
+
+        public IChecklistRepository ChecklistRepository => 
+            new ChecklistRepository(dc);
+
         public async Task<bool> SaveAsync()
         {
             return await dc.SaveChangesAsync() > 0;

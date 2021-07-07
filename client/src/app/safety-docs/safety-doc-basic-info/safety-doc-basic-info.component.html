@@ -1,5 +1,5 @@
 <div fxLayoutAlign="center center">
-    <form [formGroup]="basicInfoForm" (ngSubmit)="basicInfoForm.valid && saveBasicInfo()" autocomplete="off" fxFlex="80" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
+    <form *ngIf="basicInfoForm" [formGroup]="basicInfoForm" (ngSubmit)="basicInfoForm.valid && saveBasicInfo()" autocomplete="off" fxFlex="80" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
         <mat-form-field fxFlex="45" appearance="fill">
             <mat-label>Type:</mat-label>
             <mat-select formControlName="type">
@@ -15,7 +15,7 @@
 
         <mat-form-field fxFlex="45" appearance="fill">
             <mat-label>Switching plan</mat-label>
-            <input matInput formControlName="planId" value="SP150" disabled>
+            <input matInput formControlName="workPlanId" value="SP150" disabled>
         </mat-form-field>
 
         <!-- <mat-form-field fxFlex="45" appearance="fill">
@@ -50,15 +50,15 @@
 
         <mat-form-field fxFlex="45" appearance="fill">
             <mat-label>Phone No:</mat-label>
-            <input matInput formControlName='phoneNo'>
+            <input matInput formControlName='phoneNumber'>
         </mat-form-field>
 
         <mat-form-field fxFlex="75" appearance="fill">
             <mat-label>Field crew:</mat-label>
-            <input matInput formControlName='fieldCrew' value="NS_Crew" disabled>
+            <input matInput formControlName='crewId' value="NS_Crew" disabled>
         </mat-form-field>
         
         <button [disabled]='!basicInfoForm.valid' fxFlex="30" mat-flat-button color="accent" type="submit">Save</button>
-        <button fxFlex="30" mat-flat-button color="warn" type="submit">Cancel</button>
+        <button fxFlex="30" mat-flat-button color="warn" (click)="Cancel()" type="button">Cancel</button>
     </form>
 </div>

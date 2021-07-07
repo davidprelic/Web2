@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-safety-doc',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SafetyDocComponent implements OnInit {
 
-  constructor() { }
+  constructor(private route: ActivatedRoute) { }
+  safetyDocId: number;
 
   ngOnInit(): void {
+    this.safetyDocId = parseInt(this.route.snapshot.params['id']);
   }
 
 }

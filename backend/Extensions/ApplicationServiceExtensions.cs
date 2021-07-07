@@ -19,6 +19,9 @@ namespace backend.Extensions
             services.AddScoped<IDeviceRepository, DeviceRepository>();
             services.AddScoped<ICallRepository, CallRepository>();
             services.AddScoped<IIncidentRepository, IncidentRepository>();
+            services.AddScoped<ISafetyDocRepository, SafetyDocRepository>();
+            services.AddScoped<IChecklistRepository, ChecklistRepository>();
+            services.AddScoped<IHistorySafetyDocRepository, HistorySafetyDocRepository>();
             services.AddScoped<IResolutionRepository, ResolutionRepository>();
             services.AddDbContext<DataContext>(options =>
             {
