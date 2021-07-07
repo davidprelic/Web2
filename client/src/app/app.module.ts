@@ -63,7 +63,6 @@ import { IncidentCrewComponent } from './incidents/incident-crew/incident-crew.c
 import { IncidentMultimediaComponent } from './incidents/incident-multimedia/incident-multimedia.component';
 import { IncidentEquipmentComponent } from './incidents/incident-equipment/incident-equipment.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -120,6 +119,7 @@ import { IncidentEquipmentComponent } from './incidents/incident-equipment/incid
     ReportOutageComponent,
     DeviceDetailsComponent,
     ConsumerDetailsComponent,
+
 
   ],
   imports: [

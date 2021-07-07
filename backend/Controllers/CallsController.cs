@@ -42,8 +42,20 @@ namespace backend.Controllers
             {
                 if (incident.Location == callDto.Location)
                 {
+                    var callsForThisLocation = await _unitOfWork.CallRepository.GetCallsByIncidentIdAsync(incident.Id);
+                    foreach (var callCheck in callsForThisLocation)
+                    {
+                        if(callCheck.Email == call.Email)
+                        {
+                            return BadRequest("Call from this person for this incident already exists");
+                        }
+                    }
+
                     call.IncidentId = incident.Id;
+                    incident.NumberOfCalls++;
+                    _unitOfWork.IncidentRepository.Update(incident);
                     _unitOfWork.CallRepository.AddCall(call);
+
 
                     if (await _unitOfWork.SaveAsync()) return Ok(_mapper.Map<CallDto>(call));
                         
@@ -55,7 +67,7 @@ namespace backend.Controllers
             _unitOfWork.ResolutionRepository.AddResolution(resol);
             await _unitOfWork.ResolutionRepository.SaveAllAsync();
 
-            Incident inc = new Incident 
+            Incident inc = new Incident
             {
                 isConfirmed = false,
                 Status = "Active",
@@ -63,7 +75,8 @@ namespace backend.Controllers
                 Latitude = callDto.Latitude,
                 Longitude = callDto.Longitude,
                 OutageTime = DateTime.Now,
-                ResolutionId = resol.Id
+                ResolutionId = resol.Id,
+                NumberOfCalls = 1,
             };
 
             _unitOfWork.IncidentRepository.AddIncident(inc);
