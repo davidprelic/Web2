@@ -55,6 +55,7 @@ import { NewConsumerComponent } from './consumers/new-consumer/new-consumer.comp
 import { HttpClientModule } from '@angular/common/http';
 import { ReportOutageComponent } from './report-outage/report-outage.component';
 import { DeviceDetailsComponent } from './devices/device-details/device-details.component';
+import { CrewDetailsComponent } from './crews/crew-details/crew-details.component';
 import { ConsumerDetailsComponent } from './consumers/consumer-details/consumer-details.component';
 import { IncidentDevicesComponent } from './incidents/incident-devices/incident-devices.component';
 import { IncidentResolutionComponent } from './incidents/incident-resolution/incident-resolution.component';
@@ -119,6 +120,7 @@ import { IncidentEquipmentComponent } from './incidents/incident-equipment/incid
     NewConsumerComponent,
     ReportOutageComponent,
     DeviceDetailsComponent,
+    CrewDetailsComponent,
     ConsumerDetailsComponent,
 
   ],

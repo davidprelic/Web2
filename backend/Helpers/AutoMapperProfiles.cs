@@ -11,6 +11,7 @@ namespace backend.Helpers
             CreateMap<RegisterDto, User>();
 
             CreateMap<Device, DeviceDto>();
+
             CreateMap<DeviceDto, Device>();
 
             CreateMap<Incident, IncidentDto>();
@@ -22,6 +23,11 @@ namespace backend.Helpers
             CreateMap<Resolution, ResolutionDto>();
             CreateMap<ResolutionDto, Resolution>();
             
+
+            CreateMap<Crew, CrewDto>().ReverseMap();
+            CreateMap<CreateCrewDto, Crew>().ReverseMap();
+            CreateMap<User, CrewMemberDto>().ReverseMap();
+
             CreateMap<Customer, ConsumerDto>().ReverseMap();
             CreateMap<CreateConsumerDto, Customer>().ReverseMap();
         }
