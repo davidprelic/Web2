@@ -1,24 +1,15 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { CrewMember } from 'src/app/_models/crew-member';
+import { UserService } from 'src/app/_services/user.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CrewChangeUser } from 'src/app/_models/crew-change-user';
 
-export interface UserData {
-  name: string;
-  lastName: string;
-  location: string;
-  phoneNumber: string;
-}
 
-/** Constants used to fill up our data base. */
-const COLORS: string[] = [
-  'maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple', 'fuchsia', 'lime', 'teal',
-  'aqua', 'blue', 'navy', 'black', 'gray'
-];
-const NAMES: string[] = [
-  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
-  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
-];
+
 
 @Component({
   selector: 'app-select-members-dialog',
@@ -26,22 +17,28 @@ const NAMES: string[] = [
   styleUrls: ['./select-members-dialog.component.css']
 })
 export class SelectMembersDialogComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'lastName', 'location', 'phoneNumber'];
-  dataSource: MatTableDataSource<UserData>;
+  displayedColumns: string[] = ['id', 'firstName', 'lastName'];
+  dataSource: MatTableDataSource<CrewMember>;
+  crewMembers : CrewMember[];
+  selectedCrewMemberId: number;
+  addButtonToggle: boolean;
+  selectedCrewMember: CrewChangeUser;
+  crewId: number;
+  
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  dialog: any;
+  
 
-  constructor() { 
-    // Create 100 users
-    const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
-
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(users);
+  constructor(@Inject(MAT_DIALOG_DATA) public data: {crId: number},private userService: UserService, private router: Router,private route: ActivatedRoute) { 
   }
 
   ngOnInit(): void {
+    console.log(this.data.crId);
+    this.userService.getCrewMembers(this.data.crId).subscribe(response =>{
+      this.dataSource = new MatTableDataSource(response);
+    });
+    this.addButtonToggle = true;
   }
 
   ngAfterViewInit() {
@@ -58,17 +55,21 @@ export class SelectMembersDialogComponent implements OnInit {
     }
   }
 
+  getSelectedCrewMemberId(id: number) {
+    this.selectedCrewMemberId = id;
+    this.addButtonToggle = false;
+  }
+
+  AddCrewMember() {
+    this.userService.getUserById(this.selectedCrewMemberId).subscribe(response => {
+      this.selectedCrewMember = {
+        id: this.selectedCrewMemberId,
+        crewId: this.data.crId
+      }
+      
+      this.userService.updateCrewMember(this.selectedCrewMember).subscribe();
+    });
+
 }
 
-/** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
-
-  return {
-    name: id.toString(),
-    lastName: name,
-    location: Math.round(Math.random() * 100).toString(),
-    phoneNumber: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
-  };
 }
