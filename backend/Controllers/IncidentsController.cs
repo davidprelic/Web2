@@ -25,12 +25,23 @@ namespace backend.Controllers
         {
             var incident = _mapper.Map<Incident>(incidentDto);
 
+            var activeIncidents = await _unitOfWork.IncidentRepository.GetActiveIncidentsAsync();
+
+            foreach (var inc in activeIncidents)
+            {
+                if (inc.Location == incidentDto.Location)
+                {
+                    return BadRequest("Failed to add incident, incident on that location already exist!");
+                }
+            }
+
             Resolution resol = new Resolution();
             _unitOfWork.ResolutionRepository.AddResolution(resol);
             await _unitOfWork.ResolutionRepository.SaveAllAsync();
 
-            incident.Status = "Active";
+            incident.Status = "Draft";
             incident.ResolutionId = resol.Id;
+            incident.NumberOfCalls = 0;
 
             _unitOfWork.IncidentRepository.AddIncident(incident);
             if (await _unitOfWork.IncidentRepository.SaveAllAsync()) return Ok(_mapper.Map<IncidentDto>(incident));
@@ -44,13 +55,6 @@ namespace backend.Controllers
         {
             var incidents = await _unitOfWork.IncidentRepository.GetIncidentsAsync();
 
-            foreach (var inc in incidents)
-            {
-                var callsByIncidentId = await _unitOfWork.CallRepository.GetCallsByIncidentIdAsync(inc.Id);
-            
-                inc.NumberOfCalls = callsByIncidentId.Count();
-            }
-
             var finalIncidents = _mapper.Map<List<IncidentDto>>(incidents);
 
             return Ok(finalIncidents);
@@ -60,11 +64,6 @@ namespace backend.Controllers
         public async Task<ActionResult<IncidentDto>> GetIncident(int id)
         {
             var incident = await _unitOfWork.IncidentRepository.GetIncidentByIdAsync(id);
-
-            var callsByIncidentId = await _unitOfWork.CallRepository.GetCallsByIncidentIdAsync(id);
-            int numberOfCalls = callsByIncidentId.Count();
-            
-            incident.NumberOfCalls = numberOfCalls;
 
             var devicesByIncidentId = await _unitOfWork.DeviceRepository.GetDevicesByIncidentIdAsync(id);
             int affectedCustomers = 0;

@@ -38,8 +38,9 @@ export class SafetyDocBasicInfoComponent implements OnInit {
 
   initializeForm() {
     this.basicInfoForm = this.fb.group({
+      id: [{value: this.safetyDocId ? this.currentSafetyDoc.id : 0, disabled: true}],
       type: [ this.safetyDocId ? this.currentSafetyDoc.type : '', Validators.required],
-      status: [{value: this.safetyDocId ? this.currentSafetyDoc.status : 'Draft', disabled: false}],
+      status: [{value: this.safetyDocId ? this.currentSafetyDoc.status : 'Draft', disabled: true}],
       // OVDE IZ LOCAL STORAGE POKUPITI INFO PA UZETI ID ULOGOVANOG USERA I ISPISATI NJEGOV INFO
       createdBy: [{value: 23, disabled: true}],
       details: [{value: this.safetyDocId ? this.currentSafetyDoc.details : '', disabled: false}],
@@ -47,9 +48,9 @@ export class SafetyDocBasicInfoComponent implements OnInit {
       phoneNumber: [{value: this.safetyDocId ? this.currentSafetyDoc.phoneNumber : '', disabled: false}, Validators.required],
       dateTimeCreated: [ this.safetyDocId ? this.currentSafetyDoc.dateTimeCreated : null],
       // OVDE BOLJE STAVITI WorkPlanName PA NA OSNOVU NJEGA UZETI ID I KAD KLIKNEM SAVE PROSLEDITI TAJ WorkPlanId
-      workPlanId: [''],
+      workPlanId: [null],
       // OVDE BOLJE STAVITI CrewName PA NA OSNOVU NJEGA UZETI ID I KAD KLIKNEM SAVE PROSLEDITI TAJ CrewId
-      crewId: ['']
+      crewId: [null]
       // safetyDocType: ['', Validators.required],
     })
   }

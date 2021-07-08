@@ -29,8 +29,8 @@ export class IncidentResolutionComponent implements OnInit {
           this.currentResolutionId = response.resolutionId;
           this.resolutionService.getResolutionById(response.resolutionId).subscribe(response => {
             this.currentResolution = response;
-          this.initializeForm();
-        });
+            this.initializeForm();
+          });
       });
     }
     else 

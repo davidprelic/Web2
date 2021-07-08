@@ -70,7 +70,7 @@ namespace backend.Controllers
             Incident inc = new Incident
             {
                 isConfirmed = false,
-                Status = "Active",
+                Status = "Draft",
                 Location = callDto.Location,
                 Latitude = callDto.Latitude,
                 Longitude = callDto.Longitude,

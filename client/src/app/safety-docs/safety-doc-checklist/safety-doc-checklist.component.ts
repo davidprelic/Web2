@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Checklist } from 'src/app/_models/checklist';
+import { ChecklistService } from 'src/app/_services/checklist.service';
+import { SafetyDocService } from 'src/app/_services/safety-doc.service';
 
 @Component({
   selector: 'app-safety-doc-checklist',
@@ -8,24 +12,58 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class SafetyDocChecklistComponent implements OnInit {
   checklistForm: FormGroup;
+  safetyDocId: number;
+  currentChecklistId: number;
+  currentChecklist: Checklist;
+  checklistForUpdate: Checklist;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private checklistService: ChecklistService,
+              private safetyDocService: SafetyDocService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.initializeForm();
+    this.safetyDocId = parseInt(this.route.snapshot.params['id']);
+
+    if (this.safetyDocId != 0)
+    {
+      this.safetyDocService.getSafetyDocById(this.safetyDocId).subscribe(response => {
+          this.currentChecklistId = response.checklistId;
+          this.checklistService.getChecklistById(response.checklistId).subscribe(response => {
+            this.currentChecklist = response;
+            this.initializeForm();
+          });
+      });
+    }
+    else 
+    {
+      this.initializeForm();
+    }
   }
 
   initializeForm() {
     this.checklistForm = this.fb.group({
-      workOperationsCompleted: ['', Validators.required],
-      tagsRemoved: ['', Validators.required],
-      groundingRemoved: ['', Validators.required],
-      readyForService: ['', Validators.required],
+      workOperationsCompleted: [ this.safetyDocId ? this.currentChecklist.workOperationsCompleted : null],
+      tagsRemoved: [ this.safetyDocId ? this.currentChecklist.tagsRemoved : null],
+      groundingRemoved: [ this.safetyDocId ? this.currentChecklist.groundingRemoved : null],
+      readyForService: [ this.safetyDocId ? this.currentChecklist.readyForService : null],
     })
   }
 
-  saveBasicInfo() {
-    console.log(this.checklistForm);
+  updateChecklist() {
+    debugger
+    this.checklistForUpdate = 
+    {
+      id: this.currentChecklistId,
+      workOperationsCompleted: this.checklistForm.get('workOperationsCompleted').value,
+      tagsRemoved: this.checklistForm.get('tagsRemoved').value,
+      groundingRemoved: this.checklistForm.get('groundingRemoved').value,
+      readyForService: this.checklistForm.get('readyForService').value
+    }
+
+    console.log(this.checklistForUpdate);
+
+    this.checklistService.updateChecklist(this.checklistForUpdate).subscribe(response => {
+      console.log('valid checklist update');
+    });
   }
 
 }

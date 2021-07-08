@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using backend.DTOs;
@@ -60,6 +61,16 @@ namespace backend.Controllers
             if (await _unitOfWork.HistorySafetyDocRepository.SaveAllAsync()) return Ok();
 
             return BadRequest("Problem with deleting historySafetyDoc");
+        }
+
+        [HttpGet("safety-doc/{id}")]
+        public async Task<ActionResult<IEnumerable<HistorySafetyDocDto>>> GetHistorySafetyDocsBySafetyDocId(int id)
+        {
+            var historySafetyDoc = await _unitOfWork.HistorySafetyDocRepository.GetHistorySafetyDocsBySafetyDocIdAsync(id);
+
+            var finalhistorySafetyDoc = _mapper.Map<List<HistorySafetyDocDto>>(historySafetyDoc);
+
+            return Ok(finalhistorySafetyDoc);
         }
     }
 }

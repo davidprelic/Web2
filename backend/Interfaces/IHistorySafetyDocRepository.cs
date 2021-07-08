@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using backend.Entities;
 
@@ -10,5 +11,6 @@ namespace backend.Interfaces
         void Update(HistoryOfSafetyDocumentStateChange historySafetyDoc);
         Task<bool> SaveAllAsync();
         Task<HistoryOfSafetyDocumentStateChange> GetHistorySafetyDocByIdAsync(int id);
+        Task<IEnumerable<HistoryOfSafetyDocumentStateChange>> GetHistorySafetyDocsBySafetyDocIdAsync(int id);
     }
 }

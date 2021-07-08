@@ -1,10 +1,15 @@
 
 <div fxLayoutAlign="center center">
-    <form [formGroup]="checklistForm" (ngSubmit)="checklistForm.valid && saveBasicInfo()" autocomplete="off" fxFlex="20" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
+    <form [formGroup]="checklistForm" *ngIf="checklistForm" (ngSubmit)="checklistForm.valid && updateChecklist()" autocomplete="off" fxFlex="20" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
         <mat-slide-toggle fxFlex="100" formControlName="workOperationsCompleted">All work operations completed?</mat-slide-toggle>
         <mat-slide-toggle fxFlex="100" formControlName="tagsRemoved">All tags removed?</mat-slide-toggle>
         <mat-slide-toggle fxFlex="100" formControlName="groundingRemoved">Grounding removed?</mat-slide-toggle>
         <mat-slide-toggle fxFlex="100" formControlName="readyForService">Ready for service?</mat-slide-toggle>
+        <button [disabled]='!checklistForm.dirty' fxFlex="30" mat-flat-button color="accent" type="submit">Save</button>
+        <button fxFlex="30" mat-flat-button color="warn" type="button">Cancel</button>
     </form>
 </div>
+
+
+
 

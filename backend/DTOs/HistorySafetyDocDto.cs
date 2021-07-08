@@ -9,8 +9,8 @@ namespace backend.DTOs
         public string ChangedTo { get; set; }
         public DateTime DateTimeChanged { get; set; }
 
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
-        public int SafetyDocumentId { get; set; }
+        public int? SafetyDocumentId { get; set; }
     }
 }

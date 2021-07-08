@@ -19,6 +19,10 @@ export class HistorySafetyDocService {
     return this.http.get<HistorySafetyDoc>(this.baseUrl + 'historysafetydocs/' + id);
   }
 
+  getHistorySafetyDocsBySafetyDocId(id: number) {
+    return this.http.get<HistorySafetyDoc[]>(this.baseUrl + 'historysafetydocs/safety-doc/' + id)
+  }
+
   updateHistorySafetyDoc(historySafetyDoc: HistorySafetyDoc) {
     return this.http.put(this.baseUrl + 'historysafetydocs', historySafetyDoc);
   }

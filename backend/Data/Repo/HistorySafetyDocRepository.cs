@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using backend.Entities;
 using backend.Interfaces;
@@ -26,6 +28,13 @@ namespace backend.Data.Repo
         public async Task<HistoryOfSafetyDocumentStateChange> GetHistorySafetyDocByIdAsync(int id)
         {
             return await _context.HistoryOfSafetyDocumentStateChanges.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<HistoryOfSafetyDocumentStateChange>> GetHistorySafetyDocsBySafetyDocIdAsync(int id)
+        {
+            return await _context.HistoryOfSafetyDocumentStateChanges
+                .Where(x => x.SafetyDocumentId == id)
+                .ToListAsync();
         }
 
         public async Task<bool> SaveAllAsync()

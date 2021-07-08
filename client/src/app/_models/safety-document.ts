@@ -8,7 +8,7 @@ export interface SafetyDocument {
     notes: string;
     phoneNumber: number;
     dateTimeCreated: Date;
-    workPlanId?: string;
-    crewId: number;
-    checklistId: number;
+    workPlanId?: number;
+    crewId?: number;
+    checklistId?: number;
 }
