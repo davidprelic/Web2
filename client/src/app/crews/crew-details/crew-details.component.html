@@ -1,0 +1,57 @@
+<h1 fxLayoutAlign="center center">Details of crew</h1>
+
+<div id="register" fxLayoutAlign="center center">
+  <form [formGroup]="crewForm"  *ngIf="crewForm" autocomplete="off" fxFlex="40" fxFlex.lt-lg="70" fxLayout="row wrap"
+    fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
+    <mat-form-field fxFlex="100" appearance="fill">
+      <mat-label>Name</mat-label>
+      <input matInput placeholder="Server defined" formControlName="name">
+    </mat-form-field>
+
+    
+<div class="mat-elevation-z8">
+
+
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="id" >
+      <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+      <td class="smallField" mat-cell *matCellDef="let row"> {{row.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="firstName" >
+      <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> firstName </th>
+      <td class="smallField" mat-cell *matCellDef="let row"> {{row.firstName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="lastName" >
+      <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> lastName </th>
+      <td class="smallField" mat-cell *matCellDef="let row"> {{row.lastName}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 40]"></mat-paginator>
+
+  </div>
+
+    
+
+    <button (click)="openDialog()" fxFlex="75" mat-icon-button class="example-icon"
+      aria-label="Example icon-button with menu icon">
+      <mat-icon>person_add</mat-icon> Select members
+    </button>
+
+    <button fxFlex="30" mat-raised-button color="basic" (click)="goBack()">Go Back</button>
+    <button fxFlex="30" mat-flat-button (click)="delete()" color="warn">Delete</button>
+    <button [disabled]='false' fxFlex="35" (click)="edit()" mat-flat-button color="accent" type="submit">Edit</button>
+
+  </form>
+
+
+
+</div>
