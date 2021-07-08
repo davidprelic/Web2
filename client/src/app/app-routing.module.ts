@@ -17,6 +17,8 @@ import { WorkRequestListComponent } from './work-requests/work-request-list/work
 import { WorkRequestComponent } from './work-requests/work-request/work-request.component';
 import { CrewsListComponent } from './crews/crews-list/crews-list.component';
 import { NewCrewComponent } from './crews/new-crew/new-crew.component';
+import { CrewDetailsComponent } from './crews/crew-details/crew-details.component';
+import { SelectMembersDialogComponent } from './crews/select-members-dialog/select-members-dialog.component';
 
 import { MapViewComponent } from './map-view/map-view.component';
 
@@ -48,6 +50,7 @@ const routes: Routes = [
       {path: 'devices/:id', component: DeviceDetailsComponent},
       {path: 'crews', component: CrewsListComponent},
       {path: 'crews/0', component: NewCrewComponent},
+      {path: 'crews/:id', component: CrewDetailsComponent},
       {path: 'consumers', component: ConsumersListComponent},
       {path: 'consumers/0', component: NewConsumerComponent},
       {path: 'consumers/:id', component: ConsumerDetailsComponent},
