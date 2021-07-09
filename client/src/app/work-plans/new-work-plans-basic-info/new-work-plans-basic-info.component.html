@@ -1,11 +1,31 @@
 <div fxLayoutAlign="center center" >
-    <form [formGroup]="basicInfoForm" (ngSubmit)="basicInfoForm.valid && saveBasicInfo()" autocomplete="off" fxFlex="80" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
+    <form *ngIf="currentWorkPlan || emptyForm" [formGroup]="basicInfoForm" (ngSubmit)="basicInfoForm.valid && saveBasicInfo()" autocomplete="off" fxFlex="80" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Work plan ID</mat-label>
+            <input matInput formControlName="id">
+        </mat-form-field>
+        
         <mat-form-field fxFlex="45" appearance="fill">
             <mat-label>Type:</mat-label>
-            <mat-select formControlName="typeDoc">
+            <mat-select formControlName="type">
               <mat-option value="plannedWork">Planned Work</mat-option>
               <mat-option value="unplannedWork">Unplanned Work</mat-option>
             </mat-select>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Address:</mat-label>
+            <input matInput formControlName='address'>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Latitude:</mat-label>
+            <input matInput formControlName='latitude'>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Longitude:</mat-label>
+            <input matInput formControlName='longitude'>
         </mat-form-field>
 
         <mat-form-field fxFlex="45" appearance="fill">
@@ -15,28 +35,29 @@
 
         <mat-form-field fxFlex="45" appearance="fill">
             <mat-label>Incident ID:</mat-label>
-            <input matInput formControlName="incId" readonly [(ngModel)]="valueIncId">
-                
-            <button matSuffix mat-button *ngIf="valueIncId">
+            <mat-select formControlName="incidentId" (selectionChange)="changeIncident($event.value)">
+                <mat-option *ngFor="let item of incidents" [value]="item.id">
+                    {{item.id}}
+                </mat-option>
+            </mat-select>               
+            
+            <button matSuffix mat-button [disabled]="this.workPlanId == 0">
                 <mat-icon fxFlex="value%" fxFlexAlign="center">more_horiz</mat-icon>
             </button>
         </mat-form-field>
 
         <mat-form-field fxFlex="45" appearance="fill">
             <mat-label>Work request:</mat-label>
-            <input matInput formControlName='workReqId' readonly [(ngModel)]="valueWorkReqId">
+            <mat-select formControlName="workRequestId">
+              <!--<mat-option *ngFor="let item of workRequests" [value]="item.id">
+                {{item.id}}
+            </mat-option> -->        
+            </mat-select>
 
-            <button matSuffix mat-button *ngIf="valueWorkReqId">
+            <button matSuffix mat-button [disabled]="this.workPlanId == 0">
                 <mat-icon fxFlex="value%" fxFlexAlign="center">more_horiz</mat-icon>
             </button>
         </mat-form-field>     
-        
-        <mat-form-field fxFlex="45" appearance="fill">
-            <mat-label>Type of work:</mat-label>
-            <mat-select formControlName="typeOfWork">
-              <mat-option value="plannedWork">Equipment</mat-option>
-            </mat-select>
-        </mat-form-field>
 
         <mat-form-field fxFlex="45" appearance="fill">
             <mat-label>Start date/time:</mat-label>
@@ -47,9 +68,9 @@
 
         <mat-form-field fxFlex="45" appearance="fill">
             <mat-label>End date/time:</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName='endDateTime'>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
+            <input matInput [matDatepicker]="picker2" formControlName='endDateTime'>
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
         </mat-form-field>
 
         <mat-form-field fxFlex="45" appearance="fill">
@@ -63,11 +84,6 @@
         </mat-form-field>
 
         <mat-form-field fxFlex="45" appearance="fill">
-            <mat-label>Details:</mat-label>
-            <input matInput formControlName='details'>
-        </mat-form-field>
-
-        <mat-form-field fxFlex="45" appearance="fill">
             <mat-label>Notes:</mat-label>
             <input matInput formControlName='notes'>
         </mat-form-field>
@@ -78,29 +94,27 @@
         </mat-form-field>
 
         <mat-form-field fxFlex="45" appearance="fill">
-            <mat-label>Phone No:</mat-label>
-            <input matInput formControlName='phoneNo'>
+            <mat-label>Phone Number:</mat-label>
+            <input matInput formControlName='phoneNumber'>
         </mat-form-field>
 
         <mat-form-field fxFlex="45" appearance="fill">
             <mat-label>Date/time created:</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName='dateTimeCreated'>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
+            <input matInput formControlName='dateTimeCreated' readonly>
         </mat-form-field>
 
         <mat-form-field fxFlex="45" appearance="fill" fxFlexAlign="center">
             <mat-label>Field crew:</mat-label>
-            <input matInput formControlName='fieldCrew'  [(ngModel)]="valueFieldCrew">
-
-            <button matSuffix mat-button *ngIf="valueFieldCrew">
-                <mat-icon fxFlex="value%" fxFlexAlign="center">more_horiz</mat-icon>
-            </button>
+            <mat-select formControlName="crewId">
+                <mat-option *ngFor="let item of crews" [value]="item.id">
+                    {{item.name}}
+                </mat-option>
+            </mat-select>
         </mat-form-field>  
         
         <div fxFlex="60" fxLayout fxLayoutAlign="space-between center" >
             <button [disabled]='!basicInfoForm.valid' fxFlex="40" mat-flat-button color="accent" type="submit">Save</button>
-            <button fxFlex="40" mat-flat-button color="warn" type="submit">Cancel</button>
+            <button fxFlex="40" mat-flat-button color="warn" (click)="Cancel()" type="submit">Cancel</button>
         </div>
     </form>
 </div>

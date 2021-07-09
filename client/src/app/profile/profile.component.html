@@ -19,7 +19,7 @@
 
     
 
-    <form [formGroup]="editProfileForm"  fxFlex='60' fxFlex.lt-lg="50" fxLayout="row wrap">
+    <form [formGroup]="editProfileForm" class="example-container"  fxFlex='60' fxFlex.lt-lg="50" fxLayout="row wrap" >
       <div *ngIf="editProfileForm.dirty">
         <strong color="warn">Information:</strong> You have made changes. Any unsaved changes will be lost
       </div>
@@ -31,11 +31,12 @@
             <mat-label>Enter your email</mat-label>
             <input matInput placeholder="pat@example.com" formControlName="email" required>
         </mat-form-field>
-        <mat-form-field fxFlex="50" appearance="fill">
+        <mat-form-field fxFlex="45" appearance="fill">
           <mat-label>Enter old password</mat-label>
           <input matInput formControlName="oldPassword">
       </mat-form-field>
-      <mat-form-field fxFlex="50" appearance="fill">
+      
+      <mat-form-field fxFlex="45" appearance="fill">
         <mat-label>Enter new password</mat-label>
         <input matInput formControlName="newPassword">
       </mat-form-field>

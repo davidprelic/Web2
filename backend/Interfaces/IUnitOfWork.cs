@@ -17,6 +17,10 @@ namespace backend.Interfaces
         IResolutionRepository ResolutionRepository { get; }
         IDeviceRepository DeviceRepository { get; }
 
+        IWorkInstructionRepository WorkInstructionRepository { get; }
+
+        IHistoryOfWorkPlanStateChangeRepository HistoryOfWorkPlanStateChangeRepository { get; }
+
         Task<bool> SaveAsync();
     }
 }
