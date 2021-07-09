@@ -1,48 +1,43 @@
-
 <div fxLayoutAlign="space-around center">
+
+  <form [formGroup]="searchForm" fxFlex="27" fxLayoutAlign="space-around center"
+    fxLayout="row wrap">
+
     <button mat-button routerLink="/crews/0">
       <mat-icon>add_circle</mat-icon> Add
     </button>
-  
-    <mat-form-field>
+
+    <mat-form-field fxFlex="85">
       <mat-label>Filter</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
     </mat-form-field>
-  </div>
-    
-  <form [formGroup]="searchForm" fxLayoutAlign="space-around center" fxLayout="row wrap">
-    <mat-form-field fxFlex="21">
+
+    <mat-form-field fxFlex="40" appearance="fill">
       <mat-label>Name</mat-label>
       <input matInput formControlName="name" placeholder="Ex. Milos" #input>
     </mat-form-field>
 
-    <button fxFlex="15" (click)="applySearch()" mat-flat-button color="accent" type="submit">Search</button>
+    <button fxFlex="35" (click)="applySearch()" mat-flat-button color="accent" type="submit">Search</button>
+
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="id">
+          <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+          <td class="smallField" mat-cell *matCellDef="let row"> {{row.id}} </td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+          <td class="smallField" mat-cell *matCellDef="let row"> {{row.name}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row [routerLink]="['/crews/', row.id]" *matRowDef="let row; columns: displayedColumns;"></tr>
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="10">No data matching the filter "{{input.value}}"</td>
+        </tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    </div>
+
   </form>
-
-  <div class="mat-elevation-z8">
-    <table mat-table [dataSource]="dataSource" matSort>
-  
-      <ng-container matColumnDef="id" >
-        <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
-        <td class="smallField" mat-cell *matCellDef="let row"> {{row.id}} </td>
-      </ng-container>
-  
-      <ng-container matColumnDef="name" >
-        <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-        <td class="smallField" mat-cell *matCellDef="let row"> {{row.name}} </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row [routerLink]="['/crews/', row.id]" *matRowDef="let row; columns: displayedColumns;"></tr>
-
-    <!-- Row shown when there is no matching data. -->
-    <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="10">No data matching the filter "{{input.value}}"</td>
-    </tr>
-  </table>
-
-  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-  
-        
 </div>
-  
