@@ -109,6 +109,18 @@ namespace backend.Controllers
             return BadRequest("Problem with deleting incident");
         }
 
+        /*[HttpGet("incidentids/{id}")]
+        public async Task<List<int>> GetAllIncidentsId(int id)
+        {
+            var incidents = _unitOfWork.IncidentRepository.GetIncidentsIds();
+
+            List<int> lista = new List<int>();
+
+            foreach (var item in incidents)
+            {
+                if(item.inc)
+            }
+        }*/
 
     }
 }

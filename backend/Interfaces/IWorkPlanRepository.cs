@@ -12,6 +12,12 @@ namespace backend.Interfaces
 
         void AddWorkPlan(WorkPlan workPlan);
 
-        void DeleteWorkPlan(int workPlanId);
+        void DeleteWorkPlan(WorkPlan workPlan);
+
+        Task<WorkPlan> GetWorkPlanByIdAsync(int id);
+
+        Task<bool> SaveAllAsync();
+
+        void Update(WorkPlan workPlan);
     }
 }

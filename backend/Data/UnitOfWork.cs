@@ -34,6 +34,12 @@ namespace backend.Data
         public IDeviceRepository DeviceRepository => 
             new DeviceRepository(dc);
 
+        public IWorkInstructionRepository WorkInstructionRepository =>
+            new WorkInstructionRepository(dc);
+
+        public IHistoryOfWorkPlanStateChangeRepository HistoryOfWorkPlanStateChangeRepository =>
+            new HistoryOfWorkPlanStateChangeRepository(dc);
+
         public async Task<bool> SaveAsync()
         {
             return await dc.SaveChangesAsync() > 0;

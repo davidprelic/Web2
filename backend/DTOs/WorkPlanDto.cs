@@ -1,9 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace backend.Entities
+namespace backend.DTOs
 {
-    public class WorkPlan
+    public class WorkPlanDto
     {
         public int Id { get; set; }
         public string Type { get; set; }
@@ -17,22 +19,10 @@ namespace backend.Entities
         public string Notes { get; set; }
         public string Company { get; set; }
         public string PhoneNumber { get; set; }
-        public DateTime DateTimeCreated { get; set; } = DateTime.Now;
-        public int CreatedBy { get; set; }
-
+        public DateTime? DateTimeCreated { get; set; }
+        public string CreatedBy { get; set; }
         public int? WorkRequestId { get; set; }
-        public WorkRequest WorkRequest { get; set; }
-
         public int? CrewId { get; set; }
-        public Crew Crew { get; set; }
-        
         public int? IncidentId { get; set; }
-        public Incident Incident { get; set; }
-
-        public ICollection<HistoryOfWorkPlanStateChange> HistoryOfWorkPlanStateChanges { get; set; }
-        public ICollection<WorkPlanPhoto> Photos { get; set; }
-        public ICollection<WorkInstruction> WorkInstructions { get; set; }  
-        public ICollection<SafetyDocument> SafetyDocuments { get; set; }
-
     }
 }

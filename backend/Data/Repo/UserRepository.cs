@@ -18,6 +18,13 @@ namespace backend.Data.Repo
             this.context = context;
         }
 
+        public async Task<int> GetUserIdByUsernameAsync(string username)
+        {
+            var user = await context.Users.FirstOrDefaultAsync(x => x.UserName == username);
+
+            return user.Id; 
+        }
+
         public async Task<CrewMemberDto> GetUserByIdAsync(int id)
         {
             User user = await context.Users.FindAsync(id);

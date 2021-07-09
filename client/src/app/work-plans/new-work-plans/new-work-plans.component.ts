@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-new-work-plans',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NewWorkPlansComponent implements OnInit {
 
-  constructor() { }
+  constructor(private route: ActivatedRoute) { }
+  workPlanId: number;
 
   ngOnInit(): void {
+    this.workPlanId = parseInt(this.route.snapshot.params['id']);
   }
 
 }

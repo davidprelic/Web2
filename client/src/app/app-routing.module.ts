@@ -61,7 +61,7 @@ const routes: Routes = [
       {path: 'dashboard/safety-docs', component: SafetyDocsListComponent},
       {path: 'dashboard/safety-docs/0', component: SafetyDocComponent},
       {path: 'dashboard/work-plans', component: WorkPlansListComponent},
-      {path: 'dashboard/work-plans/new-work-plans', component: NewWorkPlansComponent},
+      {path: 'dashboard/work-plans/:id', component: NewWorkPlansComponent},
       {path: 'dashboard/work-requests', component: WorkRequestListComponent},
       {path: 'dashboard/work-requests/0', component: WorkRequestComponent},
     ]

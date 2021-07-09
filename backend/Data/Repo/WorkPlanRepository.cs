@@ -21,16 +21,29 @@ namespace backend.Data.Repo
             dc.WorkPlans.AddAsync(workPlan);
         }
 
-        public void DeleteWorkPlan(int workPlanId)
+        public void DeleteWorkPlan(WorkPlan workPlan)
         {
-            var workPlan = dc.WorkPlans.Find(workPlanId);
-
             dc.WorkPlans.Remove(workPlan);
         }
 
         public async Task<IEnumerable<WorkPlan>> GetWorkPlanAsync()
         {
             return await dc.WorkPlans.ToListAsync();
+        }
+
+        public async Task<WorkPlan> GetWorkPlanByIdAsync(int id)
+        {
+            return await dc.WorkPlans.FindAsync(id);
+        }
+
+        public async Task<bool> SaveAllAsync()
+        {
+            return await dc.SaveChangesAsync() > 0;
+        }
+
+        public void Update(WorkPlan workPlan)
+        {
+            dc.Entry(workPlan).State = EntityState.Modified;
         }
     }
 }
