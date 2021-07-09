@@ -18,7 +18,6 @@ import { WorkRequestComponent } from './work-requests/work-request/work-request.
 import { CrewsListComponent } from './crews/crews-list/crews-list.component';
 import { NewCrewComponent } from './crews/new-crew/new-crew.component';
 import { CrewDetailsComponent } from './crews/crew-details/crew-details.component';
-import { SelectMembersDialogComponent } from './crews/select-members-dialog/select-members-dialog.component';
 
 import { MapViewComponent } from './map-view/map-view.component';
 

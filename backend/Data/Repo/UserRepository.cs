@@ -42,7 +42,7 @@ namespace backend.Data.Repo
 
             foreach (var user in users)
             {
-                if (user.UserRole == "CrewMember" && user.CrewId != id)
+                if (user.UserRole == "CrewMember" && user.CrewId == null)
                 {
                     users2.Add(new CrewMemberDto(user.Id, user.FirstName, user.LastName));
                 }

@@ -26,7 +26,7 @@ export class CrewService{
         let params = new HttpParams();
         params = params.append("name", model.name);
 
-        this.router.navigate(['/crew'], {queryParams: {name: model.name}})
+        this.router.navigate(['/crews'], {queryParams: {name: model.name}})
 
         return this.http.get<CrewItem[]>(this.baseUrl + 'search', {params: params});
     }

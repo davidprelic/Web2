@@ -44,15 +44,18 @@ import { WorkRequestMultimediaComponent } from './work-requests/work-request-mul
 import { CrewsListComponent } from './crews/crews-list/crews-list.component';
 import { NewCrewComponent } from './crews/new-crew/new-crew.component';
 import { SelectMembersDialogComponent } from './crews/select-members-dialog/select-members-dialog.component';
+import { ShowMembersDialogComponent } from './crews/show-members-dialog/show-members-dialog.component';
 
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { MapViewComponent } from './map-view/map-view.component';
+import { AnotherComponent } from "./map/another.component";
 
 import { AddSwitchingInstructionComponent } from './work-plans/add-switching-instruction/add-switching-instruction.component';
 import { SelectDeviceDialogComponent } from './work-plans/select-device-dialog/select-device-dialog.component';
 import { ConsumersListComponent } from './consumers/consumers-list/consumers-list.component';
 import { NewConsumerComponent } from './consumers/new-consumer/new-consumer.component';
 import { HttpClientModule } from '@angular/common/http';
+import { MarkerService } from './_services/marker.service';
 import { ReportOutageComponent } from './report-outage/report-outage.component';
 import { DeviceDetailsComponent } from './devices/device-details/device-details.component';
 import { CrewDetailsComponent } from './crews/crew-details/crew-details.component';
@@ -110,8 +113,10 @@ import { IncidentEquipmentComponent } from './incidents/incident-equipment/incid
     CrewsListComponent,
     NewCrewComponent,
     SelectMembersDialogComponent,
+    ShowMembersDialogComponent,
 
     MapViewComponent,
+    AnotherComponent,
 
     AddSwitchingInstructionComponent,
     SelectDeviceDialogComponent,

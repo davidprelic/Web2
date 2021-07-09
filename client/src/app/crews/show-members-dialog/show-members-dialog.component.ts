@@ -12,18 +12,18 @@ import { CrewChangeUser } from 'src/app/_models/crew-change-user';
 
 
 @Component({
-  selector: 'app-select-members-dialog',
-  templateUrl: './select-members-dialog.component.html',
-  styleUrls: ['./select-members-dialog.component.css']
+  selector: 'app-show-members-dialog',
+  templateUrl: './show-members-dialog.component.html',
+  styleUrls: ['./show-members-dialog.component.css']
 })
-export class SelectMembersDialogComponent implements OnInit {
+export class ShowMembersDialogComponent implements OnInit {
   displayedColumns: string[] = ['id', 'firstName', 'lastName'];
   dataSource: MatTableDataSource<CrewMember>;
   crewMembers : CrewMember[];
   selectedCrewMemberId: number;
-  addButtonToggle: boolean;
+  deleteButtonToggle: boolean;
   selectedCrewMember: CrewChangeUser;
-  crewId: number;
+  crewIdd: number | null;
   
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -34,10 +34,11 @@ export class SelectMembersDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userService.getCrewMembers(this.data.crId).subscribe(response =>{
+    this.userService.getUsersByCrewId(this.data.crId).subscribe(response =>{
       this.dataSource = new MatTableDataSource(response);
     });
-    this.addButtonToggle = true;
+    this.deleteButtonToggle = true;
+    this.crewIdd = null
   }
 
   ngAfterViewInit() {
@@ -56,10 +57,10 @@ export class SelectMembersDialogComponent implements OnInit {
 
   getSelectedCrewMemberId(id: number) {
     this.selectedCrewMemberId = id;
-    this.addButtonToggle = false;
+    this.deleteButtonToggle = false;
   }
 
-  AddCrewMember() {
+  DeleteCrewMember() {
     this.userService.getUserById(this.selectedCrewMemberId).subscribe(response => {
       this.selectedCrewMember = {
         id: this.selectedCrewMemberId,
