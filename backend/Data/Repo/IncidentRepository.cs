@@ -43,7 +43,7 @@ namespace backend.Data.Repo
         public async Task<IEnumerable<Incident>> GetActiveIncidentsAsync()
         {
             return await _context.Incidents
-                .Where(x => x.Status == "Active")
+                .Where(x => x.Status == "Approved" || x.Status == "Draft") // moze biti i Denied
                 .ToListAsync();
         }
 

@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -25,7 +25,7 @@ export class DeviceListDialogComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: {incId: number}, private deviceService: DeviceService,
-              private router: Router) { 
+              private router: Router, private dialogRef: MatDialogRef<DeviceListDialogComponent>) { 
     this.addButtonToggle = true;
   }
 
@@ -66,11 +66,16 @@ export class DeviceListDialogComponent implements OnInit {
         incidentId: this.data.incId
       }
        
-      this.deviceService.updateDevice(this.selectedDevice).subscribe();
+      this.deviceService.updateDevice(this.selectedDevice).subscribe(res => {
+        console.log(res);
+        this.dialogRef.close({ data: 1 })
+      });
     });
+  }
 
-    
-
+  cancel() {
+    // closing itself and sending data to parent component
+    this.dialogRef.close({ data: 0 })
   }
 
 }

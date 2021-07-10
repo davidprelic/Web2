@@ -17,6 +17,15 @@ namespace backend.Helpers
             CreateMap<Incident, IncidentDto>();
             CreateMap<IncidentDto, Incident>();
 
+            CreateMap<SafetyDocument, SafetyDocDto>();
+            CreateMap<SafetyDocDto, SafetyDocument>();
+
+            CreateMap<Checklist, ChecklistDto>();
+            CreateMap<ChecklistDto, Checklist>();
+
+            CreateMap<HistoryOfSafetyDocumentStateChange, HistorySafetyDocDto>();
+            CreateMap<HistorySafetyDocDto, HistoryOfSafetyDocumentStateChange>();
+
             CreateMap<CallDto, Call>();
             CreateMap<Call, CallDto>();
 

@@ -1,24 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  color: string;
-}
-
-/** Constants used to fill up our data base. */
-const COLORS: string[] = [
-  'maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple', 'fuchsia', 'lime', 'teal',
-  'aqua', 'blue', 'navy', 'black', 'gray'
-];
-const NAMES: string[] = [
-  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
-  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
-];
+import { Router } from '@angular/router';
+import { SafetyDocument } from 'src/app/_models/safety-document';
+import { SafetyDocService } from 'src/app/_services/safety-doc.service';
 
 @Component({
   selector: 'app-safety-docs-list',
@@ -26,21 +13,20 @@ const NAMES: string[] = [
   styleUrls: ['./safety-docs-list.component.css']
 })
 export class SafetyDocsListComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'startDate', 'phoneNumber', 'status', 'address'];
-  dataSource: MatTableDataSource<UserData>;
+  displayedColumns: string[] = ['id', 'startDate', 'phoneNumber', 'status'];
+  dataSource: MatTableDataSource<SafetyDocument>;
+  safetyDocs: SafetyDocument[];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor() { 
-    // Create 100 users
-    const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
-
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(users);
+  constructor(private safetyDocService: SafetyDocService, private fb: FormBuilder, private router: Router) { 
   }
 
   ngOnInit(): void {
+    this.safetyDocService.getSafetyDocs().subscribe(response => {
+      this.dataSource = new MatTableDataSource(response); 
+    });
   }
 
   ngAfterViewInit() {
@@ -57,17 +43,4 @@ export class SafetyDocsListComponent implements OnInit {
     }
   }
 
-}
-
-/** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
-
-  return {
-    id: id.toString(),
-    name: name,
-    progress: Math.round(Math.random() * 100).toString(),
-    color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
-  };
 }

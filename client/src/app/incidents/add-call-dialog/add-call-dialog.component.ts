@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Call } from 'src/app/_models/call';
 import { Customer } from 'src/app/_models/customer';
@@ -26,7 +26,8 @@ export class AddCallDialogComponent implements OnInit {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: {incId: number}, private fb: FormBuilder, 
               public dialog: MatDialog, private callService: CallService, private incidentService: IncidentService,
-              private route: ActivatedRoute, private consumerService: ConsumerService) { }
+              private route: ActivatedRoute, private consumerService: ConsumerService,
+              private dialogRef: MatDialogRef<AddCallDialogComponent>) { }
 
   ngOnInit(): void {
     this.incidentId = this.route.snapshot.params['id'];
@@ -64,8 +65,14 @@ export class AddCallDialogComponent implements OnInit {
       }
       this.callService.addNewCall(this.currentCall).subscribe(response => {
         console.log(response);
+        this.dialogRef.close({ data: 1 })
       });
     });
+  }
+
+  cancel() {
+    // closing itself and sending data to parent component
+    this.dialogRef.close({ data: 0 })
   }
 
   openDialog() {

@@ -5,6 +5,7 @@ import { AccountService } from 'src/app/_services/account.service';
 import { MapOptions, Map, tileLayer, latLng, ZoomAnimEvent, LeafletMouseEvent } from 'leaflet';
 import { HttpClient } from '@angular/common/http';
 import { DeviceService } from 'src/app/_services/device.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-new-device',
@@ -20,7 +21,7 @@ export class NewDeviceComponent implements OnInit {
   addrInfo = {};
 
   constructor(private accountService: AccountService, private fb: FormBuilder, 
-    private router: Router, private http: HttpClient, private deviceService: DeviceService) { }
+    private router: Router, private http: HttpClient, private deviceService: DeviceService, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -60,6 +61,11 @@ export class NewDeviceComponent implements OnInit {
     this.deviceService.addNewDevice(this.newDeviceForm.getRawValue()).subscribe(response => {
       console.log(response);
       this.router.navigateByUrl('/devices');
+      this._snackBar.open("New device added!", "Succes", {
+        duration: 2000,
+        horizontalPosition: 'end',
+        panelClass: ['mat-toolbar', 'mat-accent']
+      } );
     });
   }
 

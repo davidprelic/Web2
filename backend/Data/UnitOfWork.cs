@@ -34,6 +34,14 @@ namespace backend.Data
         public IDeviceRepository DeviceRepository =>
             new DeviceRepository(dc);
 
+        public ISafetyDocRepository SafetyDocRepository => 
+            new SafetyDocRepository(dc);
+        
+        public IHistorySafetyDocRepository HistorySafetyDocRepository => 
+            new HistorySafetyDocRepository(dc);
+
+        public IChecklistRepository ChecklistRepository => 
+            new ChecklistRepository(dc);
         public IWorkInstructionRepository WorkInstructionRepository =>
             new WorkInstructionRepository(dc);
 

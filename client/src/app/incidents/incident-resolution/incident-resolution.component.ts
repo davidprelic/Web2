@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Resolution } from 'src/app/_models/resolution';
 import { IncidentService } from 'src/app/_services/incident.service';
@@ -18,7 +19,7 @@ export class IncidentResolutionComponent implements OnInit {
   resolutionForUpdate: Resolution;
 
   constructor(private fb: FormBuilder, private resolutionService: ResolutionService,
-              private incidentService: IncidentService, private route: ActivatedRoute) { }
+              private incidentService: IncidentService, private route: ActivatedRoute, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.incidentId = parseInt(this.route.snapshot.params['id']);
@@ -29,8 +30,8 @@ export class IncidentResolutionComponent implements OnInit {
           this.currentResolutionId = response.resolutionId;
           this.resolutionService.getResolutionById(response.resolutionId).subscribe(response => {
             this.currentResolution = response;
-          this.initializeForm();
-        });
+            this.initializeForm();
+          });
       });
     }
     else 
@@ -61,7 +62,11 @@ export class IncidentResolutionComponent implements OnInit {
     console.log(this.resolutionForUpdate);
 
     this.resolutionService.updateResolution(this.resolutionForUpdate).subscribe(response => {
-      console.log('valid resolution update');
+      this._snackBar.open("Resolution changes saved!", "Succes", {
+        duration: 2000,
+        horizontalPosition: 'end',
+        panelClass: ['mat-toolbar', 'mat-accent']
+      } );
     });
   }
 

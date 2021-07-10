@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Map, latLng } from 'leaflet';
 import { Device } from 'src/app/_models/device';
@@ -24,7 +25,7 @@ export class DeviceDetailsComponent implements OnInit {
   addrInfo = {};
 
   constructor(private fb: FormBuilder, private router: Router, private http: HttpClient,
-     private deviceService: DeviceService, private route: ActivatedRoute) { }
+     private deviceService: DeviceService, private route: ActivatedRoute, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.deviceId = this.route.snapshot.params['id']
@@ -70,6 +71,11 @@ export class DeviceDetailsComponent implements OnInit {
     this.updateDevice.longitude = this.deviceForm.get('longitude').value;
 
     this.deviceService.updateDevice(this.updateDevice).subscribe(response => {
+      this._snackBar.open("Device edited!", "Succes", {
+        duration: 2000,
+        horizontalPosition: 'end',
+        panelClass: ['mat-toolbar', 'mat-accent']
+      } );
       this.router.navigateByUrl('/devices');
     });
   }
@@ -77,6 +83,11 @@ export class DeviceDetailsComponent implements OnInit {
   delete() {
     this.deviceService.deleteDevice(this.deviceId).subscribe(response => {
       this.router.navigateByUrl('/devices');
+      this._snackBar.open("Device deleted!", "Succes", {
+        duration: 2000,
+        horizontalPosition: 'end',
+        panelClass: ['mat-toolbar', 'mat-accent']
+      } );
     });
   }
 

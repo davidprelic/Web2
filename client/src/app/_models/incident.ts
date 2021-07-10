@@ -21,4 +21,5 @@ export interface Incident {
     voltage?: number;
     scheduledTime?: Date;
     resolutionId?: number;
+    crewId?: number;
 }

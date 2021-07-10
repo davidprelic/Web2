@@ -20,6 +20,9 @@ namespace backend.Extensions
 
             services.AddScoped<ICallRepository, CallRepository>();
             services.AddScoped<IIncidentRepository, IncidentRepository>();
+            services.AddScoped<ISafetyDocRepository, SafetyDocRepository>();
+            services.AddScoped<IChecklistRepository, ChecklistRepository>();
+            services.AddScoped<IHistorySafetyDocRepository, HistorySafetyDocRepository>();
             services.AddScoped<IResolutionRepository, ResolutionRepository>();
 
             services.AddScoped<IWorkRequestRepository, WorkRequestRepository>();
