@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DTOs\ModelWithStringDto.cs" />
     <Compile Remove="DTOs\NewNotificationDto.cs" />
     <Compile Remove="Helpers\NotificationHub.cs" />
   </ItemGroup>

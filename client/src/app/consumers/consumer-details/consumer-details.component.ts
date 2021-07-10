@@ -64,7 +64,7 @@ export class ConsumerDetailsComponent implements OnInit {
       phoneNumber: [this.currentConsumer.phoneNumber, Validators.required],
       type: [this.currentConsumer.type, Validators.required],
       latitude: [{value: this.currentConsumer.latitude, disabled: true}, Validators.required],
-      longitude: [{value: this.currentConsumer.longitude, disabled: true}, Validators.required]   
+      longitude: [{value: this.currentConsumer.longitude, disabled: true}, Validators.required],
     })
   }
 

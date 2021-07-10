@@ -17,11 +17,12 @@ namespace backend.Data.Repo
             dc = context;
         }
 
-        public void NewNotification(Notification notification, int userId)
+        public async Task NewNotification(Notification notification, int userId)
         {
             dc.Notifications.Add(notification);
+            await SaveAllAsync();
             dc.NotificationUsers.Add(new NotificationUser() { NotificationId = notification.Id, UserId = userId, Read = false });
-                            
+            await SaveAllAsync();
         }
 
         public void AddNotification(Notification notification)
@@ -52,6 +53,11 @@ namespace backend.Data.Repo
         List<Notification> INotificationRepository.GetNotifications()
         {
             return dc.Notifications.ToList();
+        }
+
+        public async Task<bool> SaveAllAsync()
+        {
+            return await dc.SaveChangesAsync() > 0;
         }
     }
 }

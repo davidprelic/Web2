@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Route } from '@angular/compiler/src/core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {ThemePalette} from '@angular/material/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ChangeRead } from '../_models/change-read';
@@ -20,6 +22,13 @@ export class NotificationsComponent implements OnInit {
   changeToRead: ChangeRead;
   readNotifications: string = "all";
   typeNotifications: string = "all";
+
+  length: any;
+  pageSize: any;
+  pageSizeOptions: any;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(private toastrService: ToastrService, private router: Router, private notificationService: NotificationUsersService, private http: HttpClient) { }
 
@@ -55,6 +64,24 @@ export class NotificationsComponent implements OnInit {
     },
     err=>{
       this.toastrService.error("Notification is already read");
+    });
+
+    this.notificationService.getNotifications(user.username).subscribe(response =>{
+      this.notifications = response;
+      this.filteredNotifications = response;
+
+      this.notifications.forEach(element => {
+        if(element.type == "Error"){
+          element.color = 'warn';
+        }else if(element.type == "Success"){
+          element.color = 'accent';
+        }else if(element.type == "Info"){
+          element.color = 'primary';
+        }else{
+          element.color = undefined;
+        }
+      });
+      this.filterNotifications();
     });
   }
 
@@ -112,8 +139,19 @@ export class NotificationsComponent implements OnInit {
   }
 
   sortNotifications(){
-    this.tempNotifications = this.filteredNotifications.sort((a, b) => new Date(a.dateTimeCreated).getTime() - new Date(b.dateTimeCreated).getTime());
+    this.tempNotifications = this.filteredNotifications.sort((a, b) => new Date(b.dateTimeCreated).getTime() - new Date(a.dateTimeCreated).getTime());
     this.filteredNotifications = this.tempNotifications;
+    this.filteredNotifications
   }
+
+/*  change(event:PageEvent)
+{
+    //make something
+    console.log(event.length);
+    console.log(event.pageIndex);
+    console.log(event.pageSize);
+    console.log(event.previousPageIndex)
+    this.filteredNotifications=this.filteredNotifications.slice()
+}*/
 
 }

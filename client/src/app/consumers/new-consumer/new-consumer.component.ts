@@ -57,7 +57,7 @@ export class NewConsumerComponent implements OnInit {
       phoneNumber: ['', Validators.required],
       type: ['', Validators.required],
       latitude: [{value: 'Choose on map', disabled: true}, Validators.required],
-      longitude: [{value: 'Choose on map', disabled: true}, Validators.required]
+      longitude: [{value: 'Choose on map', disabled: true}, Validators.required],
     })
   }
 

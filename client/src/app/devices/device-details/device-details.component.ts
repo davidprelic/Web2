@@ -66,9 +66,19 @@ export class DeviceDetailsComponent implements OnInit {
   }
 
   edit() {
-    this.updateDevice.address = this.deviceForm.get('address').value;
-    this.updateDevice.latitude = this.deviceForm.get('latitude').value;
-    this.updateDevice.longitude = this.deviceForm.get('longitude').value;
+    this.updateDevice = 
+    {
+      id: this.currentDevice.id,
+      type: this.currentDevice.type,
+      name: this.currentDevice.name,
+      address: this.deviceForm.get('address').value,
+      latitude: this.deviceForm.get('latitude').value,
+      longitude: this.deviceForm.get('latitude').value,
+      incidentId: this.currentDevice.incidentId
+    }
+    // this.updateDevice.address = this.deviceForm.get('address').value;
+    // this.updateDevice.latitude = this.deviceForm.get('latitude').value;
+    // this.updateDevice.longitude = this.deviceForm.get('longitude').value;
 
     this.deviceService.updateDevice(this.updateDevice).subscribe(response => {
       this._snackBar.open("Device edited!", "Succes", {
