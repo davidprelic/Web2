@@ -116,9 +116,6 @@ namespace backend.Controllers
             safetyDoc.PhoneNumber = safetyDocDto.PhoneNumber;
             safetyDoc.WorkPlanId = safetyDocDto.WorkPlanId;
             safetyDoc.CrewId = safetyDocDto.CrewId;
-
-
-            safetyDoc.ChecklistId = safetyDocDto.ChecklistId;
             
             // _mapper.Map(safetyDocDto, safetyDoc);
 

@@ -26,6 +26,7 @@ export class SafetyDocsListComponent implements OnInit {
   ngOnInit(): void {
     this.safetyDocService.getSafetyDocs().subscribe(response => {
       this.dataSource = new MatTableDataSource(response); 
+      this.dataSource.paginator = this.paginator;
     });
   }
 

@@ -29,7 +29,9 @@ export class DevicesListComponent implements OnInit {
     this.initializeForm();
     this.deviceService.getDevices().subscribe(response => {
       this.dataSource = new MatTableDataSource(response); 
+      this.dataSource.paginator = this.paginator;
     });
+
   }
 
   initializeForm() {
@@ -43,7 +45,7 @@ export class DevicesListComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    // this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 

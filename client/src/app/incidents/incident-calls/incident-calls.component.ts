@@ -33,6 +33,8 @@ export class IncidentCallsComponent implements OnInit {
     this.incidentId = this.route.snapshot.params['id'];
     this.callService.getCallsByIncidentId(this.incidentId).subscribe(response => {
       this.dataSource = new MatTableDataSource(response); 
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     });
   }
 

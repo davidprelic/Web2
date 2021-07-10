@@ -28,7 +28,9 @@ export class IncidentListComponent implements OnInit {
   ngOnInit(): void {
     this.incidentService.getIncidents().subscribe(response => {
       this.dataSource = new MatTableDataSource(response); 
+      this.dataSource.paginator = this.paginator;
     });
+    
   }
 
   ngAfterViewInit() {

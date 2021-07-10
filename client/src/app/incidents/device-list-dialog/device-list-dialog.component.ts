@@ -32,7 +32,9 @@ export class DeviceListDialogComponent implements OnInit {
   ngOnInit(): void {
     this.deviceService.getFreeDevices().subscribe(response => {
       this.dataSource = new MatTableDataSource(response); 
+      this.dataSource.paginator = this.paginator;
     });
+
   }
 
   ngAfterViewInit() {

@@ -32,7 +32,9 @@ export class IncidentDevicesComponent implements OnInit {
     this.incidentId = this.route.snapshot.params['id'];
     this.deviceService.getDevicesByIncidentId(this.incidentId).subscribe(response => {
       this.dataSource = new MatTableDataSource(response); 
+      this.dataSource.paginator = this.paginator;
     });
+
   }
 
   ngAfterViewInit() {
