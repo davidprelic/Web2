@@ -5,7 +5,9 @@ using AutoMapper;
 using backend.DTOs;
 using backend.Entities;
 using backend.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
@@ -13,23 +15,50 @@ namespace backend.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public SafetyDocsController(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly UserManager<User> _userManager;
+        public SafetyDocsController(IUnitOfWork unitOfWork, IMapper mapper, UserManager<User> userManager)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         [HttpPost]
         public async Task<ActionResult<SafetyDocDto>> CreateSafetyDoc(SafetyDocDto safetyDocDto)
-        {
-            var safetyDoc = _mapper.Map<SafetyDocument>(safetyDocDto);
-            safetyDoc.DateTimeCreated = DateTime.Now;
+        {   
+            int? crewId = null;
+            int? workPlanId = null;
             
+            if(safetyDocDto.CrewId != 0)
+            {
+                crewId = safetyDocDto.CrewId;
+            }
+
+            if(safetyDocDto.WorkPlanId != 0)
+            {
+                workPlanId = safetyDocDto.WorkPlanId;
+            }
+
+            var safetyDoc = new SafetyDocument
+            {
+                Type = safetyDocDto.Type,
+                Status = safetyDocDto.Status,
+                Details = safetyDocDto.Details,
+                Notes = safetyDocDto.Notes,
+                PhoneNumber = safetyDocDto.PhoneNumber,
+                DateTimeCreated = DateTime.Now,
+                WorkPlanId = workPlanId,
+                CrewId = crewId
+            };
+
             Checklist checklist = new Checklist();
             _unitOfWork.ChecklistRepository.AddChecklist(checklist);
             await _unitOfWork.ChecklistRepository.SaveAllAsync();
 
             safetyDoc.ChecklistId = checklist.Id;
+
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == safetyDocDto.CreatedBy.ToLower());
+            safetyDoc.CreatedBy = temp.Id;
 
             _unitOfWork.SafetyDocRepository.AddSafetyDoc(safetyDoc);
             if (await _unitOfWork.SafetyDocRepository.SaveAllAsync()) return Ok(_mapper.Map<SafetyDocDto>(safetyDoc));
@@ -52,8 +81,13 @@ namespace backend.Controllers
         public async Task<ActionResult<SafetyDocDto>> GetSafetyDoc(int id)
         {
             var safetyDoc = await _unitOfWork.SafetyDocRepository.GetSafetyDocByIdAsync(id);
+            
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.Id == safetyDoc.CreatedBy);
 
-            return Ok(_mapper.Map<SafetyDocDto>(safetyDoc));
+            SafetyDocDto finalSafetyDoc = _mapper.Map<SafetyDocDto>(safetyDoc);
+            finalSafetyDoc.CreatedBy = temp.UserName;
+
+            return Ok(_mapper.Map<SafetyDocDto>(finalSafetyDoc));
         }
 
         [HttpPut]
@@ -61,9 +95,32 @@ namespace backend.Controllers
         {
             var safetyDoc = await _unitOfWork.SafetyDocRepository.GetSafetyDocByIdAsync(safetyDocDto.Id);
 
-            safetyDocDto.ChecklistId = safetyDoc.ChecklistId;
+
+            int? crewId = null;
+            int? workPlanId = null;
+
+            if (safetyDocDto.CrewId != 0)
+            {
+                crewId = safetyDocDto.CrewId;
+            }
+
+            if (safetyDocDto.WorkPlanId != 0)
+            {
+                workPlanId = safetyDocDto.WorkPlanId;
+            }
+
+            safetyDoc.Type = safetyDocDto.Type;
+            safetyDoc.Status = safetyDocDto.Status;
+            safetyDoc.Details = safetyDocDto.Details;
+            safetyDoc.Notes = safetyDocDto.Notes;
+            safetyDoc.PhoneNumber = safetyDocDto.PhoneNumber;
+            safetyDoc.WorkPlanId = safetyDocDto.WorkPlanId;
+            safetyDoc.CrewId = safetyDocDto.CrewId;
+
+
+            safetyDoc.ChecklistId = safetyDocDto.ChecklistId;
             
-            _mapper.Map(safetyDocDto, safetyDoc);
+            // _mapper.Map(safetyDocDto, safetyDoc);
 
             _unitOfWork.SafetyDocRepository.Update(safetyDoc);
 

@@ -4,9 +4,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { endWith } from 'rxjs/operators';
+import { Crew } from 'src/app/_models/crew';
 import { SafetyDocument } from 'src/app/_models/safety-document';
+import { WorkPlan } from 'src/app/_models/work-plan';
 import { AccountService } from 'src/app/_services/account.service';
+import { CrewService } from 'src/app/_services/crew.service';
 import { SafetyDocService } from 'src/app/_services/safety-doc.service';
+import { WorkPlanService } from 'src/app/_services/work-plan.service';
 
 @Component({
   selector: 'app-safety-doc-basic-info',
@@ -17,13 +21,24 @@ export class SafetyDocBasicInfoComponent implements OnInit {
   basicInfoForm: FormGroup;
   safetyDocId: number;
   currentSafetyDoc: SafetyDocument;
-  
-  constructor(private fb: FormBuilder, private router: Router, private http: HttpClient, 
+  crews: Crew[];
+  workPlans: WorkPlan[];
+
+  constructor(private fb: FormBuilder, private router: Router, private http: HttpClient,
               private route: ActivatedRoute, private safetyDocService: SafetyDocService,
-              private accountService: AccountService, private _snackBar: MatSnackBar) { }
+              private accountService: AccountService, private _snackBar: MatSnackBar, private crewService: CrewService,
+              private workPlanService: WorkPlanService) { }
 
   ngOnInit(): void {
     this.safetyDocId = parseInt(this.route.snapshot.params['id']);
+
+    this.crewService.getCrews().subscribe(response =>{
+      this.crews = response;
+    });
+
+    this.workPlanService.getWorkPlans().subscribe(response =>{
+      this.workPlans = response;
+    });
 
     if (this.safetyDocId != 0)
     {
@@ -33,27 +48,23 @@ export class SafetyDocBasicInfoComponent implements OnInit {
       });
     }
     else {
-      debugger
       this.initializeForm();
     }
   }
 
   initializeForm() {
+    var user = JSON.parse(localStorage.getItem('user'));
     this.basicInfoForm = this.fb.group({
       id: [{value: this.safetyDocId ? this.currentSafetyDoc.id : 0, disabled: true}],
       type: [ this.safetyDocId ? this.currentSafetyDoc.type : '', Validators.required],
       status: [{value: this.safetyDocId ? this.currentSafetyDoc.status : 'Draft', disabled: true}],
-      // OVDE IZ LOCAL STORAGE POKUPITI INFO PA UZETI ID ULOGOVANOG USERA I ISPISATI NJEGOV INFO
-      createdBy: [{value: 23, disabled: true}],
+      createdBy: [{value: this.safetyDocId ? this.currentSafetyDoc.createdBy : user.username, disabled: true}],
       details: [{value: this.safetyDocId ? this.currentSafetyDoc.details : '', disabled: false}],
       notes: [{value: this.safetyDocId ? this.currentSafetyDoc.notes : '', disabled: false}],
-      phoneNumber: [{value: this.safetyDocId ? this.currentSafetyDoc.phoneNumber : '', disabled: false}, Validators.required],
-      dateTimeCreated: [ this.safetyDocId ? this.currentSafetyDoc.dateTimeCreated : null],
-      // OVDE BOLJE STAVITI WorkPlanName PA NA OSNOVU NJEGA UZETI ID I KAD KLIKNEM SAVE PROSLEDITI TAJ WorkPlanId
-      workPlanId: [null],
-      // OVDE BOLJE STAVITI CrewName PA NA OSNOVU NJEGA UZETI ID I KAD KLIKNEM SAVE PROSLEDITI TAJ CrewId
-      crewId: [null]
-      // safetyDocType: ['', Validators.required],
+      phoneNumber: [{value: this.safetyDocId ? this.currentSafetyDoc.phoneNumber : '', disabled: false}],
+      dateTimeCreated: [{value: this.safetyDocId ? this.currentSafetyDoc.dateTimeCreated : null, disabled: true}],
+      workPlanId: [this.safetyDocId ? this.currentSafetyDoc.workPlanId : 0],
+      crewId: [this.safetyDocId ? this.currentSafetyDoc.crewId: 0]
     })
   }
 
@@ -70,7 +81,7 @@ export class SafetyDocBasicInfoComponent implements OnInit {
         } );
       });
     }
-    else 
+    else
     {
       this.safetyDocService.updateSafetyDoc(this.basicInfoForm.getRawValue()).subscribe(response => {
         console.log(response);
@@ -86,6 +97,12 @@ export class SafetyDocBasicInfoComponent implements OnInit {
 
   Cancel() {
     this.router.navigateByUrl('/dashboard/safety-docs');
+  }
+
+  changeWorkPlan(id: number){
+    this.workPlanService.getWorkPlanById(id).subscribe(response=>{
+      // this.basicInfoForm.controls['longitude'].setValue(response.longitude);
+    })
   }
 
 }

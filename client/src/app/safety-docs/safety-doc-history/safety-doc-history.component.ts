@@ -34,14 +34,18 @@ export class SafetyDocHistoryComponent implements OnInit {
   ngOnInit(): void {
     this.safetyDocId = parseInt(this.route.snapshot.params['id']);
 
-    this.safetyDocService.getSafetyDocById(this.safetyDocId).subscribe(response => {
-      this.currentSafetyDoc = response;
-      this.currentState = response.status;
-    })
+    if (this.safetyDocId != 0)
+    {
+      this.safetyDocService.getSafetyDocById(this.safetyDocId).subscribe(response => {
+        this.currentSafetyDoc = response;
+        this.currentState = response.status;
+      })
 
-    this.historySafetyDocService.getHistorySafetyDocsBySafetyDocId(this.safetyDocId).subscribe(response => {
-      this.dataSource = new MatTableDataSource(response); 
-    });
+      this.historySafetyDocService.getHistorySafetyDocsBySafetyDocId(this.safetyDocId).subscribe(response => {
+        this.dataSource = new MatTableDataSource(response); 
+      });
+    }
+  
   }
 
   ngAfterViewInit() {
