@@ -42,6 +42,14 @@ namespace backend.Controllers
             return Ok(new { retval });
         }
 
+        [HttpGet("allInfo/{username}")]
+        public async Task<IActionResult> GetAccount(string username)
+        {
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username.ToLower());
+
+            return Ok(_mapper.Map<AccountDto>(temp)); ;
+        }
+
         [HttpPut("EditProfile")]
         public async Task<IActionResult> EditProfile(EditProfileDto editProfileDto)
         {

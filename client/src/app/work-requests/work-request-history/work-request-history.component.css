@@ -1,19 +1,19 @@
 table {
-    width: 100%;
-  }
-  
-  .mat-form-field {
-    font-size: 14px;
-    width: 20%;
-  }
-  
-  td, th {
-    width: 20%;
-  }
+  width: 100%;
+}
 
-  span {
-    margin-left: 200px;
-  }
+.mat-form-field {
+  font-size: 14px;
+  width: 20%;
+}
+
+td, th {
+  width: 20%;
+}
+
+span {
+  margin-left: 200px;
+}
 
   /* mat-button-toggle-group {
       margin-right: 20px;

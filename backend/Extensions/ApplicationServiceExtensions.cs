@@ -26,6 +26,7 @@ namespace backend.Extensions
             services.AddScoped<IResolutionRepository, ResolutionRepository>();
 
             services.AddScoped<IWorkRequestRepository, WorkRequestRepository>();
+            services.AddScoped<IHistoryOfWorkRequestRepository, HistoryOfWorkRequestRepository>();
 
             services.AddScoped<ICrewRepository, CrewRepository>();
             services.AddScoped<IUserRepository, UserRepository>();

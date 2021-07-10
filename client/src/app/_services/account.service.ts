@@ -4,6 +4,7 @@ import { ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { EditProfile } from '../_models/edit-profile';
 import { User } from '../_models/user';
+import { UserAccount } from '../_models/user-account';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,10 @@ export class AccountService {
 
   getProfile(model: string){
     return this.http.get<EditProfile>(this.baseUrl + "Account/" + model);
+  }
+
+  getAccount(model: string){
+    return this.http.get<UserAccount>(this.baseUrl + "Account/allInfo/" + model);
   }
 
   editProfile(model: any){
