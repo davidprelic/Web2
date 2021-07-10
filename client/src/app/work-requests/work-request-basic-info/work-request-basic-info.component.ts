@@ -51,7 +51,7 @@ export class WorkRequestBasicInfoComponent implements OnInit {
     this.basicInfoForm = this.fb.group({
       id: [{ value: this.workRequestId ? this.currentWorkRequest.id : 0, disabled: true }],
       incidentId: [this.workRequestId ? this.currentWorkRequest.incidentId : 0],
-      address: [{ value: this.workRequestId ? this.currentWorkRequest.address : '', disabled: true }],
+      address: [{ value: this.workRequestId ? this.currentWorkRequest.address : '', disabled: true }, Validators.required],
       latitude: [{ value: this.workRequestId ? this.currentWorkRequest.latitude : 0, disabled: true }],
       longitude: [{ value: this.workRequestId ? this.currentWorkRequest.longitude : 0, disabled: true }],
       type: [{ value: this.workRequestId ? this.currentWorkRequest.type : '', disabled: false }, Validators.required],

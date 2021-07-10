@@ -28,6 +28,8 @@ namespace backend.Interfaces
 
         IHistoryOfWorkPlanStateChangeRepository HistoryOfWorkPlanStateChangeRepository { get; }
 
+        IHistoryOfWorkRequestRepository HistoryWorkRequest { get; }
+
         Task<bool> SaveAsync();
     }
 }
