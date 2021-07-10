@@ -1,62 +1,66 @@
-
 <div fxLayoutAlign="space-around center">
-    <button id="addNew" routerLink="/dashboard/work-requests/0" mat-raised-button>
-      <mat-icon>add_circle</mat-icon> New
-    </button>
-  
-    <mat-button-toggle-group name="filterTable" aria-label="Filter Table">
-      <mat-button-toggle value="all">All</mat-button-toggle>
-      <mat-button-toggle value="mine">Mine</mat-button-toggle>
-    </mat-button-toggle-group>
-  
-    <mat-form-field>
-      <mat-label>Filter</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
-    </mat-form-field>
-  
-  </div>
-    
-    <div class="mat-elevation-z8">
-      <table mat-table [dataSource]="dataSource" matSort>
-    
-        <!-- ID Column -->
-        <ng-container matColumnDef="id" sticky>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
-          <td mat-cell *matCellDef="let row"> {{row.id}} </td>
-        </ng-container>
-  
-        <!-- Start Date Column -->
-        <ng-container matColumnDef="startDate" sticky>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </th>
-          <td mat-cell *matCellDef="let row"> {{row.name}} </td>
-        </ng-container>
-    
-        <!-- Phone No. Column -->
-        <ng-container matColumnDef="phoneNumber">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone No. </th>
-          <td mat-cell *matCellDef="let row"> {{row.progress}}% </td>
-        </ng-container>
-    
-        <!-- Status Column -->
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-          <td mat-cell *matCellDef="let row"> {{row.color}} </td>
-        </ng-container>
-  
-        <!-- Status Column -->
-        <ng-container matColumnDef="address">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Address </th>
-          <td mat-cell *matCellDef="let row"> {{row.color}} </td>
-        </ng-container>
-    
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    
-        <!-- Row shown when there is no matching data. -->
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
-        </tr>
-      </table>
-    
-      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-    </div>
+  <button id="addNew" routerLink="/dashboard/work-requests/0" mat-raised-button>
+    <mat-icon>add_circle</mat-icon> New
+  </button>
+
+  <mat-button-toggle-group name="filterTable" aria-label="Filter Table">
+    <mat-button-toggle value="all">All</mat-button-toggle>
+    <mat-button-toggle value="mine">Mine</mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <mat-form-field>
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+  </mat-form-field>
+
+</div>
+
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+      <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="emergencyWork" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Emergency Work </th>
+      <td mat-cell *matCellDef="let row"> {{row.emergencyWork}} </td>
+    </ng-container>
+
+    <!-- Start Date Column -->
+    <ng-container matColumnDef="status" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+      <td mat-cell *matCellDef="let row"> {{row.status}} </td>
+    </ng-container>
+
+    <!-- Phone No. Column -->
+    <ng-container matColumnDef="address">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Address </th>
+      <td mat-cell *matCellDef="let row"> {{row.address}} </td>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="incidentId">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Incident Id </th>
+      <td mat-cell *matCellDef="let row"> {{row.incidentId}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dateTimeCreated">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Date and time created </th>
+      <td mat-cell *matCellDef="let row"> {{row.dateTimeCreated}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row [routerLink]="['/dashboard/work-requests/', row.id]" *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+
+    <!-- Row shown when there is no matching data. -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="6">No data matching the filter "{{input.value}}"</td>
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>

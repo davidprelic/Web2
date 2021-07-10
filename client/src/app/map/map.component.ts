@@ -35,10 +35,24 @@ export class MapComponent implements OnInit {
   public zoom: number;
   private unsubscribe = new Subject<void>();
 
+  latitude: number;
+  longitude: number;
+  markerTooltipText: string;
+
   constructor(private markerService: MarkerService) {
     this.markerService.coordsChange.pipe(takeUntil(this.unsubscribe)).subscribe(coords => {
           this.map.flyTo(coords, this.map.getZoom());
-          L.marker(coords, { icon }).addTo(this.map);
+          L.marker(coords, { icon }).addTo(this.map).on("mouseover", function (event) {
+            this.latitude = event["latlng"].lat;
+            this.longitude = event["latlng"].lng;
+
+            console.log(this.latitude);
+            
+        }).bindTooltip(this.latitude + ', ' + this.longitude, {
+          permanent: false,
+          opacity: 1,
+          direction: 'top'
+        });
     });
   }
 

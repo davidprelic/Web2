@@ -15,7 +15,7 @@ import { ConsumerService } from 'src/app/_services/consumer.service';
   styleUrls: ['./select-customer-dialog.component.css']
 })
 export class SelectCustomerDialogComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'lastName', 'location', 'phoneNumber'];
+  displayedColumns: string[] = ['id', 'name', 'lastName', 'location', 'phoneNumber'];
   dataSource: MatTableDataSource<CustomerItem>;
   customers: CustomerItem[];
   selectedCustomerId: number;

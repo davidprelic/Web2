@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
@@ -25,7 +26,7 @@ export class IncidentCallsComponent implements OnInit {
 
 
   constructor(public dialog: MatDialog, private route: ActivatedRoute, 
-              private callService: CallService) { 
+              private callService: CallService, private _snackBar: MatSnackBar) { 
   }
 
   ngOnInit(): void {
@@ -54,12 +55,21 @@ export class IncidentCallsComponent implements OnInit {
       data: {
         incId: this.incidentId
       }
-    }).afterClosed().subscribe(() => {
-      this.callService.getCallsByIncidentId(this.incidentId).subscribe(response => {
-        this.dataSource = new MatTableDataSource(response); 
-        this.dataSource.data = [...this.dataSource.data];
-      }); 
+    }).afterClosed().subscribe(res => {
+      if (res.data > 0 && res.data != undefined)
+      {
+        this.callService.getCallsByIncidentId(this.incidentId).subscribe(response => {
+          this.dataSource = new MatTableDataSource(response); 
+          this.dataSource.data = [...this.dataSource.data];
+          this._snackBar.open("New call added to incident!", "Succes", {
+            duration: 2000,
+            horizontalPosition: 'end',
+            panelClass: ['mat-toolbar', 'mat-accent']
+          } );
+        }); 
+      }
     });
   }
+  
 
 }

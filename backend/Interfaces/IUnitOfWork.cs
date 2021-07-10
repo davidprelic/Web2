@@ -12,6 +12,13 @@ namespace backend.Interfaces
         IWorkPlanRepository WorkPlanRepository { get; }
 
         IIncidentRepository IncidentRepository { get; }
+        ISafetyDocRepository SafetyDocRepository { get; }
+
+        IHistorySafetyDocRepository HistorySafetyDocRepository { get; }
+        IChecklistRepository ChecklistRepository { get; }
+
+
+        IWorkRequestRepository WorkRequestRepository { get; }
 
         ICallRepository CallRepository { get; }
         IResolutionRepository ResolutionRepository { get; }

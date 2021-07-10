@@ -22,18 +22,26 @@ namespace backend.Data
         public IWorkPlanRepository WorkPlanRepository =>
             new WorkPlanRepository(dc);
 
-        public IIncidentRepository IncidentRepository => 
+        public IIncidentRepository IncidentRepository =>
             new IncidentRepository(dc);
 
-        public ICallRepository CallRepository => 
+        public ICallRepository CallRepository =>
             new CallRepository(dc);
 
-        public IResolutionRepository ResolutionRepository => 
+        public IResolutionRepository ResolutionRepository =>
             new ResolutionRepository(dc);
 
-        public IDeviceRepository DeviceRepository => 
+        public IDeviceRepository DeviceRepository =>
             new DeviceRepository(dc);
 
+        public ISafetyDocRepository SafetyDocRepository => 
+            new SafetyDocRepository(dc);
+        
+        public IHistorySafetyDocRepository HistorySafetyDocRepository => 
+            new HistorySafetyDocRepository(dc);
+
+        public IChecklistRepository ChecklistRepository => 
+            new ChecklistRepository(dc);
         public IWorkInstructionRepository WorkInstructionRepository =>
             new WorkInstructionRepository(dc);
 
@@ -45,6 +53,8 @@ namespace backend.Data
 
         public INotificationUserRepository NotificationUserRepository =>
             new NotificationUserRepository(dc);
+        public IWorkRequestRepository WorkRequestRepository =>
+            new WorkRequestRepository(dc);
 
         public async Task<bool> SaveAsync()
         {
