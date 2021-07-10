@@ -30,6 +30,10 @@ namespace backend.Interfaces
 
         INotificationRepository NotificationRepository { get; }
         INotificationUserRepository NotificationUserRepository { get; }
+
+        IHistoryOfWorkRequestRepository HistoryWorkRequest { get; }
+
+
         Task<bool> SaveAsync();
     }
 }

@@ -1,22 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-
-export interface UserData {
-  changedBy: string;
-  changedFrom: string;
-  changedTo: string;
-}
-
-const NAMES: string[] = [
-  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
-  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
-];
-
-const STATES: string[] = [
-  'Cancel', 'Approve', 'Deny' 
-];
+import { ActivatedRoute } from '@angular/router';
+import { HistoryWorkRequest } from 'src/app/_models/history-work-request';
+import { WorkRequest } from 'src/app/_models/work-request';
+import { AccountService } from 'src/app/_services/account.service';
+import { HistoryWorkRequestService } from 'src/app/_services/history-work-request.service';
+import { WorkRequestService } from 'src/app/_services/work-request.service';
 
 
 @Component({
@@ -25,20 +17,43 @@ const STATES: string[] = [
   styleUrls: ['./work-request-history.component.css']
 })
 export class WorkRequestHistoryComponent implements OnInit {
-  displayedColumns: string[] = ['changedBy', 'changedFrom', 'changedTo'];
-  dataSource: MatTableDataSource<UserData>;
+  workRequestId: number;
+  displayedColumns: string[] = ['changedBy', 'changedFrom', 'changedTo', 'dateTimeChanged'];
+  dataSource: MatTableDataSource<HistoryWorkRequest>;
+  historyWorkRequest: HistoryWorkRequest[];
+  currentState: string;
+  currentWorkRequest: WorkRequest;
+  newHistoryWorkRequest: HistoryWorkRequest;
+  currentUserId: number;
   
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor() { 
-    const users = Array.from({length: 5}, (_, k) => createNewUser(k + 1));
-
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(users);
+  constructor(private historyWorkRequestService: HistoryWorkRequestService, private route: ActivatedRoute,
+              private workRequestService: WorkRequestService, private _snackBar: MatSnackBar, private accountService: AccountService) { 
   }
 
   ngOnInit(): void {
+    this.workRequestId = parseInt(this.route.snapshot.params['id']);
+    var user = JSON.parse(localStorage.getItem('user'));
+
+    this.accountService.getAccount(user.username).subscribe(response => {
+      this.currentUserId = response.id;
+    })
+
+
+    if (this.workRequestId != 0)
+    {
+      this.workRequestService.getWorkRequestById(this.workRequestId).subscribe(response => {
+        this.currentWorkRequest = response;
+        this.currentState = response.status;
+      })
+
+      this.historyWorkRequestService.getHistoryWorkRequestByWorkRequestId(this.workRequestId).subscribe(response => {
+        this.dataSource = new MatTableDataSource(response); 
+      });
+    }
+  
   }
 
   ngAfterViewInit() {
@@ -46,16 +61,94 @@ export class WorkRequestHistoryComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-}
+  Approve() {
+    this.newHistoryWorkRequest = {
+      changedFrom: this.currentState,
+      changedTo: "Approved",
+      dateTimeChanged: new Date(),
+      userId: this.currentUserId,
+      workRequestId: this.workRequestId
+    }
 
-/** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
+    this.historyWorkRequestService.addNewHistoryWorkRequest(this.newHistoryWorkRequest).subscribe(response => {
+      this.currentWorkRequest.status = "Approved";
+      this.workRequestService.updateWorkRequest(this.currentWorkRequest).subscribe(() => {
+        this.workRequestService.getWorkRequestById(this.workRequestId).subscribe(response => {
+          this.currentWorkRequest = response;
+          this.currentState = response.status;
+        })
+    
+        this.historyWorkRequestService.getHistoryWorkRequestByWorkRequestId(this.workRequestId).subscribe(response => {
+          this.dataSource = new MatTableDataSource(response);
+          this.dataSource.data = [...this.dataSource.data]; 
+          this._snackBar.open("State changed to Approved!", "Succes", {
+            duration: 2000,
+            horizontalPosition: 'end',
+            panelClass: ['mat-toolbar', 'mat-accent']
+          }); 
+        });
+      });
+    });
+  }
 
-  return {
-    changedBy: name,
-    changedFrom: STATES[Math.round(Math.random() * (STATES.length - 1))],
-    changedTo: STATES[Math.round(Math.random() * (STATES.length - 1))],
-  };
+  Issue() {
+    this.newHistoryWorkRequest = {
+      changedFrom: this.currentState,
+      changedTo: "Issued",
+      dateTimeChanged: new Date(),
+      userId: this.currentUserId,
+      workRequestId: this.workRequestId
+    }
+
+    this.historyWorkRequestService.addNewHistoryWorkRequest(this.newHistoryWorkRequest).subscribe(response => {
+      this.currentWorkRequest.status = "Issued";
+      this.workRequestService.updateWorkRequest(this.currentWorkRequest).subscribe(() => {
+        this.workRequestService.getWorkRequestById(this.workRequestId).subscribe(response => {
+          this.currentWorkRequest = response;
+          this.currentState = response.status;
+        })
+    
+        this.historyWorkRequestService.getHistoryWorkRequestByWorkRequestId(this.workRequestId).subscribe(response => {
+          this.dataSource = new MatTableDataSource(response);
+          this.dataSource.data = [...this.dataSource.data];
+          this._snackBar.open("State changed to Issued!", "Succes", {
+            duration: 2000,
+            horizontalPosition: 'end',
+            panelClass: ['mat-toolbar', 'mat-accent']
+          });  
+        });
+      });
+    });
+  }
+
+  Deny() {
+    this.newHistoryWorkRequest = {
+      changedFrom: this.currentState,
+      changedTo: "Denied",
+      dateTimeChanged: new Date(),
+      userId: this.currentUserId,
+      workRequestId: this.workRequestId
+    }
+
+    this.historyWorkRequestService.addNewHistoryWorkRequest(this.newHistoryWorkRequest).subscribe(response => {
+      this.currentWorkRequest.status = "Denied";
+      this.workRequestService.updateWorkRequest(this.currentWorkRequest).subscribe(() => {
+        this.workRequestService.getWorkRequestById(this.workRequestId).subscribe(response => {
+          this.currentWorkRequest = response;
+          this.currentState = response.status;
+        })
+    
+        this.historyWorkRequestService.getHistoryWorkRequestByWorkRequestId(this.workRequestId).subscribe(response => {
+          this.dataSource = new MatTableDataSource(response);
+          this.dataSource.data = [...this.dataSource.data];
+          this._snackBar.open("State changed to Denied!", "Succes", {
+            duration: 2000,
+            horizontalPosition: 'end',
+            panelClass: ['mat-toolbar', 'mat-accent']
+          }); 
+        });
+      });
+    });
+  }
+
 }
