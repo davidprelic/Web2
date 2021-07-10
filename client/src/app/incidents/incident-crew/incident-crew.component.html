@@ -1,21 +1,24 @@
 <div fxLayoutAlign="center center">
-    <button mat-button (click)="openDialog()">
+    <button mat-button [disabled]="currentCrew != undefined" (click)="openDialog()">
         <mat-icon>add_circle</mat-icon> Add Crew
+    </button>
+    <button mat-button [disabled]="currentCrew == undefined" (click)="removeCrew()">
+        <mat-icon>delete</mat-icon> Remove Crew
     </button>
 </div>
 
-<div>
+<div *ngIf="crewInfoForm && currentCrew" [formGroup]="crewInfoForm">
     <mat-form-field fxFlex="100" appearance="fill">
         <mat-label>Crew Id</mat-label>
-        <input disabled matInput formControlName='crewId'>
+        <input disabled matInput formControlName='id'>
     </mat-form-field>
     <mat-form-field fxFlex="100" appearance="fill">
         <mat-label>Crew Name</mat-label>
-        <input disabled matInput formControlName='crewName'>
+        <input disabled matInput formControlName='name'>
     </mat-form-field>
     <mat-form-field fxFlex="100" appearance="fill">
         <mat-label>Crew Members</mat-label>
-        <input disabled matInput formControlName='crewMembers'>
+        <input disabled matInput formControlName='members'>
     </mat-form-field>
 </div>
 

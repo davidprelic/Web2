@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Checklist } from 'src/app/_models/checklist';
 import { ChecklistService } from 'src/app/_services/checklist.service';
@@ -18,7 +19,7 @@ export class SafetyDocChecklistComponent implements OnInit {
   checklistForUpdate: Checklist;
 
   constructor(private fb: FormBuilder, private checklistService: ChecklistService,
-              private safetyDocService: SafetyDocService, private route: ActivatedRoute) { }
+              private safetyDocService: SafetyDocService, private route: ActivatedRoute, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.safetyDocId = parseInt(this.route.snapshot.params['id']);
@@ -49,7 +50,6 @@ export class SafetyDocChecklistComponent implements OnInit {
   }
 
   updateChecklist() {
-    debugger
     this.checklistForUpdate = 
     {
       id: this.currentChecklistId,
@@ -62,7 +62,11 @@ export class SafetyDocChecklistComponent implements OnInit {
     console.log(this.checklistForUpdate);
 
     this.checklistService.updateChecklist(this.checklistForUpdate).subscribe(response => {
-      console.log('valid checklist update');
+      this._snackBar.open("Cheklist updated!", "Succes", {
+        duration: 2000,
+        horizontalPosition: 'end',
+        panelClass: ['mat-toolbar', 'mat-accent']
+      }); 
     });
   }
 

@@ -9,6 +9,7 @@ table {
   
   td, th {
     width: 20%;
+    cursor: pointer;
   }
 
   mat-button-toggle-group {

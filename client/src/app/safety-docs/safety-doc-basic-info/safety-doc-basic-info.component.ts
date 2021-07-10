@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { endWith } from 'rxjs/operators';
 import { SafetyDocument } from 'src/app/_models/safety-document';
 import { AccountService } from 'src/app/_services/account.service';
 import { SafetyDocService } from 'src/app/_services/safety-doc.service';
@@ -18,7 +20,7 @@ export class SafetyDocBasicInfoComponent implements OnInit {
   
   constructor(private fb: FormBuilder, private router: Router, private http: HttpClient, 
               private route: ActivatedRoute, private safetyDocService: SafetyDocService,
-              private accountService: AccountService) { }
+              private accountService: AccountService, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.safetyDocId = parseInt(this.route.snapshot.params['id']);
@@ -61,15 +63,29 @@ export class SafetyDocBasicInfoComponent implements OnInit {
       this.safetyDocService.addNewSafetyDoc(this.basicInfoForm.getRawValue()).subscribe(response => {
         console.log(response);
         this.router.navigateByUrl('/dashboard/safety-docs');
+        this._snackBar.open("New safety document added!", "Succes", {
+          duration: 2000,
+          horizontalPosition: 'end',
+          panelClass: ['mat-toolbar', 'mat-accent']
+        } );
       });
     }
     else 
     {
       this.safetyDocService.updateSafetyDoc(this.basicInfoForm.getRawValue()).subscribe(response => {
         console.log(response);
-        this.router.navigateByUrl('/dashboard/safety-docs');
+        this._snackBar.open("Basic info changes saved!", "Succes", {
+          duration: 2000,
+          horizontalPosition: 'end',
+          panelClass: ['mat-toolbar', 'mat-accent']
+        } );
+        // this.router.navigateByUrl('/dashboard/safety-docs');
       });
     }
+  }
+
+  Cancel() {
+    this.router.navigateByUrl('/dashboard/safety-docs');
   }
 
 }

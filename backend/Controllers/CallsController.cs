@@ -42,12 +42,15 @@ namespace backend.Controllers
             {
                 if (incident.Location == callDto.Location)
                 {
-                    var callsForThisLocation = await _unitOfWork.CallRepository.GetCallsByIncidentIdAsync(incident.Id);
-                    foreach (var callCheck in callsForThisLocation)
+                    if (call.Email != null)
                     {
-                        if(callCheck.Email == call.Email)
+                        var callsForThisLocation = await _unitOfWork.CallRepository.GetCallsByIncidentIdAsync(incident.Id);
+                        foreach (var callCheck in callsForThisLocation)
                         {
-                            return BadRequest("Call from this person for this incident already exists");
+                            if(callCheck.Email == call.Email)
+                            {
+                                return BadRequest("Call from this person for this incident already exists");
+                            }
                         }
                     }
 

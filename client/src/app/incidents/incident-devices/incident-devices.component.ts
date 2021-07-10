@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
@@ -24,7 +25,7 @@ export class IncidentDevicesComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(public dialog: MatDialog, private deviceService: DeviceService,
-              private route: ActivatedRoute) { 
+              private route: ActivatedRoute, private _snackBar: MatSnackBar) { 
   }
 
   ngOnInit(): void {
@@ -53,11 +54,19 @@ export class IncidentDevicesComponent implements OnInit {
       data: {
         incId: this.incidentId
       }
-    }).afterClosed().subscribe(() => {
-      this.deviceService.getDevicesByIncidentId(this.incidentId).subscribe(response => {
-        this.dataSource = new MatTableDataSource(response); 
-        this.dataSource.data = [...this.dataSource.data];
-      }); 
+    }).afterClosed().subscribe(res => {
+      if (res.data > 0 && res.data != undefined)
+      {
+        this.deviceService.getDevicesByIncidentId(this.incidentId).subscribe(response => {
+          this.dataSource = new MatTableDataSource(response); 
+          this.dataSource.data = [...this.dataSource.data];
+          this._snackBar.open("New device added to incident!", "Succes", {
+            duration: 2000,
+            horizontalPosition: 'end',
+            panelClass: ['mat-toolbar', 'mat-accent']
+          } );
+        }); 
+      }
     });
   }
 

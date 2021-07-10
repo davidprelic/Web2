@@ -1,29 +1,13 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute } from '@angular/router';
+import { CrewItem } from 'src/app/_models/crew-item';
+import { CrewService } from 'src/app/_services/crew.service';
+import { IncidentService } from 'src/app/_services/incident.service';
 
-export interface DialogData {
-  animal: 'panda' | 'unicorn' | 'lion';
-}
-
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  color: string;
-}
-
-/** Constants used to fill up our data base. */
-const COLORS: string[] = [
-  'maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple', 'fuchsia', 'lime', 'teal',
-  'aqua', 'blue', 'navy', 'black', 'gray'
-];
-const NAMES: string[] = [
-  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
-  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
-];
 
 @Component({
   selector: 'app-crew-list-dialog',
@@ -32,24 +16,27 @@ const NAMES: string[] = [
 })
 export class CrewListDialogComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'crewMembers'];
-  dataSource: MatTableDataSource<UserData>;
+  dataSource: MatTableDataSource<CrewItem>;
+  crews: CrewItem[];
+  selectedCrewId: number;
+  addButtonToggle: boolean;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) { 
-    // Create 100 users
-    const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
-
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(users);
+  constructor(@Inject(MAT_DIALOG_DATA) public data: {incId: number}, private crewService: CrewService, 
+              private incidentService: IncidentService, private dialogRef: MatDialogRef<CrewListDialogComponent>) { 
+                this.addButtonToggle = true;
   }
 
   ngOnInit(): void {
+    this.crewService.getCrews().subscribe(response => {
+      this.dataSource = new MatTableDataSource(response); 
+    });
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit() {CrewListDialogComponent
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -63,18 +50,24 @@ export class CrewListDialogComponent implements OnInit {
     }
   }
 
-}
+  getSelectedCrewId(id: number) {
+    this.selectedCrewId = id;
+    this.addButtonToggle = false;
+  }
 
-/** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
+  AddCrewToIncident() {
+    this.incidentService.getIncidentById(this.data.incId).subscribe(response => {
+      response.crewId = this.selectedCrewId;
+      this.incidentService.updateIncident(response).subscribe(() => {
+        this.dialogRef.close({ data: 1 });
+      });
+    });
+  }
 
-  return {
-    id: id.toString(),
-    name: name,
-    progress: Math.round(Math.random() * 100).toString(),
-    color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
-  };
+  cancel() {
+    // closing itself and sending data to parent component
+    this.dialogRef.close({ data: 0 });
+  }
+
 }
 
