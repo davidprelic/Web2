@@ -11,6 +11,7 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectMembersDialogComponent } from '../select-members-dialog/select-members-dialog.component';
 import { CrewMember } from 'src/app/_models/crew-member';
+import { ShowMembersDialogComponent } from '../show-members-dialog/show-members-dialog.component';
 
 @Component({
   selector: 'app-crew-details',
@@ -33,7 +34,8 @@ export class CrewDetailsComponent implements OnInit {
   addrInfo = {};
 
   constructor(private fb: FormBuilder, private router: Router, private http: HttpClient,
-    private crewService: CrewService,private userService: UserService, private route: ActivatedRoute,public dialog: MatDialog) { }
+    private crewService: CrewService,private userService: UserService, private route: ActivatedRoute,
+    public dialog: MatDialog, public dialog2: MatDialog) { }
 
   ngOnInit(): void {
     this.crewId = this.route.snapshot.params['id'];
@@ -86,7 +88,19 @@ export class CrewDetailsComponent implements OnInit {
       this.userService.getUsersByCrewId(this.crewId).subscribe(response => {
         this.dataSource = new MatTableDataSource(response); 
         this.dataSource.data = [...this.dataSource.data];
-        console.log(response);
+      }); 
+    });
+  }
+
+  openDialog2() {
+    this.dialog2.open(ShowMembersDialogComponent, {
+      data: {
+        crId: this.crewId
+      }
+    }).afterClosed().subscribe(() => {
+      this.userService.getUsersByCrewId(this.crewId).subscribe(response => {
+        this.dataSource = new MatTableDataSource(response); 
+        this.dataSource.data = [...this.dataSource.data];
       }); 
     });
   }

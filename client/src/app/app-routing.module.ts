@@ -18,7 +18,6 @@ import { WorkRequestComponent } from './work-requests/work-request/work-request.
 import { CrewsListComponent } from './crews/crews-list/crews-list.component';
 import { NewCrewComponent } from './crews/new-crew/new-crew.component';
 import { CrewDetailsComponent } from './crews/crew-details/crew-details.component';
-import { SelectMembersDialogComponent } from './crews/select-members-dialog/select-members-dialog.component';
 
 import { MapViewComponent } from './map-view/map-view.component';
 
@@ -60,9 +59,9 @@ const routes: Routes = [
       {path: 'dashboard/safety-docs', component: SafetyDocsListComponent},
       {path: 'dashboard/safety-docs/:id', component: SafetyDocComponent},
       {path: 'dashboard/work-plans', component: WorkPlansListComponent},
-      {path: 'dashboard/work-plans/new-work-plans', component: NewWorkPlansComponent},
+      {path: 'dashboard/work-plans/:id', component: NewWorkPlansComponent},
       {path: 'dashboard/work-requests', component: WorkRequestListComponent},
-      {path: 'dashboard/work-requests/0', component: WorkRequestComponent},
+      {path: 'dashboard/work-requests/:id', component: WorkRequestComponent},
     ]
   },
   

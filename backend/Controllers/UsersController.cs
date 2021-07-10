@@ -57,10 +57,16 @@ namespace backend.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdateCrewMember(CrewChangeMemberDto crewChangeMemberDto)
         {
-            //var user = await userRepository.GetUserByIdAsync(crewMemberDto.Id);
-
             var user = await _userManager.Users.SingleOrDefaultAsync(x => x.Id == crewChangeMemberDto.Id);
-            user.CrewId = crewChangeMemberDto.CrewId;
+            if (user.CrewId == null)
+            {
+                user.CrewId = crewChangeMemberDto.CrewId;
+            }
+            else
+            {
+                user.CrewId = null;
+            }
+
             await _userManager.UpdateAsync(user);
             userRepository.UpdateUser(user);
 
@@ -69,6 +75,5 @@ namespace backend.Controllers
 
             return BadRequest("Failed to update crew");
         }
-
     }
 }
