@@ -66,6 +66,7 @@ import { IncidentCallsComponent } from './incidents/incident-calls/incident-call
 import { IncidentCrewComponent } from './incidents/incident-crew/incident-crew.component';
 import { IncidentMultimediaComponent } from './incidents/incident-multimedia/incident-multimedia.component';
 import { IncidentEquipmentComponent } from './incidents/incident-equipment/incident-equipment.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -138,7 +139,8 @@ import { IncidentEquipmentComponent } from './incidents/incident-equipment/incid
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule,
-    LeafletModule
+    LeafletModule,
+    ToastrModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -6,6 +6,7 @@ import { MapOptions, Map, tileLayer, latLng, ZoomAnimEvent, LeafletMouseEvent } 
 import { HttpClient } from '@angular/common/http';
 import { CallService } from '../_services/call.service';
 import { MatDialog } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-report-outage',
@@ -20,7 +21,7 @@ export class ReportOutageComponent implements OnInit {
   
   addrInfo = {};
 
-  constructor(public accountService: AccountService, private fb: FormBuilder, 
+  constructor(public toastrService: ToastrService, public accountService: AccountService, private fb: FormBuilder, 
     private router: Router, private http : HttpClient, private callService: CallService) { }
 
   ngOnInit(): void {
@@ -86,6 +87,7 @@ export class ReportOutageComponent implements OnInit {
   report() {
     this.callService.addNewCall(this.reportOutageForm.getRawValue()).subscribe(response =>{
       this.router.navigateByUrl('/');
+      this.toastrService.success("Successfully reported")
     })
   }
 

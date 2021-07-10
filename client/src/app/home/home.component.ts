@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AccountService } from '../_services/account.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +15,7 @@ export class HomeComponent implements OnInit {
   registerMode = false;
   model: any = {}
 
-  constructor(public accountService: AccountService, private router: Router) { }
+  constructor(public toastrService: ToastrService, public accountService: AccountService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -38,6 +39,7 @@ export class HomeComponent implements OnInit {
   login() {
     this.accountService.login(this.model).subscribe(response => {
       this.router.navigateByUrl('/dashboard');
+      this.toastrService.success('You logged in');
     })
   }
 

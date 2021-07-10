@@ -113,8 +113,9 @@
         </mat-form-field>  
         
         <div fxFlex="60" fxLayout fxLayoutAlign="space-between center" >
-            <button [disabled]='!basicInfoForm.valid' fxFlex="40" mat-flat-button color="accent" type="submit">Save</button>
-            <button fxFlex="40" mat-flat-button color="warn" (click)="Cancel()" type="submit">Cancel</button>
+            <button [disabled]='!basicInfoForm.valid' fxFlex="30" mat-flat-button color="accent" type="submit">Save</button>
+            <button fxFlex="30" mat-flat-button (click)="delete()" [disabled]="this.workPlanId == 0" color="warn">Delete</button>
+            <button fxFlex="30" mat-flat-button color="warn" (click)="Cancel()" type="submit">Cancel</button>
         </div>
     </form>
 </div>

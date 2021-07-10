@@ -54,6 +54,11 @@ namespace backend.Controllers
             temp.Address = editProfileDto.Address;
             if(temp.UserRole != editProfileDto.UserRole)
             {
+                if(editProfileDto.UserRole != "CrewMember")
+                {
+                    temp.CrewId = null;
+                }
+
                 temp.UserRole = editProfileDto.UserRole;
                 temp.RegistrationStatus = "Waiting";
             }
@@ -66,7 +71,7 @@ namespace backend.Controllers
                 }
                 else
                 {
-                    return Ok(new { msg = "error" });
+                    return BadRequest(new { msg = "err" });
                 }
             }
             return Ok(new { msg = "ok" });

@@ -40,6 +40,12 @@ namespace backend.Data
         public IHistoryOfWorkPlanStateChangeRepository HistoryOfWorkPlanStateChangeRepository =>
             new HistoryOfWorkPlanStateChangeRepository(dc);
 
+        public INotificationRepository NotificationRepository =>
+            new NotificationRepository(dc);
+
+        public INotificationUserRepository NotificationUserRepository =>
+            new NotificationUserRepository(dc);
+
         public async Task<bool> SaveAsync()
         {
             return await dc.SaveChangesAsync() > 0;

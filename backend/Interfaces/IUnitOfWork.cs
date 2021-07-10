@@ -21,6 +21,8 @@ namespace backend.Interfaces
 
         IHistoryOfWorkPlanStateChangeRepository HistoryOfWorkPlanStateChangeRepository { get; }
 
+        INotificationRepository NotificationRepository { get; }
+        INotificationUserRepository NotificationUserRepository { get; }
         Task<bool> SaveAsync();
     }
 }

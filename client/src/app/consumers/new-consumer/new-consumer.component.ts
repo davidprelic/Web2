@@ -6,6 +6,7 @@ import { AccountService } from 'src/app/_services/account.service';
 import { HttpClient } from '@angular/common/http';
 import { MapOptions, Map, tileLayer, latLng, ZoomAnimEvent, LeafletMouseEvent } from 'leaflet';
 import { ConsumerService } from 'src/app/_services/consumer.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-new-consumer',
@@ -20,7 +21,7 @@ export class NewConsumerComponent implements OnInit {
 
   addrInfo = {};
 
-  constructor(private accountService: AccountService, private fb: FormBuilder, 
+  constructor(private toastrService: ToastrService, private accountService: AccountService, private fb: FormBuilder, 
     private router: Router, private http: HttpClient, private consumerService: ConsumerService) { }
 
   ngOnInit(): void {
@@ -62,8 +63,8 @@ export class NewConsumerComponent implements OnInit {
 
   add() {
     this.consumerService.addConsumer(this.newConsumerForm.getRawValue()).subscribe(response => {
-      console.log(response);
       this.router.navigateByUrl('/consumers');
+      this.toastrService.success('Successfully added consumer')
     }) 
   }
 
