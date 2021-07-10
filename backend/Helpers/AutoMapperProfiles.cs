@@ -32,6 +32,7 @@ namespace backend.Helpers
             CreateMap<CreateConsumerDto, Customer>().ReverseMap();
 
             CreateMap<WorkPlan, WorkPlanDto>().ReverseMap();
+            CreateMap<WorkRequest, WorkRequestDto>().ReverseMap();
         }
     }
 }

@@ -1,23 +1,51 @@
 <div fxLayoutAlign="center center">
-    <form [formGroup]="basicInfoForm" (ngSubmit)="basicInfoForm.valid && saveBasicInfo()" autocomplete="off" fxFlex="80" fxFlex.lt-lg="70" fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
+    <form *ngIf="currentWorkRequest || emptyForm" [formGroup]="basicInfoForm"
+        (ngSubmit)="basicInfoForm.valid && saveBasicInfo()" autocomplete="off" fxFlex="80" fxFlex.lt-lg="70"
+        fxLayout="row wrap" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center">
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Work request ID</mat-label>
+            <input matInput formControlName="id">
+        </mat-form-field>
+
         <mat-form-field fxFlex="45" appearance="fill">
             <mat-label>Type:</mat-label>
             <mat-select formControlName="type">
-              <mat-option value="plannedWork">Planned Work</mat-option>
-              <mat-option value="unplannedWork">Unplanned Work</mat-option>
+                <mat-option value="plannedWork">Planned Work</mat-option>
+                <mat-option value="unplannedWork">Unplanned Work</mat-option>
             </mat-select>
         </mat-form-field>
 
         <mat-form-field fxFlex="45" appearance="fill">
-            <mat-label>Status</mat-label>
+            <mat-label>Address:</mat-label>
+            <input matInput formControlName='address'>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Latitude:</mat-label>
+            <input matInput formControlName='latitude'>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Longitude:</mat-label>
+            <input matInput formControlName='longitude'>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Status:</mat-label>
             <input matInput formControlName='status'>
         </mat-form-field>
-      
+
         <mat-form-field fxFlex="45" appearance="fill">
-            <mat-label>Date/time created:</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName='dateTimeCreated'>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
+            <mat-label>Incident ID:</mat-label>
+            <mat-select formControlName="incidentId" (selectionChange)="changeIncident($event.value)">
+                <mat-option *ngFor="let item of incidents" [value]="item.id">
+                    {{item.id}}
+                </mat-option>
+            </mat-select>
+
+            <button matSuffix mat-button [disabled]="this.workRequestId == 0">
+                <mat-icon fxFlex="value%" fxFlexAlign="center">more_horiz</mat-icon>
+            </button>
         </mat-form-field>
 
         <mat-form-field fxFlex="45" appearance="fill">
@@ -29,55 +57,48 @@
 
         <mat-form-field fxFlex="45" appearance="fill">
             <mat-label>End date/time:</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName='endDateTime'>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
+            <input matInput [matDatepicker]="picker2" formControlName='endDateTime'>
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field fxFlex="45" appearance="fill">
-            <mat-label>Details:</mat-label>
-            <input matInput formControlName='details'>
-        </mat-form-field>
-            
-        
-        <mat-form-field fxFlex="45" appearance="fill">
-            <mat-label>Notes:</mat-label>
-            <input matInput formControlName='notes'>
-        </mat-form-field>
-        
-        <mat-form-field fxFlex="45" appearance="fill">
-            <mat-label>Phone No:</mat-label>
-            <input matInput formControlName='phoneNo'>
-        </mat-form-field>
-        
         <mat-form-field fxFlex="45" appearance="fill">
             <mat-label>Created by:</mat-label>
             <input matInput formControlName='createdBy'>
         </mat-form-field>
-        
+
         <mat-form-field fxFlex="45" appearance="fill">
             <mat-label>Purpose:</mat-label>
             <input matInput formControlName='purpose'>
         </mat-form-field>
-        
+
+        <mat-form-field fxFlex="45" appearance="fill">
+            <mat-label>Notes:</mat-label>
+            <input matInput formControlName='notes'>
+        </mat-form-field>
+
         <mat-form-field fxFlex="45" appearance="fill">
             <mat-label>Company:</mat-label>
             <input matInput formControlName='company'>
         </mat-form-field>
-        
+
         <mat-form-field fxFlex="45" appearance="fill">
-            <mat-label>Address:</mat-label>
-            <input matInput formControlName='address'>
+            <mat-label>Phone Number:</mat-label>
+            <input matInput formControlName='phoneNumber'>
         </mat-form-field>
-        
+
         <mat-form-field fxFlex="45" appearance="fill">
-            <mat-label>Incident:</mat-label>
-            <input matInput formControlName='incident'>
+            <mat-label>Date/time created:</mat-label>
+            <input matInput formControlName='dateTimeCreated' readonly>
         </mat-form-field>
 
         <mat-checkbox fxFlex="45" appearance="fill" formControlName='emergencyWork'>Emergency work</mat-checkbox>
-        
-        <button [disabled]='!basicInfoForm.valid' fxFlex="30" mat-flat-button color="accent" type="submit">Save</button>
-        <button fxFlex="30" mat-flat-button color="warn" type="submit">Cancel</button>
+
+        <div fxFlex="80" fxLayout fxLayoutAlign="space-between center">
+            <button [disabled]='!basicInfoForm.valid' fxFlex="30" mat-flat-button color="accent"
+                type="submit">Save</button>
+            <button fxFlex="30" mat-flat-button (click)="Delete()" [disabled]="this.workRequestId == 0" color="warn">Delete</button>
+            <button fxFlex="30" mat-flat-button color="basic" (click)="Cancel()" type="submit">Cancel</button>
+        </div>
     </form>
 </div>

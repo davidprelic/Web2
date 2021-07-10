@@ -13,6 +13,8 @@ namespace backend.Interfaces
 
         IIncidentRepository IncidentRepository { get; }
 
+        IWorkRequestRepository WorkRequestRepository { get; }
+
         ICallRepository CallRepository { get; }
         IResolutionRepository ResolutionRepository { get; }
         IDeviceRepository DeviceRepository { get; }

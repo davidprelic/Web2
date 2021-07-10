@@ -22,16 +22,16 @@ namespace backend.Data
         public IWorkPlanRepository WorkPlanRepository =>
             new WorkPlanRepository(dc);
 
-        public IIncidentRepository IncidentRepository => 
+        public IIncidentRepository IncidentRepository =>
             new IncidentRepository(dc);
 
-        public ICallRepository CallRepository => 
+        public ICallRepository CallRepository =>
             new CallRepository(dc);
 
-        public IResolutionRepository ResolutionRepository => 
+        public IResolutionRepository ResolutionRepository =>
             new ResolutionRepository(dc);
 
-        public IDeviceRepository DeviceRepository => 
+        public IDeviceRepository DeviceRepository =>
             new DeviceRepository(dc);
 
         public IWorkInstructionRepository WorkInstructionRepository =>
@@ -39,6 +39,9 @@ namespace backend.Data
 
         public IHistoryOfWorkPlanStateChangeRepository HistoryOfWorkPlanStateChangeRepository =>
             new HistoryOfWorkPlanStateChangeRepository(dc);
+
+        public IWorkRequestRepository WorkRequestRepository =>
+            new WorkRequestRepository(dc);
 
         public async Task<bool> SaveAsync()
         {
