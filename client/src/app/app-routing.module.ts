@@ -62,7 +62,7 @@ const routes: Routes = [
       {path: 'dashboard/work-plans', component: WorkPlansListComponent},
       {path: 'dashboard/work-plans/:id', component: NewWorkPlansComponent},
       {path: 'dashboard/work-requests', component: WorkRequestListComponent},
-      {path: 'dashboard/work-requests/0', component: WorkRequestComponent},
+      {path: 'dashboard/work-requests/:id', component: WorkRequestComponent},
     ]
   },
   

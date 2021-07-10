@@ -22,6 +22,8 @@ namespace backend.Extensions
             services.AddScoped<IIncidentRepository, IncidentRepository>();
             services.AddScoped<IResolutionRepository, ResolutionRepository>();
 
+            services.AddScoped<IWorkRequestRepository, WorkRequestRepository>();
+
             services.AddScoped<ICrewRepository, CrewRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
 
