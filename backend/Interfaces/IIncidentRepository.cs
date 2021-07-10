@@ -16,5 +16,7 @@ namespace backend.Interfaces
         Task<IEnumerable<Incident>> GetIncidentsByUserIdAsync(int id);
         Task<IEnumerable<Incident>> GetIncidentsAsync();
 
+        List<Incident> GetIncidentsIds();
+
     }
 }

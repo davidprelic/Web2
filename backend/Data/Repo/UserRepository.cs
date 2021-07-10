@@ -18,6 +18,13 @@ namespace backend.Data.Repo
             this.context = context;
         }
 
+        public async Task<int> GetUserIdByUsernameAsync(string username)
+        {
+            var user = await context.Users.FirstOrDefaultAsync(x => x.UserName == username);
+
+            return user.Id; 
+        }
+
         public async Task<CrewMemberDto> GetUserByIdAsync(int id)
         {
             User user = await context.Users.FindAsync(id);
@@ -35,7 +42,7 @@ namespace backend.Data.Repo
 
             foreach (var user in users)
             {
-                if (user.UserRole == "CrewMember" && user.CrewId != id)
+                if (user.UserRole == "CrewMember" && user.CrewId == null)
                 {
                     users2.Add(new CrewMemberDto(user.Id, user.FirstName, user.LastName));
                 }

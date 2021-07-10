@@ -18,9 +18,15 @@ namespace backend.Interfaces
         IChecklistRepository ChecklistRepository { get; }
 
 
+        IWorkRequestRepository WorkRequestRepository { get; }
+
         ICallRepository CallRepository { get; }
         IResolutionRepository ResolutionRepository { get; }
         IDeviceRepository DeviceRepository { get; }
+
+        IWorkInstructionRepository WorkInstructionRepository { get; }
+
+        IHistoryOfWorkPlanStateChangeRepository HistoryOfWorkPlanStateChangeRepository { get; }
 
         Task<bool> SaveAsync();
     }

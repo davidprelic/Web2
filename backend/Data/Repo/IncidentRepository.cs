@@ -15,6 +15,11 @@ namespace backend.Data.Repo
             _context = context;
         }
 
+        public List<Incident> GetIncidentsIds()
+        {
+            return _context.Incidents.ToList();
+        }
+
         public void AddIncident(Incident incident)
         {
             _context.Incidents.Add(incident);

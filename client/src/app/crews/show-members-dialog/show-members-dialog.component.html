@@ -1,0 +1,42 @@
+
+<mat-form-field>
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+  </mat-form-field>
+  
+  <div class="mat-elevation-z8">
+
+
+    <table mat-table [dataSource]="dataSource" matSort>
+  
+      <ng-container matColumnDef="id" >
+        <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+        <td class="smallField" mat-cell *matCellDef="let row"> {{row.id}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="firstName" >
+        <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> firstName </th>
+        <td class="smallField" mat-cell *matCellDef="let row"> {{row.firstName}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="lastName" >
+        <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> lastName </th>
+        <td class="smallField" mat-cell *matCellDef="let row"> {{row.lastName}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row (click)="getSelectedCrewMemberId(row.id)" *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <!-- Row shown when there is no matching data. -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="10">No data matching the filter "{{input.value}}"</td>
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+
+  </div>
+
+  <button mat-flat-button [disabled]="deleteButtonToggle" color="accent" (click)="DeleteCrewMember()" type="submit">Delete</button>
+  <button mat-flat-button [mat-dialog-close]="true" color="warn" type="submit">Return</button>
+
