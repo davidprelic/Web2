@@ -1,21 +1,25 @@
 <div>
-    <span fxFlex="40">Current state: PLACEHOLDER </span>
-    <span fxFlex="40">Document state options:&nbsp;&nbsp; 
-        <button fxFlex="20" mat-flat-button color="accent" type="submit">Issue</button>
-        <button fxFlex="20" mat-flat-button color="warn" type="submit">Cancel</button>
+    <span fxFlex="40">Current state: {{this.currentState}} </span>
+    <span fxFlex="40">Document state options:&nbsp;&nbsp;
+        <button fxFlex="20" [disabled]='this.currentState === "Approved"' mat-flat-button color="accent"
+            (click)="Approve()" type="button">Approve</button>
+        <button fxFlex="20" [disabled]='this.currentState === "Issued"' mat-flat-button color="primary"
+            (click)="Issue()" type="button">Issue</button>
+        <button fxFlex="20" [disabled]='this.currentState === "Denied"' mat-flat-button color="warn" (click)="Deny()"
+            type="button">Deny</button>
     </span>
-    
+
 </div>
 
 <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource" matSort>
-    
+
         <!-- Changed by Column -->
         <ng-container matColumnDef="changedBy" sticky>
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Changed by </th>
-            <td mat-cell *matCellDef="let row"> {{row.changedBy}} </td>
+            <td mat-cell *matCellDef="let row"> {{row.userId}} </td>
         </ng-container>
-    
+
         <!-- Status Column -->
         <ng-container matColumnDef="changedFrom">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Changed from </th>
@@ -27,7 +31,13 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Changed to </th>
             <td mat-cell *matCellDef="let row"> {{row.changedTo}} </td>
         </ng-container>
-    
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="dateTimeChanged">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Date Time </th>
+            <td mat-cell *matCellDef="let row"> {{row.dateTimeChanged}} </td>
+        </ng-container>
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
