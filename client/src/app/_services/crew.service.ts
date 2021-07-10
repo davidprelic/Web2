@@ -19,7 +19,8 @@ export class CrewService{
     }
 
     addCrew(model: Crew){
-        return this.http.post<Crew>(this.baseUrl, model);
+        var user = JSON.parse(localStorage.getItem('user'));
+        return this.http.post<Crew>(this.baseUrl + user.username, model);
     }
 
     getCrewAfterSearch(model: Crew){
@@ -36,10 +37,12 @@ export class CrewService{
       }
 
     updateCrew(crew: Crew){
-        return this.http.put(this.baseUrl, crew);
+        var user = JSON.parse(localStorage.getItem('user'));
+        return this.http.put(this.baseUrl + user.username, crew);
     }
 
     deleteCrew(id: number) {
-        return this.http.delete(this.baseUrl + id);
+        var user = JSON.parse(localStorage.getItem('user'));
+        return this.http.delete(this.baseUrl + id + "/" + user.username);
       }
 }

@@ -28,7 +28,10 @@ export class ConsumersListComponent implements OnInit {
     this.initializeForm();
     this.consumerService.getConsumers().subscribe(response =>{
       this.dataSource = new MatTableDataSource(response);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     });
+
   }
 
   initializeForm() {
@@ -45,8 +48,7 @@ export class ConsumersListComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    
   }
 
   applyFilter(event: Event) {

@@ -3,7 +3,9 @@ using backend.DTOs;
 using backend.Entities;
 using backend.Helpers;
 using backend.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +17,13 @@ namespace backend.Controllers
     {
         private readonly IUnitOfWork uow;
         private readonly IMapper mapper;
+        private readonly UserManager<User> _userManager;
 
-        public ConsumerController(IUnitOfWork uow, IMapper mapper)
+        public ConsumerController(UserManager<User> userManager, IUnitOfWork uow, IMapper mapper)
         {
             this.uow = uow;
             this.mapper = mapper;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -30,13 +34,26 @@ namespace backend.Controllers
             return Ok(consumersDto);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddConsumer(CreateConsumerDto consumerDto)
+        [HttpPost("{username}")]
+        public async Task<IActionResult> AddConsumer(CreateConsumerDto consumerDto, string username)
         {
             var consumer = mapper.Map<Customer>(consumerDto);
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username);
 
             uow.ConsumerRepository.AddCustomer(consumer);
-            if (await uow.SaveAsync()) return Ok(mapper.Map<ConsumerDto>(consumer));
+
+
+            if (await uow.SaveAsync())
+            {
+                await uow.NotificationRepository.NewNotification(new Notification()
+                {
+                    Type = "Success",
+                    Content = "You created new consumer named " + consumerDto.Name + " " + consumerDto.LastName,
+                    DateTimeCreated = DateTime.Now,
+                }, temp.Id);
+
+                return Ok();
+            }
             return BadRequest("Failed to add consumer");
         }
 
@@ -79,32 +96,55 @@ namespace backend.Controllers
             return Ok(mapper.Map<ConsumerDto>(consumer));
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateConsumer(ConsumerDto consumerDto)
+        [HttpPut("{username}")]
+        public async Task<IActionResult> UpdateConsumer(ConsumerDto consumerDto, string username)
         {
             var consumer = await uow.ConsumerRepository.GetCustomerByIdAsync(consumerDto.Id);
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username);
 
             mapper.Map(consumerDto, consumer);
 
             uow.ConsumerRepository.Update(consumer);
 
-            if (await uow.SaveAsync()) return NoContent();
+            if (await uow.SaveAsync())
+            {
+                await uow.NotificationRepository.NewNotification(new Notification()
+                {
+                    Type = "Success",
+                    Content = "You changed consumer: " + consumerDto.Name + " " + consumerDto.LastName,
+                    DateTimeCreated = DateTime.Now,
+                }, temp.Id);
+
+                return NoContent();
+            }
+
 
             return BadRequest("Failed to update consumer");
 
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteConsumer(int id)
+        [HttpDelete("{id}/{username}")]
+        public async Task<IActionResult> DeleteConsumer(int id, string username)
         {
             var consumer = await uow.ConsumerRepository.GetCustomerByIdAsync(id);
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username);
+
+            string name = consumer.Name + " "+ consumer.LastName;
 
             uow.ConsumerRepository.DeleteCustomer(consumer);
 
-            if (await uow.SaveAsync()) return Ok();
+            if (await uow.SaveAsync())
+            {
+                await uow.NotificationRepository.NewNotification(new Notification()
+                {
+                    Type = "Info",
+                    Content = "You deleted consumer: " + name,
+                    DateTimeCreated = DateTime.Now,
+                }, temp.Id);
+                return Ok();
+            }
 
             return BadRequest("Failed to delete consumer");
-
         }
     }
 }

@@ -19,30 +19,43 @@ namespace backend.Controllers
         private readonly IMapper mapper;
 
         private readonly UserManager<User> _userManager;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CrewController(ICrewRepository crewRepository, IMapper mapper, UserManager<User> userManager)
+        public CrewController(IUnitOfWork unitOfWork, ICrewRepository crewRepository, IMapper mapper, UserManager<User> userManager)
         {
             this.crewRepository = crewRepository;
             this.mapper = mapper;
             _userManager = userManager;
+            _unitOfWork = unitOfWork;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<CrewDto>> CreateCrew(CreateCrewDto createCrewDto)
+        [HttpPost("{username}")]
+        public async Task<ActionResult<CrewDto>> CreateCrew(CreateCrewDto createCrewDto, string username)
         {
             var crew = mapper.Map<Crew>(createCrewDto);
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username);
             crewRepository.AddCrew(crew);
 
             if (await crewRepository.SaveAllAsync())
+            {
+                await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                {
+                    Type = "Success",
+                    Content = "You added new crew named: " + crew.Name,
+                    DateTimeCreated = DateTime.Now,
+                }, temp.Id);
+
                 return Ok(mapper.Map<CrewDto>(crew));
+            }
 
             return BadRequest("Failed to add crew");
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteCrew(int id)
+        [HttpDelete("{id}/{username}")]
+        public async Task<ActionResult> DeleteCrew(int id, string username)
         {
             var crew = await crewRepository.GetCrewByIdAsync(id);
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username);
 
             ICollection<User> users = new List<User>();
 
@@ -63,22 +76,41 @@ namespace backend.Controllers
             crewRepository.DeleteCrew(crew);
 
             if (await crewRepository.SaveAllAsync())
+            {
+                await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                {
+                    Type = "Info",
+                    Content = "You deleted crew: " + crew.Name,
+                    DateTimeCreated = DateTime.Now,
+                }, temp.Id);
+
                 return Ok();
+            }
 
             return BadRequest("Problem with deleting crew");
         }
 
-        [HttpPut]
-        public async Task<ActionResult> UpdateCrew(CrewDto crewDto)
+        [HttpPut("{username}")]
+        public async Task<ActionResult> UpdateCrew(CrewDto crewDto, string username)
         {
             var crew = await crewRepository.GetCrewByIdAsync(crewDto.Id);
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username);
 
             mapper.Map(crewDto, crew);
 
             crewRepository.UpdateCrew(crew);
 
             if (await crewRepository.SaveAllAsync())
+            {
+                await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                {
+                    Type = "Success",
+                    Content = "You updated crew: " + crew.Name,
+                    DateTimeCreated = DateTime.Now,
+                }, temp.Id);
+
                 return NoContent();
+            }
 
             return BadRequest("Failed to update crew");
         }

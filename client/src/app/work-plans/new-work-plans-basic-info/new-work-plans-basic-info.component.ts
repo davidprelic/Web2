@@ -9,7 +9,7 @@ import { AccountService } from 'src/app/_services/account.service';
 import { CrewService } from 'src/app/_services/crew.service';
 import { IncidentService } from 'src/app/_services/incident.service';
 import { WorkPlanService } from 'src/app/_services/work-plan.service';
-;
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-new-work-plans-basic-info',
@@ -28,7 +28,7 @@ export class NewWorkPlansBasicInfoComponent implements OnInit {
   emptyForm: boolean;
 
 
-  constructor(private fb: FormBuilder, private incidentService: IncidentService, private crewService: CrewService, private router: Router, private http: HttpClient,
+  constructor(private toastrService: ToastrService, private fb: FormBuilder, private incidentService: IncidentService, private crewService: CrewService, private router: Router, private http: HttpClient,
     private route: ActivatedRoute, private workPlanService: WorkPlanService, private accountService: AccountService) { }
 
   ngOnInit(): void {
@@ -85,11 +85,13 @@ export class NewWorkPlansBasicInfoComponent implements OnInit {
     if(this.workPlanId === 0){
       this.workPlanService.addNewWorkPlan(this.basicInfoForm.getRawValue()).subscribe(response =>{
         this.router.navigateByUrl('/dashboard/work-plans');
+        this.toastrService.success('Successfully added new work plan');
       });
     }
     else{
       this.workPlanService.updateWorkPlan(this.basicInfoForm.getRawValue()).subscribe(response=>{
         this.router.navigateByUrl('/dashboard/work-plans');
+        this.toastrService.success('Successfully updated work plan');
       });
     }
   }
@@ -108,5 +110,12 @@ export class NewWorkPlansBasicInfoComponent implements OnInit {
 
   changeWorkPlan(id: number){
     //implementiraj ovde kad se izmeni workplan
+  }
+
+  delete(){
+    this.workPlanService.deleteWorkPlan(this.workPlanId).subscribe(response => {
+      this.router.navigateByUrl('/dashboard/work-plans');
+      this.toastrService.success('Successfully deleted new work plan');
+    });
   }
 }

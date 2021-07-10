@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Map, latLng } from 'leaflet';
 import { ConsumerService } from 'src/app/_services/consumer.service';
 import { Customer } from 'src/app/_models/customer';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-consumer-details',
@@ -22,7 +23,7 @@ export class ConsumerDetailsComponent implements OnInit {
 
   addrInfo = {};
 
-  constructor(private fb: FormBuilder, private router: Router, private http: HttpClient,
+  constructor(private toastrService: ToastrService, private fb: FormBuilder, private router: Router, private http: HttpClient,
     private consumerService: ConsumerService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -63,7 +64,7 @@ export class ConsumerDetailsComponent implements OnInit {
       phoneNumber: [this.currentConsumer.phoneNumber, Validators.required],
       type: [this.currentConsumer.type, Validators.required],
       latitude: [{value: this.currentConsumer.latitude, disabled: true}, Validators.required],
-      longitude: [{value: this.currentConsumer.longitude, disabled: true}, Validators.required]   
+      longitude: [{value: this.currentConsumer.longitude, disabled: true}, Validators.required],
     })
   }
 
@@ -79,12 +80,14 @@ export class ConsumerDetailsComponent implements OnInit {
 
     this.consumerService.updateConsumer(this.updateConsumer).subscribe(response => {
       this.router.navigateByUrl('/consumers');
+      this.toastrService.success('Successfully updated consumer')
     });
   }
 
   delete(){
     this.consumerService.deleteConsumer(this.consumerId).subscribe(response => {
       this.router.navigateByUrl('/consumers');
+      this.toastrService.success('Successfully deleted consumer')
     });
   }
 

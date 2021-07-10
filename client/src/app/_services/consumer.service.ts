@@ -1,8 +1,12 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Customer } from '../_models/customer';
 import { CustomerItem } from '../_models/customer-item';
+
+export interface modelWithString{
+    string : string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +23,8 @@ export class ConsumerService{
     }
 
     addConsumer(model: Customer){
-        return this.http.post<Customer>(this.baseUrl, model);
+        var user = JSON.parse(localStorage.getItem('user'));
+        return this.http.post<Customer>(this.baseUrl + user.username, model);
     }
 
     getConsumersAfterSearch(model: Customer){
@@ -44,10 +49,13 @@ export class ConsumerService{
       }
 
     updateConsumer(customer: Customer){
-        return this.http.put(this.baseUrl, customer);
+        var user = JSON.parse(localStorage.getItem('user'));
+
+        return this.http.put(this.baseUrl + user.username, customer);
     }
 
-    deleteConsumer(id: number) {
-        return this.http.delete(this.baseUrl + id);
+    deleteConsumer(id:number) {
+        var user = JSON.parse(localStorage.getItem('user'));
+        return this.http.delete(this.baseUrl + id + "/" + user.username);
       }
 }

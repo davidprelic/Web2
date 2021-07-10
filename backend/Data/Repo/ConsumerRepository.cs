@@ -53,5 +53,10 @@ namespace backend.Data.Repo
         {
             dc.Entry(customer).State = EntityState.Modified;
         }
+
+        public async Task<bool> SaveAllAsync()
+        {
+            return await dc.SaveChangesAsync() > 0;
+        }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -14,15 +15,17 @@ namespace backend.Controllers
     public class AccountController : BaseApiController
     {
         private readonly ITokenService _tokenService;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, ITokenService tokenService, IMapper mapper)
+        public AccountController(IUnitOfWork unitOfWork, UserManager<User> userManager, SignInManager<User> signInManager, ITokenService tokenService, IMapper mapper)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _mapper = mapper;
             _tokenService = tokenService;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet("{username}")]
@@ -62,6 +65,11 @@ namespace backend.Controllers
             temp.Address = editProfileDto.Address;
             if(temp.UserRole != editProfileDto.UserRole)
             {
+                if(editProfileDto.UserRole != "CrewMember")
+                {
+                    temp.CrewId = null;
+                }
+
                 temp.UserRole = editProfileDto.UserRole;
                 temp.RegistrationStatus = "Waiting";
             }
@@ -70,13 +78,35 @@ namespace backend.Controllers
             {
                 if((await _userManager.ChangePasswordAsync(temp, editProfileDto.OldPassword, editProfileDto.NewPassword)).Succeeded)
                 {
+                    await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                    {
+                        Type = "Success",
+                        Content = "You have changed you password and other information",
+                        DateTimeCreated = DateTime.Now,
+                    }, temp.Id);
+
                     return Ok(new { msg = "changedpass" });
                 }
                 else
                 {
-                    return Ok(new { msg = "error" });
+                    await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                    {
+                        Type = "Error",
+                        Content = "Wrong old password passed while trying to change password",
+                        DateTimeCreated = DateTime.Now,
+                    }, temp.Id);
+
+                    return BadRequest(new { msg = "err" });
                 }
             }
+
+            await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+            {
+                Type = "Success",
+                Content = "You have changed profile information",
+                DateTimeCreated = DateTime.Now,
+            }, temp.Id);
+
             return Ok(new { msg = "ok" });
         
         }
@@ -98,6 +128,13 @@ namespace backend.Controllers
 
             if (!roleResult.Succeeded) return BadRequest(roleResult.Errors);
 
+            await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+            {
+                Type = "Success",
+                Content = "You have registered",
+                DateTimeCreated = DateTime.Now,
+            }, user.Id);
+
             return new UserDto
             {
                 Username = user.UserName,
@@ -116,13 +153,28 @@ namespace backend.Controllers
             var result = await _signInManager
                 .CheckPasswordSignInAsync(user, loginDto.Password, false);
 
-            if (!result.Succeeded) return Unauthorized();
+            if (!result.Succeeded) {
+                await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                {
+                    Type = "Warning",
+                    Content = "Invalid login",
+                    DateTimeCreated = DateTime.Now,
+                }, user.Id);
+                return Unauthorized(); 
+            }
+
+            await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+            {
+                Type = "Success",
+                Content = "You have logged in",
+                DateTimeCreated = DateTime.Now,
+            }, user.Id);
 
             return new UserDto
             {
                 Username = user.UserName,
                 Token = await _tokenService.CreateToken(user)
-            };
+            };          
         }
 
         private async Task<bool> UserExists(string email)
