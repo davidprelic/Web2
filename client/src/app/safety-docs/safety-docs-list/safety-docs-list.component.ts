@@ -16,6 +16,7 @@ export class SafetyDocsListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'startDate', 'phoneNumber', 'status'];
   dataSource: MatTableDataSource<SafetyDocument>;
   safetyDocs: SafetyDocument[];
+  selectedSafetyDocFilter: string = "all";
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -27,20 +28,38 @@ export class SafetyDocsListComponent implements OnInit {
     this.safetyDocService.getSafetyDocs().subscribe(response => {
       this.dataSource = new MatTableDataSource(response); 
       this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     });
   }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
+  
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
+    }
+  }
+
+  filterSafetyDocs() {
+    if (this.selectedSafetyDocFilter == "all")
+    {
+      this.safetyDocService.getSafetyDocs().subscribe(response => {
+        this.dataSource = new MatTableDataSource(response);
+        this.dataSource.data = [...this.dataSource.data]; 
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      });
+    }
+    else if (this.selectedSafetyDocFilter == "mine")
+    {
+      var user = JSON.parse(localStorage.getItem('user'));
+      this.safetyDocService.getSafetyDocsByUsername(user.username).subscribe(response => {
+        this.dataSource = new MatTableDataSource(response);
+        this.dataSource.data = [...this.dataSource.data]; 
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      });
     }
   }
 

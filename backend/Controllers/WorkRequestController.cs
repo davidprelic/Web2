@@ -34,8 +34,8 @@ namespace backend.Controllers
             return Ok(finalWorkRequests);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<WorkRequestDto>> CreateWorkRequest(WorkRequestDto workRequestDto)
+        [HttpPost("{username}")]
+        public async Task<ActionResult<WorkRequestDto>> CreateWorkRequest(WorkRequestDto workRequestDto, string username)
         {
             int? incId = null;
 
@@ -60,20 +60,29 @@ namespace backend.Controllers
                 PhoneNumber = workRequestDto.PhoneNumber,
                 IncidentId = incId
             };
-            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == workRequestDto.CreatedBy.ToLower());
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username.ToLower());
 
             workRequest.CreatedBy = temp.Id;
 
             workRequest.DateTimeCreated = DateTime.Now;
             unitOfWork.WorkRequestRepository.AddWorkRequest(workRequest);
 
-            if (await unitOfWork.SaveAsync()) return Ok(_mapper.Map<WorkRequestDto>(workRequest));
+            if (await unitOfWork.SaveAsync())
+            {
+                await unitOfWork.NotificationRepository.NewNotification(new Notification()
+                {
+                    Type = "Success",
+                    Content = "You created new work request: " + workRequest.Id,
+                    DateTimeCreated = DateTime.Now,
+                }, temp.Id);
+                return Ok(_mapper.Map<WorkRequestDto>(workRequest));
+            }
 
             return BadRequest("Failed to add work request");
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteWorkRequest(int id)
+        [HttpDelete("{id}/{username}")]
+        public async Task<IActionResult> DeleteWorkRequest(int id, string username)
         {
             var historyWork = await unitOfWork.HistoryWorkRequest.GetHistoryWorkRequestByWorkRequestIdAsync(id);
             var workRequest = await unitOfWork.WorkRequestRepository.GetWorkRequestByIdAsync(id);
@@ -82,7 +91,18 @@ namespace backend.Controllers
                 unitOfWork.HistoryWorkRequest.DeleteHistoryWorkRequest(item);
             }
             unitOfWork.WorkRequestRepository.DeleteWorkRequest(workRequest);
-            if (await unitOfWork.SaveAsync()) return Ok();
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username.ToLower());
+
+            if (await unitOfWork.SaveAsync())
+            {
+                await unitOfWork.NotificationRepository.NewNotification(new Notification()
+                {
+                    Type = "Warning",
+                    Content = "You deleted work request: " + workRequest.Id,
+                    DateTimeCreated = DateTime.Now,
+                }, temp.Id);
+                return Ok();
+            }
             return BadRequest("Problem with deleting work request");
         }
 
@@ -98,8 +118,8 @@ namespace backend.Controllers
             return Ok(finalWorkRequest);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateWorkRequest(WorkRequestDto workRequestDto)
+        [HttpPut("{username}")]
+        public async Task<IActionResult> UpdateWorkRequest(WorkRequestDto workRequestDto, string username)
         {
             var workRequest = await unitOfWork.WorkRequestRepository.GetWorkRequestByIdAsync(workRequestDto.Id);
 
@@ -126,7 +146,19 @@ namespace backend.Controllers
 
             unitOfWork.WorkRequestRepository.Update(workRequest);
 
-            if (await unitOfWork.SaveAsync()) return NoContent();
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username.ToLower());
+
+            if (await unitOfWork.SaveAsync())
+            {
+                await unitOfWork.NotificationRepository.NewNotification(new Notification()
+                {
+                    Type = "Success",
+                    Content = "You updated work request: " + workRequest.Id,
+                    DateTimeCreated = DateTime.Now,
+                }, temp.Id);
+                return NoContent();
+            }
+
 
             return BadRequest("Failed to update work request");
         }

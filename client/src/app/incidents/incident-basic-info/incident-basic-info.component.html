@@ -53,6 +53,7 @@
             <mat-select formControlName="status">
               <mat-option value="Draft">Draft</mat-option>
               <mat-option value="Approved">Approved</mat-option>
+              <mat-option value="Completed">Completed</mat-option>
               <mat-option value="Denied">Denied</mat-option>
             </mat-select>
         </mat-form-field>
@@ -93,9 +94,10 @@
             <mat-datepicker #picker5></mat-datepicker>
         </mat-form-field>
 
-        <button fxFlex="70" (click)="TakeToResolve()" [disabled]="this.takenToResolveToggle" mat-flat-button color="primary">Take To Resolve</button>
+        <button fxFlex="80" (click)="TakeToResolve()" [disabled]="this.takenToResolveToggle" mat-flat-button color="primary">Take To Resolve</button>
         
-        <button [disabled]='!basicInfoForm.valid' fxFlex="40" mat-flat-button color="accent" type="submit">Save</button>
-        <button fxFlex="40" mat-flat-button color="warn" (click)="Cancel()" type="button">Cancel</button>
+        <button class="moveLower" [disabled]='!basicInfoForm.valid' fxFlex="30" mat-flat-button color="accent" type="submit">Save</button>
+        <button class="moveLower" fxFlex="30" mat-flat-button (click)="delete()" [disabled]="this.incidentId == 0" color="warn">Delete</button>
+        <button class="moveLower" fxFlex="30" mat-flat-button color="warn" (click)="Cancel()" type="button">Cancel</button>
     </form>
 </div>

@@ -18,8 +18,7 @@ export class IncidentListComponent implements OnInit {
       'affectedCustomers', 'voltage'];
   dataSource: MatTableDataSource<Incident>;
   incidents: Incident[];
-  selectedIncidentsFilter = new FormControl();
-  currentIncidentsFilter: string;
+  selectedIncidentFilter: string = "all";
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -29,8 +28,6 @@ export class IncidentListComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.currentIncidentsFilter = "all";
-
     this.incidentService.getIncidents().subscribe(response => {
       this.dataSource = new MatTableDataSource(response); 
       this.dataSource.paginator = this.paginator;
@@ -48,18 +45,28 @@ export class IncidentListComponent implements OnInit {
     }
   }
 
-  ShowAllIncidents() {
-    // if (this.currentIncidentsFilter === this.selectedIncidentsFilter.value)
-    // {
-    //   console.log(this.selectedIncidentsFilter.value);
-    // }
-  }
-
-  ShowMineIncidents() {
-    // if (this.currentIncidentsFilter != this.selectedIncidentsFilter.value)
-    // {
-    //   console.log(this.selectedIncidentsFilter.value);
-    // }
+  filterIncidents() {
+    if (this.selectedIncidentFilter == "all")
+    {
+      console.log('ALL');
+      this.incidentService.getIncidents().subscribe(response => {
+        this.dataSource = new MatTableDataSource(response);
+        this.dataSource.data = [...this.dataSource.data]; 
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      });
+    }
+    else if (this.selectedIncidentFilter == "mine")
+    {
+      console.log('MINE');
+      var user = JSON.parse(localStorage.getItem('user'));
+      this.incidentService.getIncidentsByUsername(user.username).subscribe(response => {
+        this.dataSource = new MatTableDataSource(response);
+        this.dataSource.data = [...this.dataSource.data]; 
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      });
+    }
   }
 
   createNewIncident() {

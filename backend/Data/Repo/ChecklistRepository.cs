@@ -23,7 +23,7 @@ namespace backend.Data.Repo
              _context.Checklists.Remove(checklist);
         }
 
-        public async Task<Checklist> GetChecklistByIdAsync(int id)
+        public async Task<Checklist> GetChecklistByIdAsync(int? id)
         {
             return await _context.Checklists.FindAsync(id);
         }

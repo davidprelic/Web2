@@ -77,6 +77,18 @@ namespace backend.Controllers
             return Ok(finalSafetyDocs);
         }
 
+        [HttpGet("mine/{username}")]
+        public async Task<ActionResult<IEnumerable<SafetyDocument>>> GetSafetyDocsByUsername(string username)
+        {
+            User temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username);
+
+            var safetyDocs = await _unitOfWork.SafetyDocRepository.GetSafetyDocsByUserIdAsync(temp.Id);
+
+            var finalSafetyDocs = _mapper.Map<List<SafetyDocDto>>(safetyDocs);
+
+            return Ok(finalSafetyDocs);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<SafetyDocDto>> GetSafetyDoc(int id)
         {
@@ -88,6 +100,29 @@ namespace backend.Controllers
             finalSafetyDoc.CreatedBy = temp.UserName;
 
             return Ok(_mapper.Map<SafetyDocDto>(finalSafetyDoc));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteSafetyDoc(int id)
+        {
+            var safetyDoc = await _unitOfWork.SafetyDocRepository.GetSafetyDocByIdAsync(id);
+
+            var checklist = await _unitOfWork.ChecklistRepository.GetChecklistByIdAsync(safetyDoc.ChecklistId);
+
+            _unitOfWork.SafetyDocRepository.DeleteSafetyDoc(safetyDoc);
+
+            _unitOfWork.ChecklistRepository.DeleteChecklist(checklist);
+
+            var historySafetyDocs = await _unitOfWork.HistorySafetyDocRepository.GetHistorySafetyDocsBySafetyDocIdAsync(id);
+
+            foreach (var hist in historySafetyDocs)
+            {
+                _unitOfWork.HistorySafetyDocRepository.DeleteHistorySafetyDoc(hist);
+            }
+
+            if (await _unitOfWork.SaveAsync()) return Ok();
+
+            return BadRequest("Problem with deleting safetyDoc");
         }
 
         [HttpPut]

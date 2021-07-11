@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -24,7 +25,19 @@ namespace backend.Controllers
             var historySafetyDoc = _mapper.Map<HistoryOfSafetyDocumentStateChange>(historySafetyDocDto);
             _unitOfWork.HistorySafetyDocRepository.AddHistorySafetyDoc(historySafetyDoc);
 
-             if (await _unitOfWork.HistorySafetyDocRepository.SaveAllAsync()) return Ok(_mapper.Map<HistorySafetyDocDto>(historySafetyDoc));
+            if (await _unitOfWork.HistorySafetyDocRepository.SaveAllAsync())
+            {
+                if (await _unitOfWork.SaveAsync())
+                {
+                    await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                    {
+                        Type = "Success",
+                        Content = "You changed state for safety document: " + historySafetyDoc.SafetyDocumentId,
+                        DateTimeCreated = DateTime.Now,
+                    }, historySafetyDoc.UserId);
+                }
+                return Ok(_mapper.Map<HistorySafetyDocDto>(historySafetyDoc));
+            }
 
             return BadRequest("Failed to add historySafetyDoc");
         }
@@ -46,7 +59,19 @@ namespace backend.Controllers
 
             _unitOfWork.HistorySafetyDocRepository.Update(historySafetyDoc);
 
-            if (await _unitOfWork.HistorySafetyDocRepository.SaveAllAsync()) return NoContent();
+            if (await _unitOfWork.HistorySafetyDocRepository.SaveAllAsync())
+            {
+                if (await _unitOfWork.SaveAsync())
+                {
+                    await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                    {
+                        Type = "Success",
+                        Content = "You changed state for safety document: " + historySafetyDoc.SafetyDocumentId,
+                        DateTimeCreated = DateTime.Now,
+                    }, historySafetyDoc.UserId);
+                }
+                return NoContent();
+            }
 
             return BadRequest("Failed to update historySafetyDoc");
         }

@@ -26,7 +26,17 @@ namespace backend.Controllers
             var historyWorkRequest = _mapper.Map<HistoryOfWorkRequestStateChange>(historyWorkRequestDto);
             _unitOfWork.HistoryWorkRequest.AddHistoryWorkRequest(historyWorkRequest);
 
-            if (await _unitOfWork.HistoryWorkRequest.SaveAllAsync()) return Ok(_mapper.Map<HistoryWorkRequestDto>(historyWorkRequest));
+            if (await _unitOfWork.HistoryWorkRequest.SaveAllAsync())
+            {
+                await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                {
+                    Type = "Success",
+                    Content = "You changed state for work request: " + historyWorkRequest.WorkRequestId,
+                    DateTimeCreated = DateTime.Now,
+                }, historyWorkRequest.UserId);
+                
+                return Ok(_mapper.Map<HistoryWorkRequestDto>(historyWorkRequest));
+            }
 
             return BadRequest("Failed to add historyWorkRequest");
         }
@@ -48,7 +58,17 @@ namespace backend.Controllers
 
             _unitOfWork.HistoryWorkRequest.Update(historyOfWorkRequest);
 
-            if (await _unitOfWork.HistoryWorkRequest.SaveAllAsync()) return NoContent();
+            if (await _unitOfWork.HistoryWorkRequest.SaveAllAsync()) 
+            {
+                await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                {
+                    Type = "Success",
+                    Content = "You changed state for work request: " + historyOfWorkRequest.WorkRequestId,
+                    DateTimeCreated = DateTime.Now,
+                }, historyOfWorkRequest.UserId);
+                
+                return NoContent(); 
+            }
 
             return BadRequest("Failed to update history of work request");
         }

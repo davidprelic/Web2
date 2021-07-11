@@ -1,21 +1,17 @@
 <div>
     <div class="dashboard" fxLayout="row wrap" fxLayoutGap="26px grid">
         <div fxFlex="25%">
-            <mat-card class="example-card">
+            <mat-card *ngIf="incidents" class="example-card">
                 <mat-card-header>
                     <div mat-card-avatar class="example-header-image"></div>
                     <mat-card-title routerLink="/dashboard/incidents">MY INCIDENTS</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
-                    <p>0 Drafts</p>
-                    <p>0 Canceled</p>
-                    <p>1 Executing</p>
-                    <p>2 Completed</p>
+                    <p>{{numOfDraftsIncident}} Drafts</p>
+                    <p>{{numOfApprovedIncident}} Approved</p>
+                    <p>{{numOfCompletedIncident}} Completed</p>
+                    <p>{{numOfDeniedIncident}} Denied</p>
                 </mat-card-content>
-                <mat-card-actions>
-                    <button mat-button>LIKE</button>
-                    <button mat-button>SHARE</button>
-                </mat-card-actions>
             </mat-card>
         </div>
 
@@ -26,15 +22,11 @@
                     <mat-card-title routerLink="/dashboard/work-requests">MY REQUESTS</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
-                    <p>0 Drafts</p>
-                    <p>0 Canceled</p>
-                    <p>1 Executing</p>
-                    <p>2 Completed</p>
+                    <p>{{numOfDraftsWorkRequest}} Drafts</p>
+                    <p>{{numOfApprovedWorkRequest}} Approved</p>
+                    <p>{{numOfIssuedWorkRequest}} Issued</p>
+                    <p>{{numOfDeniedWorkRequest}} Denied</p>
                 </mat-card-content>
-                <mat-card-actions>
-                    <button mat-button>LIKE</button>
-                    <button mat-button>SHARE</button>
-                </mat-card-actions>
             </mat-card>
         </div>
         
@@ -45,15 +37,11 @@
                     <mat-card-title routerLink="/dashboard/work-plans">MY WORK PLANS</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
-                    <p>0 Drafts</p>
-                    <p>0 Canceled</p>
-                    <p>1 Executing</p>
-                    <p>2 Completed</p>
+                    <p>{{numOfDraftsWorkPlan}} Drafts</p>
+                    <p>{{numOfApprovedWorkPlan}} Approved</p>
+                    <p>{{numOfIssuedWorkPlan}} Issued</p>
+                    <p>{{numOfDeniedWorkPlan}} Denied</p>
                 </mat-card-content>
-                <mat-card-actions>
-                    <button mat-button>LIKE</button>
-                    <button mat-button>SHARE</button>
-                </mat-card-actions>
             </mat-card>
         </div>
 
@@ -64,15 +52,11 @@
                     <mat-card-title routerLink="/dashboard/safety-docs">MY SAFETY DOCS</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
-                    <p>0 Drafts</p>
-                    <p>0 Canceled</p>
-                    <p>1 Executing</p>
-                    <p>2 Completed</p>
+                    <p>{{numOfDraftsSafetyDoc}} Drafts</p>
+                    <p>{{numOfApprovedSafetyDoc}} Approved</p>
+                    <p>{{numOfIssuedSafetyDoc}} Issued</p>
+                    <p>{{numOfDeniedSafetyDoc}} Denied</p>
                 </mat-card-content>
-                <mat-card-actions>
-                    <button mat-button>LIKE</button>
-                    <button mat-button>SHARE</button>
-                </mat-card-actions>
             </mat-card>
         </div>
 
