@@ -25,12 +25,12 @@ export class WorkRequestHistoryComponent implements OnInit {
   currentWorkRequest: WorkRequest;
   newHistoryWorkRequest: HistoryWorkRequest;
   currentUserId: number;
-  
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private historyWorkRequestService: HistoryWorkRequestService, private route: ActivatedRoute,
-              private workRequestService: WorkRequestService, private _snackBar: MatSnackBar, private accountService: AccountService) { 
+    private workRequestService: WorkRequestService, private _snackBar: MatSnackBar, private accountService: AccountService) {
   }
 
   ngOnInit(): void {
@@ -42,24 +42,25 @@ export class WorkRequestHistoryComponent implements OnInit {
     })
 
 
-    if (this.workRequestId != 0)
-    {
+    if (this.workRequestId != 0) {
       this.workRequestService.getWorkRequestById(this.workRequestId).subscribe(response => {
         this.currentWorkRequest = response;
         this.currentState = response.status;
       })
 
       this.historyWorkRequestService.getHistoryWorkRequestByWorkRequestId(this.workRequestId).subscribe(response => {
-        this.dataSource = new MatTableDataSource(response); 
+        this.dataSource = new MatTableDataSource(response);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
       });
     }
-  
+
   }
 
-  ngAfterViewInit() {
+  /*ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-  }
+  }*/
 
   Approve() {
     this.newHistoryWorkRequest = {
@@ -77,15 +78,15 @@ export class WorkRequestHistoryComponent implements OnInit {
           this.currentWorkRequest = response;
           this.currentState = response.status;
         })
-    
+
         this.historyWorkRequestService.getHistoryWorkRequestByWorkRequestId(this.workRequestId).subscribe(response => {
           this.dataSource = new MatTableDataSource(response);
-          this.dataSource.data = [...this.dataSource.data]; 
+          this.dataSource.data = [...this.dataSource.data];
           this._snackBar.open("State changed to Approved!", "Succes", {
             duration: 2000,
             horizontalPosition: 'end',
             panelClass: ['mat-toolbar', 'mat-accent']
-          }); 
+          });
         });
       });
     });
@@ -107,7 +108,7 @@ export class WorkRequestHistoryComponent implements OnInit {
           this.currentWorkRequest = response;
           this.currentState = response.status;
         })
-    
+
         this.historyWorkRequestService.getHistoryWorkRequestByWorkRequestId(this.workRequestId).subscribe(response => {
           this.dataSource = new MatTableDataSource(response);
           this.dataSource.data = [...this.dataSource.data];
@@ -115,7 +116,7 @@ export class WorkRequestHistoryComponent implements OnInit {
             duration: 2000,
             horizontalPosition: 'end',
             panelClass: ['mat-toolbar', 'mat-accent']
-          });  
+          });
         });
       });
     });
@@ -137,7 +138,7 @@ export class WorkRequestHistoryComponent implements OnInit {
           this.currentWorkRequest = response;
           this.currentState = response.status;
         })
-    
+
         this.historyWorkRequestService.getHistoryWorkRequestByWorkRequestId(this.workRequestId).subscribe(response => {
           this.dataSource = new MatTableDataSource(response);
           this.dataSource.data = [...this.dataSource.data];
@@ -145,7 +146,7 @@ export class WorkRequestHistoryComponent implements OnInit {
             duration: 2000,
             horizontalPosition: 'end',
             panelClass: ['mat-toolbar', 'mat-accent']
-          }); 
+          });
         });
       });
     });

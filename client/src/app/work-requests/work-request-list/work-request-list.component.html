@@ -3,9 +3,9 @@
     <mat-icon>add_circle</mat-icon> New
   </button>
 
-  <mat-button-toggle-group name="filterTable" aria-label="Filter Table">
-    <mat-button-toggle value="all">All</mat-button-toggle>
-    <mat-button-toggle value="mine">Mine</mat-button-toggle>
+  <mat-button-toggle-group [(ngModel)]="typeNotifications" (click)="filterNotifications()">
+    <mat-button-toggle value="all" ngDefaultControl>All</mat-button-toggle>
+    <mat-button-toggle value="mine" ngDefaultControl>Mine</mat-button-toggle>
   </mat-button-toggle-group>
 
   <mat-form-field>

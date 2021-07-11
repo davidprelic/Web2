@@ -43,7 +43,7 @@ namespace backend.Controllers
             {
                 incId = workRequestDto.IncidentId;
             }
-            
+
             var workRequest = new WorkRequest
             {
                 Type = workRequestDto.Type,
@@ -75,7 +75,12 @@ namespace backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteWorkRequest(int id)
         {
+            var historyWork = await unitOfWork.HistoryWorkRequest.GetHistoryWorkRequestByWorkRequestIdAsync(id);
             var workRequest = await unitOfWork.WorkRequestRepository.GetWorkRequestByIdAsync(id);
+            foreach (var item in historyWork)
+            {
+                unitOfWork.HistoryWorkRequest.DeleteHistoryWorkRequest(item);
+            }
             unitOfWork.WorkRequestRepository.DeleteWorkRequest(workRequest);
             if (await unitOfWork.SaveAsync()) return Ok();
             return BadRequest("Problem with deleting work request");
@@ -104,7 +109,7 @@ namespace backend.Controllers
             {
                 incId = workRequestDto.IncidentId;
             }
-            
+
             workRequest.Type = workRequestDto.Type;
             workRequest.Status = workRequestDto.Status;
             workRequest.Address = workRequestDto.Address;

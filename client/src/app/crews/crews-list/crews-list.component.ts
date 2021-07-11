@@ -30,6 +30,8 @@ export class CrewsListComponent implements OnInit {
     this.initializeForm();
     this.crewService.getCrews().subscribe(response =>{
       this.dataSource = new MatTableDataSource(response);
+      this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
     });
   }
 
@@ -39,10 +41,10 @@ export class CrewsListComponent implements OnInit {
     })
   }
 
-  ngAfterViewInit() {
+  /*ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-  }
+  }*/
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

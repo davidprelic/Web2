@@ -6,6 +6,7 @@ import { AccountService } from 'src/app/_services/account.service';
 import { SelectMembersDialogComponent } from '../select-members-dialog/select-members-dialog.component';
 import { HttpClient } from '@angular/common/http';
 import { CrewService } from 'src/app/_services/crew.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-new-crew',
@@ -18,7 +19,7 @@ export class NewCrewComponent implements OnInit {
 
   addrInfo = {};
 
-  constructor(private accountService: AccountService, private fb: FormBuilder, 
+  constructor(private accountService: AccountService, private fb: FormBuilder, private _snackBar: MatSnackBar,
     private router: Router, private http: HttpClient, private crewService: CrewService) { }
 
   ngOnInit(): void {
@@ -33,9 +34,14 @@ export class NewCrewComponent implements OnInit {
 
   add() {
     this.crewService.addCrew(this.newCrewForm.getRawValue()).subscribe(response => {
+      this._snackBar.open("Crew created!", "Succes", {
+        duration: 2000,
+        horizontalPosition: 'end',
+        panelClass: ['mat-toolbar', 'mat-accent']
+      });
       console.log(response);
       this.router.navigateByUrl('/crews');
-    }) 
+    })
   }
 
   cancel() {
@@ -56,7 +62,7 @@ export class NewCrewComponent implements OnInit {
   model: any = {};
   newCrewForm: FormGroup;
 
-  constructor(private accountService: AccountService, private fb: FormBuilder, 
+  constructor(private accountService: AccountService, private fb: FormBuilder,
     private router: Router, public dialog: MatDialog) { }
 
   ngOnInit(): void {

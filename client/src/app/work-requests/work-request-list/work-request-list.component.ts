@@ -19,20 +19,29 @@ export class WorkRequestListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
+  filteredNotifications: WorkRequest[];
+  tempNotifications: WorkRequest[];
+  readNotifications: string = "all";
+  typeNotifications: string = "all";
+
   constructor(private workRequestService: WorkRequestService, private fb: FormBuilder, private router: Router) {
 
   }
 
   ngOnInit(): void {
     this.workRequestService.getWorkRequests().subscribe(response => {
+      this.filteredNotifications = response;
       this.dataSource = new MatTableDataSource(response);
-    })
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.filterNotifications();
+    });
   }
 
-  ngAfterViewInit() {
+  /*ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-  }
+  }*/
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -42,5 +51,24 @@ export class WorkRequestListComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+
+  filterNotifications(){
+    var user = JSON.parse(localStorage.getItem('user'));
+    this.filteredNotifications = [];
+    this.tempNotifications = [];
+
+    if(this.typeNotifications == "all"){
+      this.filteredNotifications = this.tempNotifications;
+    }
+    else if(this.typeNotifications == "mine"){
+      this.tempNotifications.forEach(element => {
+        if(element.createdBy == user.username){
+          this.filteredNotifications.push(element);
+        }
+      });
+    }
+
+  }
+
 }
 
