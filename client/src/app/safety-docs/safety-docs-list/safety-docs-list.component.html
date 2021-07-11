@@ -4,7 +4,7 @@
       <mat-icon>add_circle</mat-icon> New
     </button>
   
-    <mat-button-toggle-group name="filterTable" aria-label="Filter Table">
+    <mat-button-toggle-group [(ngModel)]="selectedSafetyDocFilter" (click)="filterSafetyDocs()">
       <mat-button-toggle value="all">All</mat-button-toggle>
       <mat-button-toggle value="mine">Mine</mat-button-toggle>
     </mat-button-toggle-group>

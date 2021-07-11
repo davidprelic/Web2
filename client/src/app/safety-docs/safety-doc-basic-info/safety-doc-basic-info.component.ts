@@ -105,4 +105,15 @@ export class SafetyDocBasicInfoComponent implements OnInit {
     })
   }
 
+  delete(){
+    this.safetyDocService.deleteSafetyDoc(this.safetyDocId).subscribe(response => {
+      this.router.navigateByUrl('/dashboard/safety-docs');
+      this._snackBar.open("Safety doc is deleted!", "Succes", {
+        duration: 2000,
+        horizontalPosition: 'end',
+        panelClass: ['mat-toolbar', 'mat-accent']
+      } );
+    });
+  }
+
 }

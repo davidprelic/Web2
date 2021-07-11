@@ -9,6 +9,6 @@ namespace backend.Interfaces
         void DeleteChecklist(Checklist checklist);
         void Update(Checklist checklist);
         Task<bool> SaveAllAsync();
-        Task<Checklist> GetChecklistByIdAsync(int id);
+        Task<Checklist> GetChecklistByIdAsync(int? id);
     }
 }

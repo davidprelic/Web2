@@ -5,9 +5,9 @@
     <mat-icon>add_circle</mat-icon> New
   </button>
 
-  <mat-button-toggle-group [formControl]="selectedIncidentsFilter">
-    <mat-button-toggle (click)="ShowAllIncidents()" value="all">All</mat-button-toggle>
-    <mat-button-toggle (click)="ShowMineIncidents()" value="mine">Mine</mat-button-toggle>
+  <mat-button-toggle-group [(ngModel)]="selectedIncidentFilter" (click)="filterIncidents()">
+    <mat-button-toggle value="all">All</mat-button-toggle>
+    <mat-button-toggle value="mine">Mine</mat-button-toggle>
   </mat-button-toggle-group>
 
   <mat-form-field>

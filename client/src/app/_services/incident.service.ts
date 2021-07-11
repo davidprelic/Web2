@@ -19,6 +19,10 @@ export class IncidentService {
     return this.http.get<Incident[]>(this.baseUrl + 'incidents')
   }
 
+  getIncidentsByUsername(username: string) {
+    return this.http.get<Incident[]>(this.baseUrl + 'incidents/mine/' + username);
+  }
+
   getIncidentById(id: number) {
     return this.http.get<Incident>(this.baseUrl + 'incidents/' + id);
   }
