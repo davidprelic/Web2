@@ -19,6 +19,10 @@ export class SafetyDocService {
     return this.http.get<SafetyDocument[]>(this.baseUrl + 'safetydocs')
   }
 
+  getSafetyDocsByUsername(username: string) {
+    return this.http.get<SafetyDocument[]>(this.baseUrl + 'safetydocs/mine/' + username);
+  }
+
   getSafetyDocById(id: number) {
     return this.http.get<SafetyDocument>(this.baseUrl + 'safetydocs/' + id);
   }

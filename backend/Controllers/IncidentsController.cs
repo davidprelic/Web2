@@ -78,6 +78,18 @@ namespace backend.Controllers
             return Ok(finalIncidents);
         }
 
+        [HttpGet("mine/{username}")]
+        public async Task<ActionResult<IEnumerable<Incident>>> GetIncidentsByUsername(string username)
+        {
+            User temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username);
+
+            var incidents = await _unitOfWork.IncidentRepository.GetIncidentsByUserIdAsync(temp.Id);
+
+            var finalIncidents = _mapper.Map<List<IncidentDto>>(incidents);
+
+            return Ok(finalIncidents);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<IncidentDto>> GetIncident(int id)
         {
@@ -161,9 +173,21 @@ namespace backend.Controllers
         {
             var incident = await _unitOfWork.IncidentRepository.GetIncidentByIdAsync(id);
 
+            var resolution = await _unitOfWork.ResolutionRepository.GetResolutionByIdAsync(incident.ResolutionId);
+
             _unitOfWork.IncidentRepository.DeleteIncident(incident);
 
-            if (await _unitOfWork.IncidentRepository.SaveAllAsync()) return Ok();
+            _unitOfWork.ResolutionRepository.DeleteResolution(resolution);
+
+            var devices = await _unitOfWork.DeviceRepository.GetDevicesByIncidentIdAsync(id);
+
+            foreach (var device in devices)
+            {
+                device.IncidentId = null;
+                _unitOfWork.DeviceRepository.Update(device);
+            }
+
+            if (await _unitOfWork.SaveAsync()) return Ok();
 
             return BadRequest("Problem with deleting incident");
         }

@@ -23,7 +23,7 @@ namespace backend.Data.Repo
             _context.Resolutions.Remove(resolution);
         }
 
-        public async Task<Resolution> GetResolutionByIdAsync(int id)
+        public async Task<Resolution> GetResolutionByIdAsync(int? id)
         {
             return await _context.Resolutions.FindAsync(id);
         }

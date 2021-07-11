@@ -9,6 +9,6 @@ namespace backend.Interfaces
         void DeleteResolution(Resolution resolution);
         void Update(Resolution resolution);
         Task<bool> SaveAllAsync();
-        Task<Resolution> GetResolutionByIdAsync(int id);
+        Task<Resolution> GetResolutionByIdAsync(int? id);
     }
 }

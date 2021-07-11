@@ -123,6 +123,17 @@ export class IncidentBasicInfoComponent implements OnInit {
     }
   }
 
+  delete(){
+    this.incidentService.deleteIncident(this.incidentId).subscribe(response => {
+      this.router.navigateByUrl('/dashboard/incidents');
+      this._snackBar.open("Incident is deleted!", "Succes", {
+        duration: 2000,
+        horizontalPosition: 'end',
+        panelClass: ['mat-toolbar', 'mat-accent']
+      } );
+    });
+  }
+
   TakeToResolve() {
     var user = JSON.parse(localStorage.getItem('user'));
 
