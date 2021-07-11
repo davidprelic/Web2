@@ -7,31 +7,47 @@ using backend.DTOs;
 using backend.Entities;
 using backend.Helpers;
 using backend.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
     public class DeviceController : BaseApiController
     {
         private readonly IDeviceRepository _deviceRepository;
+        private readonly UserManager<User> _userManager;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public DeviceController(IDeviceRepository deviceRepository, IMapper mapper)
+        public DeviceController(IUnitOfWork unitOfWork, UserManager<User> userManager, IDeviceRepository deviceRepository, IMapper mapper)
         {
             _mapper = mapper;
             _deviceRepository = deviceRepository;
+            _userManager = userManager;
+            _unitOfWork = unitOfWork;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<DeviceDto>> CreateDevice(DeviceDto deviceDto)
+        [HttpPost("{username}")]
+        public async Task<ActionResult<DeviceDto>> CreateDevice(DeviceDto deviceDto, string username)
         {
             var device = _mapper.Map<Device>(deviceDto);
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username);
             _deviceRepository.AddDevice(device);
 
-             if (await _deviceRepository.SaveAllAsync()) return Ok(_mapper.Map<DeviceDto>(device));
+            if (await _deviceRepository.SaveAllAsync())
+            {
+                await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                {
+                    Type = "Success",
+                    Content = "You added new device: " + device.Name,
+                    DateTimeCreated = DateTime.Now,
+                }, temp.Id);
+                return Ok(_mapper.Map<DeviceDto>(device));
+            }
 
             return BadRequest("Failed to add device");
 
-            
+
         }
 
         [HttpGet]
@@ -66,10 +82,10 @@ namespace backend.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<Device>>> GetDevicesSearch([FromQuery]DeviceSearchParameters deviceParams)
+        public async Task<ActionResult<IEnumerable<Device>>> GetDevicesSearch([FromQuery] DeviceSearchParameters deviceParams)
         {
             var devices = await _deviceRepository.GetDevicesAsync();
-            
+
             if (!String.IsNullOrWhiteSpace(deviceParams.Type))
                 devices = devices.Where(d => d.Type.ToLower().Contains(deviceParams.Type.Trim().ToLower()));
             if (!String.IsNullOrWhiteSpace(deviceParams.Name))
@@ -86,7 +102,7 @@ namespace backend.Controllers
             var finalDevices = _mapper.Map<List<DeviceDto>>(devices);
 
             return Ok(finalDevices);
-        }        
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<DeviceDto>> GetDevice(int id)
@@ -96,28 +112,48 @@ namespace backend.Controllers
             return Ok(_mapper.Map<DeviceDto>(device));
         }
 
-        [HttpPut]
-        public async Task<ActionResult> UpdateDevice(DeviceDto deviceDto)
+        [HttpPut("{username}")]
+        public async Task<ActionResult> UpdateDevice(DeviceDto deviceDto, string username)
         {
             var device = await _deviceRepository.GetDeviceByIdAsync(deviceDto.Id);
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username);
 
             _mapper.Map(deviceDto, device);
 
             _deviceRepository.Update(device);
 
-            if (await _deviceRepository.SaveAllAsync()) return NoContent();
+            if (await _deviceRepository.SaveAllAsync())
+            {
+                await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                {
+                    Type = "Success",
+                    Content = "You updated device: " + device.Name,
+                    DateTimeCreated = DateTime.Now,
+                }, temp.Id);
+                return NoContent();
+            }
 
             return BadRequest("Failed to update device");
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteDevice(int id)
+        [HttpDelete("{id}/{username}")]
+        public async Task<ActionResult> DeleteDevice(int id, string username)
         {
             var device = await _deviceRepository.GetDeviceByIdAsync(id);
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username);
 
             _deviceRepository.DeleteDevice(device);
 
-            if (await _deviceRepository.SaveAllAsync()) return Ok();
+            if (await _deviceRepository.SaveAllAsync()) 
+            {
+                await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                {
+                    Type = "Info",
+                    Content = "You deleted device: " + device.Name,
+                    DateTimeCreated = DateTime.Now,
+                }, temp.Id);
+                return Ok(); 
+            }
 
             return BadRequest("Problem with deleting device");
         }

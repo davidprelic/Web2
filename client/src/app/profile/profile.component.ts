@@ -5,6 +5,7 @@ import { AccountService } from '../_services/account.service';
 import { MapOptions, Map, tileLayer, latLng, ZoomAnimEvent, LeafletMouseEvent } from 'leaflet';
 import { HttpClient } from '@angular/common/http';
 import { EditProfile } from '../_models/edit-profile';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-profile',
@@ -19,7 +20,7 @@ export class ProfileComponent implements OnInit {
 
   addrInfo = {};
 
-  constructor(private http: HttpClient,private fb: FormBuilder, private profileService: AccountService,
+  constructor(private toastrService: ToastrService, private http: HttpClient,private fb: FormBuilder, private profileService: AccountService,
     private router: Router) { }
 
 
@@ -99,9 +100,12 @@ export class ProfileComponent implements OnInit {
     this.updateProfile.dateOfBirth = this.editProfileForm.get('dateOfBirth').value;
     this.updateProfile.oldPassword = this.editProfileForm.get('oldPassword').value;
     this.updateProfile.newPassword = this.editProfileForm.get('newPassword').value;
-    console.log(this.updateProfile);
       this.profileService.editProfile(this.updateProfile).subscribe(response =>{
         this.router.navigateByUrl('/dashboard');
+        this.toastrService.success('Successfully changed profile details');
+      },
+      err=>{
+        this.toastrService.error('Error while changing profile details');
       })
   }
 

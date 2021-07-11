@@ -14,8 +14,8 @@ namespace backend.Controllers
     public class CallsController : BaseApiController
     {
         private readonly IMapper _mapper;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<User> _userManager;
+        private readonly IUnitOfWork _unitOfWork;
         public CallsController(IUnitOfWork unitOfWork, IMapper mapper, UserManager<User> userManager)
         {
             _unitOfWork = unitOfWork;
@@ -39,6 +39,7 @@ namespace backend.Controllers
         {
             var call = _mapper.Map<Call>(callDto);
 
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.Email == callDto.Email);
             var activeIncidents = await _unitOfWork.IncidentRepository.GetActiveIncidentsAsync();
 
             foreach (var incident in activeIncidents)
@@ -50,12 +51,28 @@ namespace backend.Controllers
                         var callsForThisLocation = await _unitOfWork.CallRepository.GetCallsByIncidentIdAsync(incident.Id);
                         foreach (var callCheck in callsForThisLocation)
                         {
-                            if(callCheck.Email == call.Email)
+                            if (callCheck.Email == call.Email)
                             {
+                                if (temp != null)
+                                {
+                                    await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                                    {
+                                        Type = "Error",
+                                        Content = "There is already a call for this location " + callDto.Location +" from you",
+                                        DateTimeCreated = DateTime.Now,
+                                    }, temp.Id);     
+                                }
                                 return BadRequest("Call from this person for this incident already exists");
                             }
                         }
                     }
+
+                    await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                    {
+                        Type = "Success",
+                        Content = "You have reported an outage on location " + callDto.Location,
+                        DateTimeCreated = DateTime.Now,
+                    }, temp.Id);
 
                     call.IncidentId = incident.Id;
                     incident.NumberOfCalls++;
@@ -64,7 +81,7 @@ namespace backend.Controllers
 
 
                     if (await _unitOfWork.SaveAsync()) return Ok(_mapper.Map<CallDto>(call));
-                        
+
                     return BadRequest("Failed to add call");
                 }
             }
@@ -75,13 +92,13 @@ namespace backend.Controllers
             
             int createdById = 0;
 
-            User temp = null;
+            User tempUs = null;
 
             if (callDto.Email != null)
             {
-                temp = await _userManager.Users.SingleOrDefaultAsync(x => x.Email == callDto.Email.ToLower());
-                if (temp != null)
-                    createdById = temp.Id;
+                tempUs = await _userManager.Users.SingleOrDefaultAsync(x => x.Email == callDto.Email.ToLower());
+                if (tempUs != null)
+                    createdById = tempUs.Id;
             }
 
             Incident inc = new Incident
@@ -103,6 +120,14 @@ namespace backend.Controllers
             call.IncidentId = inc.Id;
 
             _unitOfWork.CallRepository.AddCall(call);
+
+            await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+            {
+                Id = 0,
+                Type = "Success",
+                Content = "You have reported an outage on location " + callDto.Location,
+                DateTimeCreated = DateTime.Now,
+            }, temp.Id) ;
 
             if (await _unitOfWork.CallRepository.SaveAllAsync()) return Ok(_mapper.Map<CallDto>(call));
 

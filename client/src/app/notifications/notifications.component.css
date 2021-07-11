@@ -1,0 +1,20 @@
+.center {
+    padding: 10px;
+    text-align: center;
+  }
+
+.button{
+    min-width: 200px;
+    margin-right: 10px;
+}
+
+.notificationlist{
+    margin-top: 10px;
+    text-align: center;
+}
+
+.mat-chip{
+    max-width: 1000px;
+    min-width: 800px;
+    height: 60px;
+}

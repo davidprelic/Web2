@@ -21,5 +21,7 @@ namespace backend.Interfaces
         void DeleteCustomer(Customer customer);
 
         Task<Customer> FindCustomer(int id);
+
+        Task<bool> SaveAllAsync();
     }
 }

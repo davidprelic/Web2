@@ -48,6 +48,11 @@ namespace backend.Data
         public IHistoryOfWorkPlanStateChangeRepository HistoryOfWorkPlanStateChangeRepository =>
             new HistoryOfWorkPlanStateChangeRepository(dc);
 
+        public INotificationRepository NotificationRepository =>
+            new NotificationRepository(dc);
+
+        public INotificationUserRepository NotificationUserRepository =>
+            new NotificationUserRepository(dc);
         public IWorkRequestRepository WorkRequestRepository =>
             new WorkRequestRepository(dc);
 

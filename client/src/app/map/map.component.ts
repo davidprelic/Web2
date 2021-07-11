@@ -4,6 +4,11 @@ import { MarkerService } from '../_services/marker.service';
 import * as L from 'leaflet'
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { IncidentService } from 'src/app/_services/incident.service';
+import { Incident } from 'src/app/_models/incident';
+import { CrewService } from 'src/app/_services/crew.service';
+import { Crew } from 'src/app/_models/crew';
+import { Router } from '@angular/router';
 
 const icon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.5.1/dist/images/marker-icon.png",
@@ -35,28 +40,51 @@ export class MapComponent implements OnInit {
   public zoom: number;
   private unsubscribe = new Subject<void>();
 
-  latitude: number;
-  longitude: number;
-  markerTooltipText: string;
+  addressa: string;
+  ekipa: string;
+  ekipaId: number;
+  allIncidents: Incident[];
+  allCrews: Crew[];
+  incIds: number;
 
-  constructor(private markerService: MarkerService) {
+  constructor(private markerService: MarkerService, private incidentService: IncidentService,
+    private crewService: CrewService, private router: Router) {
     this.markerService.coordsChange.pipe(takeUntil(this.unsubscribe)).subscribe(coords => {
-          this.map.flyTo(coords, this.map.getZoom());
-          L.marker(coords, { icon }).addTo(this.map).on("mouseover", function (event) {
-            this.latitude = event["latlng"].lat;
-            this.longitude = event["latlng"].lng;
+      
+      this.map.flyTo(coords, this.map.getZoom());
 
-            console.log(this.latitude);
-            
-        }).bindTooltip(this.latitude + ', ' + this.longitude, {
-          permanent: false,
-          opacity: 1,
-          direction: 'top'
-        });
+      this.incIds = this.allIncidents.find(x => x.latitude == coords[0]).id;
+      this.addressa = this.allIncidents.find(x => x.latitude == coords[0]).location;
+      this.ekipaId = this.allIncidents.find(x => x.latitude == coords[0]).crewId;
+      
+      if (this.ekipaId != null && this.ekipaId != undefined) {
+        this.ekipa = this.allCrews.find(x => x.id == this.ekipaId).name + " radi na incidentu";
+      }
+      else {
+        this.ekipa = "Nema aktivnih ekipa"
+      }
+
+      var ekx = this.incIds;
+      var ruter = this.router;
+
+      L.marker(coords, { icon }).on("click", function (event) {
+        ruter.navigateByUrl('/dashboard/incidents/' + ekx);
+      }).bindTooltip(this.addressa + " <br> " + this.ekipa, {
+        permanent: false,
+        opacity: 1,
+        direction: 'top',
+      }).addTo(this.map);
     });
+
   }
 
   ngOnInit(): void {
+    this.incidentService.getIncidents().subscribe(response => {
+      this.allIncidents = response;
+    });
+    this.crewService.getCrews().subscribe(response => {
+      this.allCrews = response;
+    })
   }
 
   ngOnDestroy() {

@@ -12,7 +12,8 @@ export class DeviceService {
   constructor(private http: HttpClient, private router: Router) { }
 
   addNewDevice(model: Device) {
-    return this.http.post<Device>(this.baseUrl + 'device', model);
+    var user = JSON.parse(localStorage.getItem('user'));
+    return this.http.post<Device>(this.baseUrl + 'device/' + user.username, model);
   }
 
   getDevices() {
@@ -46,11 +47,13 @@ export class DeviceService {
   }
 
   updateDevice(device: Device) {
-    return this.http.put(this.baseUrl + 'device', device);
+    var user = JSON.parse(localStorage.getItem('user'));
+    return this.http.put(this.baseUrl + 'device/' + user.username, device);
   }
 
   deleteDevice(id: number) {
-    return this.http.delete(this.baseUrl + 'device/' + id);
+    var user = JSON.parse(localStorage.getItem('user'));
+    return this.http.delete(this.baseUrl + 'device/' + id + "/" + user.username);
   }
 
   private toQueryString(query): string {
