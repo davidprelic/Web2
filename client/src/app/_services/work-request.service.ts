@@ -24,6 +24,10 @@ export class WorkRequestService {
     getWorkRequestById(id: number) {
       return this.http.get<WorkRequest>(this.baseUrl + id);
     }
+
+    getWorkRequestsByUsername(username: string) {
+      return this.http.get<WorkRequest[]>(this.baseUrl + 'mine/' + username);
+    }
   
     updateWorkRequest(model: WorkRequest) {
       var user = JSON.parse(localStorage.getItem('user'));

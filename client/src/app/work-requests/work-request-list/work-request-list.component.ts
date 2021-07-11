@@ -19,6 +19,8 @@ export class WorkRequestListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
+  selectedWorkRequestFilter: string = "all";
+
   constructor(private workRequestService: WorkRequestService, private fb: FormBuilder, private router: Router) {
 
   }
@@ -26,13 +28,15 @@ export class WorkRequestListComponent implements OnInit {
   ngOnInit(): void {
     this.workRequestService.getWorkRequests().subscribe(response => {
       this.dataSource = new MatTableDataSource(response);
-    })
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    });
   }
 
-  ngAfterViewInit() {
+  /*ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-  }
+  }*/
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -42,5 +46,28 @@ export class WorkRequestListComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+
+  filterWorkRequests() {
+    if (this.selectedWorkRequestFilter == "all")
+    {
+      this.workRequestService.getWorkRequests().subscribe(response => {
+        this.dataSource = new MatTableDataSource(response);
+        this.dataSource.data = [...this.dataSource.data]; 
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      });
+    }
+    else if (this.selectedWorkRequestFilter == "mine")
+    {
+      var user = JSON.parse(localStorage.getItem('user'));
+      this.workRequestService.getWorkRequestsByUsername(user.username).subscribe(response => {
+        this.dataSource = new MatTableDataSource(response);
+        this.dataSource.data = [...this.dataSource.data]; 
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      });
+    }
+  }
+
 }
 

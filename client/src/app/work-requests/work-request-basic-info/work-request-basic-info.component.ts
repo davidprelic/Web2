@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ThemePalette } from '@angular/material/core'; import { ActivatedRoute, Router } from '@angular/router';
+import { ThemePalette } from '@angular/material/core';import { MatSnackBar } from '@angular/material/snack-bar';
+ import { ActivatedRoute, Router } from '@angular/router';
 import { Incident } from 'src/app/_models/incident';
 import { WorkRequest } from 'src/app/_models/work-request';
 import { AccountService } from 'src/app/_services/account.service';
@@ -25,7 +26,8 @@ export class WorkRequestBasicInfoComponent implements OnInit {
 
 
   constructor(private fb: FormBuilder, private incidentService: IncidentService, private router: Router, private http: HttpClient,
-    private route: ActivatedRoute, private workRequestService: WorkRequestService, private accountService: AccountService) { }
+    private route: ActivatedRoute, private workRequestService: WorkRequestService, private accountService: AccountService,
+    private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.workRequestId = parseInt(this.route.snapshot.params['id']);
@@ -71,11 +73,21 @@ export class WorkRequestBasicInfoComponent implements OnInit {
   saveBasicInfo() {
     if (this.workRequestId === 0) {
       this.workRequestService.addNewWorkRequest(this.basicInfoForm.getRawValue()).subscribe(response => {
+        this._snackBar.open("Work request created!", "Succes", {
+          duration: 2000,
+          horizontalPosition: 'end',
+          panelClass: ['mat-toolbar', 'mat-accent']
+        } );
         this.router.navigateByUrl('/dashboard/work-requests');
       });
     }
     else {
       this.workRequestService.updateWorkRequest(this.basicInfoForm.getRawValue()).subscribe(response => {
+        this._snackBar.open("Work request updated!", "Succes", {
+          duration: 2000,
+          horizontalPosition: 'end',
+          panelClass: ['mat-toolbar', 'mat-accent']
+        } );
         this.router.navigateByUrl('/dashboard/work-requests');
       });
     }
@@ -84,6 +96,11 @@ export class WorkRequestBasicInfoComponent implements OnInit {
   Delete() {
     if (this.workRequestId != 0) {
       this.workRequestService.deleteWorkRequest(this.workRequestId).subscribe(response => {
+        this._snackBar.open("Work request deleted!", "Succes", {
+          duration: 2000,
+          horizontalPosition: 'end',
+          panelClass: ['mat-toolbar', 'mat-accent']
+        } );
         this.router.navigateByUrl('/dashboard/work-requests');
       });
     }

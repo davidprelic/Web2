@@ -43,7 +43,7 @@ namespace backend.Controllers
             {
                 incId = workRequestDto.IncidentId;
             }
-            
+
             var workRequest = new WorkRequest
             {
                 Type = workRequestDto.Type,
@@ -84,7 +84,12 @@ namespace backend.Controllers
         [HttpDelete("{id}/{username}")]
         public async Task<IActionResult> DeleteWorkRequest(int id, string username)
         {
+            var historyWork = await unitOfWork.HistoryWorkRequest.GetHistoryWorkRequestByWorkRequestIdAsync(id);
             var workRequest = await unitOfWork.WorkRequestRepository.GetWorkRequestByIdAsync(id);
+            foreach (var item in historyWork)
+            {
+                unitOfWork.HistoryWorkRequest.DeleteHistoryWorkRequest(item);
+            }
             unitOfWork.WorkRequestRepository.DeleteWorkRequest(workRequest);
             var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username.ToLower());
 
@@ -113,6 +118,18 @@ namespace backend.Controllers
             return Ok(finalWorkRequest);
         }
 
+        [HttpGet("mine/{username}")]
+        public async Task<ActionResult<IEnumerable<WorkRequest>>> GetWorkRequestsByUsername(string username)
+        {
+            User temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username);
+
+            var workRequests = await unitOfWork.WorkRequestRepository.GetWorkRequestsByUserIdAsync(temp.Id);
+
+            var finalWorkRequests = _mapper.Map<List<WorkRequestDto>>(workRequests);
+
+            return Ok(finalWorkRequests);
+        }
+
         [HttpPut("{username}")]
         public async Task<IActionResult> UpdateWorkRequest(WorkRequestDto workRequestDto, string username)
         {
@@ -124,7 +141,7 @@ namespace backend.Controllers
             {
                 incId = workRequestDto.IncidentId;
             }
-            
+
             workRequest.Type = workRequestDto.Type;
             workRequest.Status = workRequestDto.Status;
             workRequest.Address = workRequestDto.Address;

@@ -20,13 +20,15 @@ namespace backend.Controllers
 
         private readonly UserManager<User> _userManager;
         private readonly IUnitOfWork _unitOfWork;
+        //private readonly IIncidentRepository incidentRepository;
 
-        public CrewController(IUnitOfWork unitOfWork, ICrewRepository crewRepository, IMapper mapper, UserManager<User> userManager)
+        public CrewController(IUnitOfWork unitOfWork, ICrewRepository crewRepository, IMapper mapper, UserManager<User> userManager/*, IIncidentRepository incidentRepository*/)
         {
             this.crewRepository = crewRepository;
             this.mapper = mapper;
             _userManager = userManager;
             _unitOfWork = unitOfWork;
+            //this.incidentRepository = incidentRepository;
         }
 
         [HttpPost("{username}")]
@@ -56,6 +58,43 @@ namespace backend.Controllers
         {
             var crew = await crewRepository.GetCrewByIdAsync(id);
             var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username);
+            //var incidents = await incidentRepository.GetIncidentsAsync();
+            //var workPlans = await _unitOfWork.WorkPlanRepository.GetWorkPlanAsync();
+            //var safetyDocs = await _unitOfWork.SafetyDocRepository.GetSafetyDocsAsync();
+
+           /* ICollection<Incident> incidents1 = new List<Incident>();
+            foreach (var item in incidents)
+            {
+                if (item.CrewId == id)
+                {
+                    item.CrewId = null;
+                    incidents1.Add(item);
+                }
+            }*/
+
+            /*foreach (var item in incidents1)
+            {
+                incidentRepository.Update(item);
+            }*/
+
+            /*foreach (var item in workPlans)
+            {
+                if(item.CrewId == id)
+                {
+                    item.CrewId = null;
+                    _unitOfWork.WorkPlanRepository.Update(item);
+                }
+            }
+
+            foreach (var item in safetyDocs)
+            {
+                if (item.CrewId == id)
+                {
+                    item.CrewId = null;
+                    _unitOfWork.SafetyDocRepository.Update(item);
+                }
+            }*/
+
 
             ICollection<User> users = new List<User>();
 
@@ -74,8 +113,9 @@ namespace backend.Controllers
             }
 
             crewRepository.DeleteCrew(crew);
-
-            if (await crewRepository.SaveAllAsync())
+            /*if (await incidentRepository.SaveAllAsync())
+            {*/
+            if (await crewRepository.SaveAllAsync() /*&& await _unitOfWork.WorkPlanRepository.SaveAllAsync() && await _unitOfWork.SafetyDocRepository.SaveAllAsync()*/)
             {
                 await _unitOfWork.NotificationRepository.NewNotification(new Notification()
                 {
@@ -86,6 +126,7 @@ namespace backend.Controllers
 
                 return Ok();
             }
+            //}
 
             return BadRequest("Problem with deleting crew");
         }

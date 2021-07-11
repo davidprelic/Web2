@@ -9,6 +9,7 @@ import { Incident } from 'src/app/_models/incident';
 import { CrewService } from 'src/app/_services/crew.service';
 import { Crew } from 'src/app/_models/crew';
 import { Router } from '@angular/router';
+import { NgZone } from '@angular/core';
 
 const icon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.5.1/dist/images/marker-icon.png",
@@ -48,15 +49,15 @@ export class MapComponent implements OnInit {
   incIds: number;
 
   constructor(private markerService: MarkerService, private incidentService: IncidentService,
-    private crewService: CrewService, private router: Router) {
+    private crewService: CrewService, private router: Router, private zone: NgZone) {
     this.markerService.coordsChange.pipe(takeUntil(this.unsubscribe)).subscribe(coords => {
-      
+
       this.map.flyTo(coords, this.map.getZoom());
 
       this.incIds = this.allIncidents.find(x => x.latitude == coords[0]).id;
       this.addressa = this.allIncidents.find(x => x.latitude == coords[0]).location;
       this.ekipaId = this.allIncidents.find(x => x.latitude == coords[0]).crewId;
-      
+
       if (this.ekipaId != null && this.ekipaId != undefined) {
         this.ekipa = this.allCrews.find(x => x.id == this.ekipaId).name + " radi na incidentu";
       }
@@ -66,9 +67,12 @@ export class MapComponent implements OnInit {
 
       var ekx = this.incIds;
       var ruter = this.router;
+      var zons = zone;
 
       L.marker(coords, { icon }).on("click", function (event) {
-        ruter.navigateByUrl('/dashboard/incidents/' + ekx);
+        zons.run(() => {
+          ruter.navigateByUrl('/dashboard/incidents/' + ekx);
+        });
       }).bindTooltip(this.addressa + " <br> " + this.ekipa, {
         permanent: false,
         opacity: 1,

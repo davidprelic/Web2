@@ -16,6 +16,8 @@ namespace backend.Interfaces
 
         Task<WorkRequest> GetWorkRequestByIdAsync(int id);
 
+        Task<IEnumerable<WorkRequest>> GetWorkRequestsByUserIdAsync(int id);
+
         Task<bool> SaveAllAsync();
 
         void Update(WorkRequest workRequest);
