@@ -37,6 +37,13 @@ namespace backend.Data.Repo
             return await context.WorkRequests.ToListAsync();
         }
 
+        public async Task<IEnumerable<WorkRequest>> GetWorkRequestsByUserIdAsync(int id)
+        {
+            return await context.WorkRequests
+                .Where(x => x.CreatedBy == id)
+                .ToListAsync();
+        }
+
         public async Task<bool> SaveAllAsync()
         {
             return await context.SaveChangesAsync() > 0;

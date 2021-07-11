@@ -118,6 +118,18 @@ namespace backend.Controllers
             return Ok(finalWorkRequest);
         }
 
+        [HttpGet("mine/{username}")]
+        public async Task<ActionResult<IEnumerable<WorkRequest>>> GetWorkRequestsByUsername(string username)
+        {
+            User temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username);
+
+            var workRequests = await unitOfWork.WorkRequestRepository.GetWorkRequestsByUserIdAsync(temp.Id);
+
+            var finalWorkRequests = _mapper.Map<List<WorkRequestDto>>(workRequests);
+
+            return Ok(finalWorkRequests);
+        }
+
         [HttpPut("{username}")]
         public async Task<IActionResult> UpdateWorkRequest(WorkRequestDto workRequestDto, string username)
         {

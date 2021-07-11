@@ -19,10 +19,7 @@ export class WorkRequestListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  filteredNotifications: WorkRequest[];
-  tempNotifications: WorkRequest[];
-  readNotifications: string = "all";
-  typeNotifications: string = "all";
+  selectedWorkRequestFilter: string = "all";
 
   constructor(private workRequestService: WorkRequestService, private fb: FormBuilder, private router: Router) {
 
@@ -30,11 +27,9 @@ export class WorkRequestListComponent implements OnInit {
 
   ngOnInit(): void {
     this.workRequestService.getWorkRequests().subscribe(response => {
-      this.filteredNotifications = response;
       this.dataSource = new MatTableDataSource(response);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-      this.filterNotifications();
     });
   }
 
@@ -52,22 +47,26 @@ export class WorkRequestListComponent implements OnInit {
     }
   }
 
-  filterNotifications(){
-    var user = JSON.parse(localStorage.getItem('user'));
-    this.filteredNotifications = [];
-    this.tempNotifications = [];
-
-    if(this.typeNotifications == "all"){
-      this.filteredNotifications = this.tempNotifications;
-    }
-    else if(this.typeNotifications == "mine"){
-      this.tempNotifications.forEach(element => {
-        if(element.createdBy == user.username){
-          this.filteredNotifications.push(element);
-        }
+  filterWorkRequests() {
+    if (this.selectedWorkRequestFilter == "all")
+    {
+      this.workRequestService.getWorkRequests().subscribe(response => {
+        this.dataSource = new MatTableDataSource(response);
+        this.dataSource.data = [...this.dataSource.data]; 
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
       });
     }
-
+    else if (this.selectedWorkRequestFilter == "mine")
+    {
+      var user = JSON.parse(localStorage.getItem('user'));
+      this.workRequestService.getWorkRequestsByUsername(user.username).subscribe(response => {
+        this.dataSource = new MatTableDataSource(response);
+        this.dataSource.data = [...this.dataSource.data]; 
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      });
+    }
   }
 
 }
