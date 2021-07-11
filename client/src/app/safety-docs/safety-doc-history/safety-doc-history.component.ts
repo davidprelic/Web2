@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { HistorySafetyDoc } from 'src/app/_models/history-safety-doc';
 import { SafetyDocument } from 'src/app/_models/safety-document';
+import { AccountService } from 'src/app/_services/account.service';
 import { HistorySafetyDocService } from 'src/app/_services/history-safety-doc.service';
 import { SafetyDocService } from 'src/app/_services/safety-doc.service';
 
@@ -23,16 +24,22 @@ export class SafetyDocHistoryComponent implements OnInit {
   currentState: string;
   currentSafetyDoc: SafetyDocument;
   newHistorySafetyDoc: HistorySafetyDoc;
+  currentUserId: number;
   
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private historySafetyDocService: HistorySafetyDocService, private route: ActivatedRoute,
-              private safetyDocService: SafetyDocService, private _snackBar: MatSnackBar) { 
+              private safetyDocService: SafetyDocService, private _snackBar: MatSnackBar, private accountService: AccountService) { 
   }
 
   ngOnInit(): void {
     this.safetyDocId = parseInt(this.route.snapshot.params['id']);
+    var user = JSON.parse(localStorage.getItem('user'));
+
+    this.accountService.getAccount(user.username).subscribe(response => {
+      this.currentUserId = response.id;
+    })
 
     if (this.safetyDocId != 0)
     {
@@ -43,6 +50,7 @@ export class SafetyDocHistoryComponent implements OnInit {
 
       this.historySafetyDocService.getHistorySafetyDocsBySafetyDocId(this.safetyDocId).subscribe(response => {
         this.dataSource = new MatTableDataSource(response); 
+        this.dataSource.paginator = this.paginator;
       });
     }
   
@@ -58,7 +66,7 @@ export class SafetyDocHistoryComponent implements OnInit {
       changedFrom: this.currentState,
       changedTo: "Approved",
       dateTimeChanged: new Date(),
-      userId: 4,
+      userId: this.currentUserId,
       safetyDocumentId: this.safetyDocId
     }
 
@@ -88,7 +96,7 @@ export class SafetyDocHistoryComponent implements OnInit {
       changedFrom: this.currentState,
       changedTo: "Issued",
       dateTimeChanged: new Date(),
-      userId: 4,
+      userId: this.currentUserId,
       safetyDocumentId: this.safetyDocId
     }
 
@@ -118,7 +126,7 @@ export class SafetyDocHistoryComponent implements OnInit {
       changedFrom: this.currentState,
       changedTo: "Denied",
       dateTimeChanged: new Date(),
-      userId: 4,
+      userId: this.currentUserId,
       safetyDocumentId: this.safetyDocId
     }
 

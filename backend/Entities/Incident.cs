@@ -22,7 +22,8 @@ namespace backend.Entities
         public double? Voltage { get; set; }
         public DateTime? ScheduledTime { get; set; }
 
-        public int? TakenToResolveUserId { get; set; } 
+        public int? CreatedById { get; set; } 
+        public int? UserId { get; set; } 
         public User User { get; set; }
 
         public int? ResolutionId { get; set; }

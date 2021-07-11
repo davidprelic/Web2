@@ -21,7 +21,9 @@ namespace backend.DTOs
         public double? Voltage { get; set; }
         public DateTime? ScheduledTime { get; set; }
 
-        public int? TakenToResolveUserId { get; set; } 
+        // public int? TakenToResolveUserId { get; set; } 
+        public string UserId { get; set; } 
+        public string CreatedById { get; set; } 
 
         public int? ResolutionId { get; set; }
 

@@ -22,4 +22,6 @@ export interface Incident {
     scheduledTime?: Date;
     resolutionId?: number;
     crewId?: number;
+    userId?: string;
+    createdById?: string;
 }

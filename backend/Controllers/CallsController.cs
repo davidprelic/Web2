@@ -16,7 +16,7 @@ namespace backend.Controllers
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly IUnitOfWork _unitOfWork;
-        public CallsController(UserManager<User> userManager, IUnitOfWork unitOfWork, IMapper mapper)
+        public CallsController(IUnitOfWork unitOfWork, IMapper mapper, UserManager<User> userManager)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -89,6 +89,17 @@ namespace backend.Controllers
             Resolution resol = new Resolution();
             _unitOfWork.ResolutionRepository.AddResolution(resol);
             await _unitOfWork.ResolutionRepository.SaveAllAsync();
+            
+            int createdById = 0;
+
+            User tempUs = null;
+
+            if (callDto.Email != null)
+            {
+                tempUs = await _userManager.Users.SingleOrDefaultAsync(x => x.Email == callDto.Email.ToLower());
+                if (tempUs != null)
+                    createdById = tempUs.Id;
+            }
 
             Incident inc = new Incident
             {
@@ -100,6 +111,7 @@ namespace backend.Controllers
                 OutageTime = DateTime.Now,
                 ResolutionId = resol.Id,
                 NumberOfCalls = 1,
+                CreatedById = createdById
             };
 
             _unitOfWork.IncidentRepository.AddIncident(inc);

@@ -34,12 +34,9 @@ export class SelectCustomerDialogComponent implements OnInit {
   ngOnInit(): void {
     this.consumerService.getConsumers().subscribe(response => {
       this.dataSource = new MatTableDataSource(response);
-    })
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    })
   }
 
   applyFilter(event: Event) {

@@ -6,7 +6,9 @@ using AutoMapper;
 using backend.DTOs;
 using backend.Entities;
 using backend.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
@@ -14,16 +16,23 @@ namespace backend.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public IncidentsController(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly UserManager<User> _userManager;
+        public IncidentsController(IUnitOfWork unitOfWork, IMapper mapper, UserManager<User> userManager)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         [HttpPost]
         public async Task<ActionResult<IncidentDto>> CreateIncident(IncidentDto incidentDto)
         {
+            User temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == incidentDto.CreatedById.ToLower());
+            incidentDto.CreatedById = null;
+
             var incident = _mapper.Map<Incident>(incidentDto);
+
+            incident.CreatedById = temp.Id;
 
             var activeIncidents = await _unitOfWork.IncidentRepository.GetActiveIncidentsAsync();
 
@@ -44,7 +53,16 @@ namespace backend.Controllers
             incident.NumberOfCalls = 0;
 
             _unitOfWork.IncidentRepository.AddIncident(incident);
-            if (await _unitOfWork.IncidentRepository.SaveAllAsync()) return Ok(_mapper.Map<IncidentDto>(incident));
+
+            if (await _unitOfWork.IncidentRepository.SaveAllAsync()) 
+            {
+                incident.CreatedById = null;
+
+                IncidentDto finalIncDto = _mapper.Map<IncidentDto>(incident);
+                finalIncDto.CreatedById = temp.UserName;
+
+                return Ok(finalIncDto);
+            }
 
             return BadRequest("Failed to add incident");
 
@@ -77,7 +95,28 @@ namespace backend.Controllers
 
             incident.AffectedCustomers = affectedCustomers;
 
-            return Ok(_mapper.Map<IncidentDto>(incident));
+            IncidentDto finalIncDto = _mapper.Map<IncidentDto>(incident);
+
+            if (incident.CreatedById != 0)
+            {
+                User tempCreatedBy = await _userManager.Users.SingleOrDefaultAsync(x => x.Id == incident.CreatedById);
+
+                finalIncDto.CreatedById = tempCreatedBy.UserName;
+            }
+            else
+            {
+                finalIncDto.CreatedById = "Random user";
+            }
+            
+            User tempTakenToResolveUserId = null;
+
+            if (incident.UserId != null)
+            {
+                tempTakenToResolveUserId = await _userManager.Users.SingleOrDefaultAsync(x => x.Id == incident.UserId);
+                finalIncDto.UserId = tempTakenToResolveUserId.UserName;
+            }            
+
+            return Ok(finalIncDto);
         }
 
         [HttpPut]
@@ -87,7 +126,28 @@ namespace backend.Controllers
 
             incidentUpdateDto.ResolutionId = incident.ResolutionId;
             
+            User temp = null;
+
+            if (incidentUpdateDto.UserId != null)
+            {
+                temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == incidentUpdateDto.UserId.ToLower());
+                incidentUpdateDto.UserId = null;
+            }
+
+            User tempCreatedBy = null;
+
+            if (incidentUpdateDto.CreatedById != "Random user")
+            {
+                tempCreatedBy = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == incidentUpdateDto.CreatedById.ToLower());
+            }
+
+            incidentUpdateDto.CreatedById = null;
+
             _mapper.Map(incidentUpdateDto, incident);
+
+            incident.UserId = (temp != null) ? temp.Id : null;  
+
+            incident.CreatedById = (tempCreatedBy != null) ? tempCreatedBy.Id : 0;
 
             _unitOfWork.IncidentRepository.Update(incident);
 
