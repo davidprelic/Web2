@@ -16,7 +16,7 @@
     </div>
     <div class="notificationlist" fxLayoutAlign="space-around space-around" fxFlex="100" fxFlex.lt-lg="100">
         <mat-chip-list class="mat-chip-list-stacked" aria-label="Color selection">
-            <mat-chip *ngFor="let chip of filteredNotifications" selected [color]="chip.color" (click)="ReadNotification(chip.id)">
+            <mat-chip *ngFor="let chip of pagedNotifications" selected [color]="chip.color" (click)="ReadNotification(chip.id)">
                 <div fxFlex="10" *ngIf="chip.type === 'Warning'">
                     <mat-icon>warning</mat-icon>    
                 </div>
@@ -38,9 +38,10 @@
             </mat-chip>
         </mat-chip-list>     
     </div>
-    <!--<mat-paginator [length]="length"
+    <mat-paginator fxFlex="100" [length]="length"
                [pageSize]="pageSize"
+               [pageIndex]="pageIndex"
                [pageSizeOptions]="pageSizeOptions"
                (page)="change($event)">
-    </mat-paginator>-->
+    </mat-paginator>
 </div>

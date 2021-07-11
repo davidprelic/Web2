@@ -13,7 +13,8 @@ export class WorkPlanService {
     constructor(private http: HttpClient, private router: Router) { }
   
     addNewWorkPlan(model: WorkPlan) {
-      return this.http.post<WorkPlan>(this.baseUrl, model);
+      var user = JSON.parse(localStorage.getItem('user'));
+      return this.http.post<WorkPlan>(this.baseUrl + user.username, model);
     }
   
     getWorkPlans() {
@@ -25,11 +26,13 @@ export class WorkPlanService {
     }
   
     updateWorkPlan(model: WorkPlan) {
-      return this.http.put(this.baseUrl, model);
+      var user = JSON.parse(localStorage.getItem('user'));
+      return this.http.put(this.baseUrl + user.username, model);
     }
   
     deleteWorkPlan(id: number) {
-      return this.http.delete(this.baseUrl + id);
+      var user = JSON.parse(localStorage.getItem('user'));
+      return this.http.delete(this.baseUrl + id + "/" + user.username);
     }
   
   }

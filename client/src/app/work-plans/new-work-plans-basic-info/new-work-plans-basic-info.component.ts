@@ -10,6 +10,8 @@ import { CrewService } from 'src/app/_services/crew.service';
 import { IncidentService } from 'src/app/_services/incident.service';
 import { WorkPlanService } from 'src/app/_services/work-plan.service';
 import { ToastrService } from 'ngx-toastr';
+import { WorkRequestService } from 'src/app/_services/work-request.service';
+import { WorkRequest } from 'src/app/_models/work-request';
 
 @Component({
   selector: 'app-new-work-plans-basic-info',
@@ -24,11 +26,12 @@ export class NewWorkPlansBasicInfoComponent implements OnInit {
   sendWorkPlan: WorkPlan;
   //workRequests: WorkRequest[];
   incidents: Incident[];
+  workRequests: WorkRequest[];
   crews: Crew[];
   emptyForm: boolean;
 
 
-  constructor(private toastrService: ToastrService, private fb: FormBuilder, private incidentService: IncidentService, private crewService: CrewService, private router: Router, private http: HttpClient,
+  constructor(private workRequestService: WorkRequestService, private toastrService: ToastrService, private fb: FormBuilder, private incidentService: IncidentService, private crewService: CrewService, private router: Router, private http: HttpClient,
     private route: ActivatedRoute, private workPlanService: WorkPlanService, private accountService: AccountService) { }
 
   ngOnInit(): void {
@@ -40,6 +43,10 @@ export class NewWorkPlansBasicInfoComponent implements OnInit {
     this.incidentService.getIncidents().subscribe(response =>{
       this.incidents = response;
     });
+
+    this.workRequestService.getWorkRequests().subscribe(response =>{
+      this.workRequests = response;
+    })
 
     
 
@@ -62,7 +69,7 @@ export class NewWorkPlansBasicInfoComponent implements OnInit {
     this.basicInfoForm = this.fb.group({
       id: [{value: this.workPlanId ? this.currentWorkPlan.id : 0, disabled: true}],
       incidentId: [this.workPlanId ? this.currentWorkPlan.incidentId : 0],  
-      address: [{value: this.workPlanId ? this.currentWorkPlan.address : '', disabled: false}],    
+      address: [{value: this.workPlanId ? this.currentWorkPlan.address : '', disabled: true}],    
       latitude: [{value: this.workPlanId ? this.currentWorkPlan.latitude : 0, disabled: true}],
       longitude: [{value: this.workPlanId ? this.currentWorkPlan.longitude : 0, disabled: true}],
       type: [{value: this.workPlanId ? this.currentWorkPlan.type : '', disabled: false}, Validators.required],
@@ -108,8 +115,13 @@ export class NewWorkPlansBasicInfoComponent implements OnInit {
     })  
   }
 
-  changeWorkPlan(id: number){
-    //implementiraj ovde kad se izmeni workplan
+  changeWorkRequest(id: number){
+    this.workRequestService.getWorkRequestById(id).subscribe(response => {
+      this.basicInfoForm.controls['address'].setValue(response.address);
+      this.basicInfoForm.controls['latitude'].setValue(response.latitude);
+      this.basicInfoForm.controls['longitude'].setValue(response.longitude);
+      this.basicInfoForm.controls['incidentId'].setValue(response.incidentId);
+    })
   }
 
   delete(){

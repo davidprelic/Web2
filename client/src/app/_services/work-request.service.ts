@@ -13,7 +13,8 @@ export class WorkRequestService {
     constructor(private http: HttpClient, private router: Router) { }
   
     addNewWorkRequest(model: WorkRequest) {
-      return this.http.post<WorkRequest>(this.baseUrl, model);
+      var user = JSON.parse(localStorage.getItem('user'));
+      return this.http.post<WorkRequest>(this.baseUrl + user.username, model);
     }
   
     getWorkRequests() {
@@ -25,11 +26,13 @@ export class WorkRequestService {
     }
   
     updateWorkRequest(model: WorkRequest) {
-      return this.http.put(this.baseUrl, model);
+      var user = JSON.parse(localStorage.getItem('user'));
+      return this.http.put(this.baseUrl + user.username, model);
     }
   
     deleteWorkRequest(id: number) {
-      return this.http.delete(this.baseUrl + id);
+      var user = JSON.parse(localStorage.getItem('user'));
+      return this.http.delete(this.baseUrl + id + "/" + user.username);
     }
   
   }
