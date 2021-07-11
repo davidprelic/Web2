@@ -50,7 +50,7 @@ namespace backend.Data.Repo
         public async Task<IEnumerable<Incident>> GetIncidentsByUserIdAsync(int id)
         {
             return await _context.Incidents
-                .Where(x => x.TakenToResolveUserId == id)
+                .Where(x => x.UserId == id || x.CreatedById == id)
                 .ToListAsync();
         }
 

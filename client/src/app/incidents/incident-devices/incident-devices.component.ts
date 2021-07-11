@@ -33,13 +33,9 @@ export class IncidentDevicesComponent implements OnInit {
     this.deviceService.getDevicesByIncidentId(this.incidentId).subscribe(response => {
       this.dataSource = new MatTableDataSource(response); 
       this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     });
 
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   applyFilter(event: Event) {

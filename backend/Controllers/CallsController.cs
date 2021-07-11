@@ -5,7 +5,9 @@ using AutoMapper;
 using backend.DTOs;
 using backend.Entities;
 using backend.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
@@ -13,11 +15,12 @@ namespace backend.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        public CallsController(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly UserManager<User> _userManager;
+        public CallsController(IUnitOfWork unitOfWork, IMapper mapper, UserManager<User> userManager)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-
+            _userManager = userManager;
         }
 
         [HttpGet("incident/{id}")]
@@ -69,6 +72,17 @@ namespace backend.Controllers
             Resolution resol = new Resolution();
             _unitOfWork.ResolutionRepository.AddResolution(resol);
             await _unitOfWork.ResolutionRepository.SaveAllAsync();
+            
+            int createdById = 0;
+
+            User temp = null;
+
+            if (callDto.Email != null)
+            {
+                temp = await _userManager.Users.SingleOrDefaultAsync(x => x.Email == callDto.Email.ToLower());
+                if (temp != null)
+                    createdById = temp.Id;
+            }
 
             Incident inc = new Incident
             {
@@ -80,6 +94,7 @@ namespace backend.Controllers
                 OutageTime = DateTime.Now,
                 ResolutionId = resol.Id,
                 NumberOfCalls = 1,
+                CreatedById = createdById
             };
 
             _unitOfWork.IncidentRepository.AddIncident(inc);

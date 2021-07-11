@@ -5,9 +5,9 @@
     <mat-icon>add_circle</mat-icon> New
   </button>
 
-  <mat-button-toggle-group name="filterTable" aria-label="Filter Table">
-    <mat-button-toggle value="all">All</mat-button-toggle>
-    <mat-button-toggle value="mine">Mine</mat-button-toggle>
+  <mat-button-toggle-group [formControl]="selectedIncidentsFilter">
+    <mat-button-toggle (click)="ShowAllIncidents()" value="all">All</mat-button-toggle>
+    <mat-button-toggle (click)="ShowMineIncidents()" value="mine">Mine</mat-button-toggle>
   </mat-button-toggle-group>
 
   <mat-form-field>
@@ -56,6 +56,18 @@
       <ng-container matColumnDef="numberOfCalls">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> NumberOfCalls </th>
         <td mat-cell *matCellDef="let row"> {{row.numberOfCalls}} </td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="affectedCustomers">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> AffectedCustomers </th>
+        <td mat-cell *matCellDef="let row"> {{row.affectedCustomers}} </td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="voltage">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Voltage </th>
+        <td mat-cell *matCellDef="let row"> {{row.voltage}} </td>
       </ng-container>
   
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

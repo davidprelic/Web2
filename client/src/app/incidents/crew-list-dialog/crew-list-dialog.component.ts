@@ -32,13 +32,10 @@ export class CrewListDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.crewService.getCrews().subscribe(response => {
-      this.dataSource = new MatTableDataSource(response); 
+      this.dataSource = new MatTableDataSource(response);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort; 
     });
-  }
-
-  ngAfterViewInit() {CrewListDialogComponent
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   applyFilter(event: Event) {
