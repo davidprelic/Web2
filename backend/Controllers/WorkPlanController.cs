@@ -35,24 +35,24 @@ namespace backend.Controllers
             return Ok(finalWorkPlans);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<WorkPlanDto>> AddWorkPlan(WorkPlanDto workPlanDto)
+        [HttpPost("{username}")]
+        public async Task<ActionResult<WorkPlanDto>> AddWorkPlan(WorkPlanDto workPlanDto, string username)
         {
             int? crewId = null;
             int? workRequestId = null;
             int? incId = null;
 
-            if(workPlanDto.CrewId != 0)
+            if (workPlanDto.CrewId != 0)
             {
                 crewId = workPlanDto.CrewId;
             }
 
-            if(workPlanDto.WorkRequestId != 0)
+            if (workPlanDto.WorkRequestId != 0)
             {
                 workRequestId = workPlanDto.WorkRequestId;
             }
 
-            if(workPlanDto.IncidentId != 0)
+            if (workPlanDto.IncidentId != 0)
             {
                 incId = workPlanDto.IncidentId;
             }
@@ -74,24 +74,45 @@ namespace backend.Controllers
                 CrewId = crewId,
                 IncidentId = incId
             };
-            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == workPlanDto.CreatedBy.ToLower());
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username.ToLower());
 
             workPlan.CreatedBy = temp.Id;
 
             workPlan.DateTimeCreated = DateTime.Now;
             uow.WorkPlanRepository.AddWorkPlan(workPlan);
 
-            if (await uow.SaveAsync()) return Ok(_mapper.Map<WorkPlanDto>(workPlan));
+            if (await uow.SaveAsync())
+            {
+                await uow.NotificationRepository.NewNotification(new Notification()
+                {
+                    Type = "Success",
+                    Content = "You created new work plan: " + workPlan.Id,
+                    DateTimeCreated = DateTime.Now,
+                }, temp.Id);
+                return Ok(_mapper.Map<WorkPlanDto>(workPlan));
+            }
 
             return BadRequest("Failed to add work plan");
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteWorkPlan(int id)
+        [HttpDelete("{id}/{username}")]
+        public async Task<IActionResult> DeleteWorkPlan(int id, string username)
         {
             var workPlan = await uow.WorkPlanRepository.GetWorkPlanByIdAsync(id);
+
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username.ToLower());
+
             uow.WorkPlanRepository.DeleteWorkPlan(workPlan);
-            if (await uow.SaveAsync()) return Ok();
+            if (await uow.SaveAsync())
+            {
+                await uow.NotificationRepository.NewNotification(new Notification()
+                {
+                    Type = "Warning",
+                    Content = "You deleted work plan: " + workPlan.Id,
+                    DateTimeCreated = DateTime.Now,
+                }, temp.Id);
+                return Ok();
+            }
             return BadRequest("Problem with deleting work plan");
         }
 
@@ -107,8 +128,8 @@ namespace backend.Controllers
             return Ok(finalWorkPlan);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateWorkPlan(WorkPlanDto workPlanDto)
+        [HttpPut("{username}")]
+        public async Task<IActionResult> UpdateWorkPlan(WorkPlanDto workPlanDto, string username)
         {
             var workPlan = await uow.WorkPlanRepository.GetWorkPlanByIdAsync(workPlanDto.Id);
 
@@ -146,9 +167,19 @@ namespace backend.Controllers
             workPlan.CrewId = workPlanDto.CrewId;
             workPlan.IncidentId = workPlanDto.IncidentId;
 
-            uow.WorkPlanRepository.Update(workPlan);
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username.ToLower());
 
-            if (await uow.SaveAsync()) return NoContent();
+            uow.WorkPlanRepository.Update(workPlan);
+            if (await uow.SaveAsync())
+            {
+                await uow.NotificationRepository.NewNotification(new Notification()
+                {
+                    Type = "Success",
+                    Content = "You changed work plan: " + workPlan.Id,
+                    DateTimeCreated = DateTime.Now,
+                }, temp.Id);
+                return NoContent();
+            }
 
             return BadRequest("Failed to update work plan");
         }

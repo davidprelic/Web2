@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Route } from '@angular/compiler/src/core';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {ThemePalette} from '@angular/material/core';
+import { ThemePalette } from '@angular/material/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Router } from '@angular/router';
@@ -19,13 +19,16 @@ export class NotificationsComponent implements OnInit {
   notifications: NotificationUser[];
   filteredNotifications: NotificationUser[];
   tempNotifications: NotificationUser[];
+  pagedNotifications: NotificationUser[];
   changeToRead: ChangeRead;
+  pageEvent : PageEvent;
   readNotifications: string = "all";
   typeNotifications: string = "all";
 
   length: any;
   pageSize: any;
-  pageSizeOptions: any;
+  pageIndex: any = 0;
+  pageSizeOptions: any = [10];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -33,6 +36,7 @@ export class NotificationsComponent implements OnInit {
   constructor(private toastrService: ToastrService, private router: Router, private notificationService: NotificationUsersService, private http: HttpClient) { }
 
   ngOnInit(): void {
+    this.pagedNotifications = [];
     this.changeToRead = {id:0,username:""}
     var user = JSON.parse(localStorage.getItem('user'));
     this.notificationService.getNotifications(user.username).subscribe(response =>{
@@ -141,17 +145,24 @@ export class NotificationsComponent implements OnInit {
   sortNotifications(){
     this.tempNotifications = this.filteredNotifications.sort((a, b) => new Date(b.dateTimeCreated).getTime() - new Date(a.dateTimeCreated).getTime());
     this.filteredNotifications = this.tempNotifications;
-    this.filteredNotifications
+    this.length = this.filteredNotifications.length;
+
+    this.pageEvent = {
+      length:this.length,
+      pageSize: 10,
+      pageIndex: this.pageIndex,
+    }
+
+    this.change(this.pageEvent);
   }
 
-/*  change(event:PageEvent)
-{
-    //make something
-    console.log(event.length);
-    console.log(event.pageIndex);
-    console.log(event.pageSize);
-    console.log(event.previousPageIndex)
-    this.filteredNotifications=this.filteredNotifications.slice()
-}*/
+  change(event:PageEvent)
+  {
+      //make something
+      console.log("Length: " + event.length);
+      console.log("Page Index: " +event.pageIndex);
+      console.log("Page size: " + event.pageSize);
+      this.pagedNotifications=this.filteredNotifications.slice(event.pageIndex* event.pageSize, event.pageIndex*event.pageSize + 10)
+  }
 
 }

@@ -18,3 +18,8 @@
     min-width: 800px;
     height: 60px;
 }
+
+.mat-paginator{
+    display: flex;
+    justify-content: center;
+}

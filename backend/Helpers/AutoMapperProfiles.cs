@@ -45,6 +45,8 @@ namespace backend.Helpers
 
             CreateMap<HistoryOfWorkRequestStateChange, HistoryWorkRequestDto>().ReverseMap();
             CreateMap<User, AccountDto>().ReverseMap();
+
+            CreateMap<HistoryOfWorkPlanStateChange, HistoryWorkPlanDto>().ReverseMap();
         }
     }
 }

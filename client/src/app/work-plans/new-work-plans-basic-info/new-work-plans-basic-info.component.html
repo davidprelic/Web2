@@ -48,10 +48,10 @@
 
         <mat-form-field fxFlex="45" appearance="fill">
             <mat-label>Work request:</mat-label>
-            <mat-select formControlName="workRequestId">
-              <!--<mat-option *ngFor="let item of workRequests" [value]="item.id">
+            <mat-select formControlName="workRequestId" (selectionChange)="changeWorkRequest($event.value)">
+              <mat-option *ngFor="let item of workRequests" [value]="item.id">
                 {{item.id}}
-            </mat-option> -->        
+            </mat-option>      
             </mat-select>
 
             <button matSuffix mat-button [disabled]="this.workPlanId == 0">
