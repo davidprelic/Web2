@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { EditProfile } from '../_models/edit-profile';
 import { User } from '../_models/user';
 import { UserAccount } from '../_models/user-account';
+import { UserChangeState } from '../_models/user-change-state';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,14 @@ export class AccountService {
     return this.http.put(this.baseUrl + "Account/EditProfile", model)
   }
 
+  changeAccountStatus(model: any){
+    return this.http.put(this.baseUrl + "Account", model )
+  }
+
+  getAllUsers() {
+    return this.http.get<UserChangeState[]>(this.baseUrl + 'Account/users');
+  }
+
   login(model: any) {
     return this.http.post(this.baseUrl + 'Account/login', model).pipe(
       map((response: User) => {
@@ -41,11 +50,11 @@ export class AccountService {
 
   register(model: any) {
     return this.http.post(this.baseUrl + 'Account/register', model).pipe(
-      map((user: User) => {
+      /*map((user: User) => {
         if (user) {
           this.setCurrentUser(user);
         }
-      })
+      })*/
     )
   }
 

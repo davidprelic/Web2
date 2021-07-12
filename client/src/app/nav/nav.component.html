@@ -18,8 +18,11 @@
       <button mat-icon-button class="example-icon" routerLinkActive='active' routerLink="/map" aria-label="Example icon-button with heart icon">
         <mat-icon>map</mat-icon>
       </button>
-      <button mat-icon-button class="example-icon" routerLink="/" aria-label="Example icon-button with heart icon">
+      <button mat-icon-button class="example-icon" *ngIf="userRole == 'Admin'" [matMenuTriggerFor]="menu2" aria-label="Example icon-button with heart icon">
         <mat-icon>settings</mat-icon>
+        <mat-menu #menu2="matMenu">
+          <button routerLink="/changeuserstatus" mat-menu-item>Change user status</button>
+        </mat-menu>
       </button>
       <button mat-icon-button class="example-icon" routerLinkActive='active' routerLink="/devices" aria-label="Example icon-button with heart icon">
         <mat-icon>search</mat-icon>

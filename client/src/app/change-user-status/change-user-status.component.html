@@ -1,0 +1,66 @@
+<div fxLayoutAlign="space-around center">
+    <button mat-button routerLink="/changeuserstatus/0">
+        <mat-icon>add_circle</mat-icon> Add
+    </button>
+
+    <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+    </mat-form-field>
+</div>
+
+<div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort>
+
+        <ng-container matColumnDef="id">
+            <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+            <td class="smallField" mat-cell *matCellDef="let row"> {{row.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="userName">
+            <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> User Name </th>
+            <td class="smallField" mat-cell *matCellDef="let row"> {{row.userName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+            <th class="smallField" mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+            <td class="smallField" mat-cell *matCellDef="let row"> {{row.registrationStatus}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row [routerLink]="['/changeuserstatus/', row.id]" *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="10">No data matching the filter "{{input.value}}"</td>
+        </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+   
+        <div fxLayoutAlign="space-around center">
+            
+            <mat-form-field fxFlex="40">
+                <!-- <mat-label>User IDs:</mat-label> -->
+                <mat-select [(ngModel)]="currentId">
+                    <mat-option *ngFor="let item of users" [value]="item.id">
+                        {{item.id}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+                
+            <mat-form-field fxFlex="40">
+                <!-- <mat-label>Change Status:</mat-label> -->
+                <mat-select [(ngModel)]="currentStatus">
+                    <mat-option value="Approved">Approve</mat-option>
+                    <mat-option value="Denied">Denny</mat-option>
+                </mat-select>
+                
+                
+            </mat-form-field>
+            <button (click)="ChangeStatus(currentId,currentStatus)" fxFlex="30" mat-flat-button color="accent"
+            type="submit">Change State</button>
+            
+        </div>
+
+</div>

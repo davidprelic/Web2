@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -63,9 +64,9 @@ namespace backend.Controllers
             temp.Email = editProfileDto.Email;
             temp.DateOfBirth = editProfileDto.DateOfBirth;
             temp.Address = editProfileDto.Address;
-            if(temp.UserRole != editProfileDto.UserRole)
+            if (temp.UserRole != editProfileDto.UserRole)
             {
-                if(editProfileDto.UserRole != "CrewMember")
+                if (editProfileDto.UserRole != "CrewMember")
                 {
                     temp.CrewId = null;
                 }
@@ -76,7 +77,7 @@ namespace backend.Controllers
             await _userManager.UpdateAsync(temp);
             if (!string.IsNullOrWhiteSpace(editProfileDto.OldPassword))
             {
-                if((await _userManager.ChangePasswordAsync(temp, editProfileDto.OldPassword, editProfileDto.NewPassword)).Succeeded)
+                if ((await _userManager.ChangePasswordAsync(temp, editProfileDto.OldPassword, editProfileDto.NewPassword)).Succeeded)
                 {
                     await _unitOfWork.NotificationRepository.NewNotification(new Notification()
                     {
@@ -108,7 +109,7 @@ namespace backend.Controllers
             }, temp.Id);
 
             return Ok(new { msg = "ok" });
-        
+
         }
 
         [HttpPost("register")]
@@ -119,6 +120,8 @@ namespace backend.Controllers
             var user = _mapper.Map<User>(registerDto);
 
             user.Email = registerDto.Email.ToLower();
+
+            user.RegistrationStatus = "Waiting";
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
@@ -154,14 +157,20 @@ namespace backend.Controllers
             var result = await _signInManager
                 .CheckPasswordSignInAsync(user, loginDto.Password, false);
 
-            if (!result.Succeeded) {
+            if (!result.Succeeded)
+            {
                 await _unitOfWork.NotificationRepository.NewNotification(new Notification()
                 {
                     Type = "Warning",
                     Content = "Invalid login",
                     DateTimeCreated = DateTime.Now,
                 }, user.Id);
-                return Unauthorized(); 
+                return Unauthorized();
+            }
+
+            if(user.RegistrationStatus== "Waiting")
+            {
+                return Unauthorized("Account not approved");
             }
 
             await _unitOfWork.NotificationRepository.NewNotification(new Notification()
@@ -176,7 +185,7 @@ namespace backend.Controllers
                 Username = user.UserName,
                 UserRole = user.UserRole,
                 Token = await _tokenService.CreateToken(user)
-            };          
+            };
         }
 
         private async Task<bool> UserExists(string email)
@@ -184,6 +193,40 @@ namespace backend.Controllers
             return await _userManager.Users.AnyAsync(x => x.Email == email.ToLower());
         }
 
+        [HttpPut]
+        public async Task<IActionResult> ChangeStatus(UserForStatusDto userForStatus)
+        {
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.Id == userForStatus.Id);
+
+            if (temp.RegistrationStatus == userForStatus.RegistrationStatus)
+            {
+                return BadRequest(new { msg = "err" });
+            }
+            else
+            {
+                temp.RegistrationStatus = userForStatus.RegistrationStatus;
+                await _userManager.UpdateAsync(temp);
+                return Ok(new { msg = "changedstatus" });
+            }
+        }
+
+        [HttpGet("users")]
+        public async Task<ActionResult<IEnumerable<UserForStatusDto>>> GetUsersAccount()
+        {
+            var users = _userManager.Users;
+            var lista = new List<UserForStatusDto>();
+            foreach (var item in users)
+            {
+                lista.Add(new UserForStatusDto()
+                {
+                    Id = item.Id,
+                    UserName = item.UserName,
+                    RegistrationStatus = item.RegistrationStatus
+                });
+            }
+
+            return Ok(lista);
+        }
 
     }
 }
