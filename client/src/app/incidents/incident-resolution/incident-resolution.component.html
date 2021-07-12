@@ -36,5 +36,6 @@
         </mat-form-field>
 
         <button [disabled]='!resolutionForm.dirty' *ngIf="userRole == 'Dispatcher'" fxFlex="30" mat-flat-button color="accent" type="submit">Save Changes</button>
-    </form>
+        <button fxFlex="30" (click)="cancel()" mat-flat-button color="warn" type="submit">Cancel</button>
+      </form>
 </div>

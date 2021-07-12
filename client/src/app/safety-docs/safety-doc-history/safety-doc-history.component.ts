@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HistorySafetyDoc } from 'src/app/_models/history-safety-doc';
 import { SafetyDocument } from 'src/app/_models/safety-document';
 import { AccountService } from 'src/app/_services/account.service';
@@ -30,7 +30,7 @@ export class SafetyDocHistoryComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private historySafetyDocService: HistorySafetyDocService, private route: ActivatedRoute,
+  constructor(private historySafetyDocService: HistorySafetyDocService, private route: ActivatedRoute, private router: Router,
               private safetyDocService: SafetyDocService, private _snackBar: MatSnackBar, private accountService: AccountService) { 
   }
 
@@ -58,6 +58,10 @@ export class SafetyDocHistoryComponent implements OnInit {
       });
     }
   
+  }
+
+  cancel(){
+    this.router.navigateByUrl('/dashboard/safety-docs');
   }
 
   Approve() {

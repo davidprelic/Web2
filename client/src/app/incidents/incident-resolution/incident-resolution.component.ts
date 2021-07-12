@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Resolution } from 'src/app/_models/resolution';
 import { IncidentService } from 'src/app/_services/incident.service';
 import { ResolutionService } from 'src/app/_services/resolution.service';
@@ -19,7 +19,7 @@ export class IncidentResolutionComponent implements OnInit {
   resolutionForUpdate: Resolution;
   userRole: string;
 
-  constructor(private fb: FormBuilder, private resolutionService: ResolutionService,
+  constructor(private fb: FormBuilder, private resolutionService: ResolutionService, private router: Router,
               private incidentService: IncidentService, private route: ActivatedRoute, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
@@ -51,6 +51,10 @@ export class IncidentResolutionComponent implements OnInit {
       constructionType: [ {value:this.incidentId ? this.currentResolution.constructionType : null, disabled: (this.userRole != "Dispatcher") ? true : false}, Validators.required],
       material: [ {value: this.incidentId ? this.currentResolution.material : null, disabled: (this.userRole != "Dispatcher") ? true : false}, Validators.required]
     })
+  }
+
+  cancel(){
+    this.router.navigateByUrl('/dashboard/incidents');
   }
 
   updateResolution() {

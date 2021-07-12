@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Crew } from 'src/app/_models/crew';
 import { CrewItem } from 'src/app/_models/crew-item';
 import { CrewService } from 'src/app/_services/crew.service';
@@ -20,7 +20,7 @@ export class IncidentCrewComponent implements OnInit {
   currentCrew: Crew;
   userRole: string;
 
-  constructor(public dialog: MatDialog, private fb: FormBuilder, private route: ActivatedRoute,
+  constructor(public dialog: MatDialog, private fb: FormBuilder, private route: ActivatedRoute, private router: Router,
     private incidentService: IncidentService, private crewService: CrewService, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
@@ -77,6 +77,10 @@ export class IncidentCrewComponent implements OnInit {
         });
       }
     });;
+  }
+
+  cancel(){
+    this.router.navigateByUrl('/dashboard/incidents');
   }
 
   removeCrew() {

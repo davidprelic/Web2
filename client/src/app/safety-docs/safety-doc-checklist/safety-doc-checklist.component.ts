@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Checklist } from 'src/app/_models/checklist';
 import { ChecklistService } from 'src/app/_services/checklist.service';
 import { SafetyDocService } from 'src/app/_services/safety-doc.service';
@@ -19,7 +19,7 @@ export class SafetyDocChecklistComponent implements OnInit {
   checklistForUpdate: Checklist;
   userRole: string;
 
-  constructor(private fb: FormBuilder, private checklistService: ChecklistService,
+  constructor(private fb: FormBuilder, private checklistService: ChecklistService, private router: Router,
               private safetyDocService: SafetyDocService, private route: ActivatedRoute, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
@@ -51,6 +51,10 @@ export class SafetyDocChecklistComponent implements OnInit {
       groundingRemoved: [ {value: this.safetyDocId ? this.currentChecklist.groundingRemoved : null, disabled: (this.userRole != "Dispatcher") ? true : false}],
       readyForService: [ {value: this.safetyDocId ? this.currentChecklist.readyForService : null, disabled: (this.userRole != "Dispatcher") ? true : false}],
     })
+  }
+
+  cancel(){
+    this.router.navigateByUrl('/dashboard/safety-docs');
   }
 
   updateChecklist() {

@@ -44,7 +44,9 @@ export class RegisterComponent implements OnInit {
 
   register() {
     this.accountService.register(this.registerForm.value).subscribe(response => {
-      this.router.navigateByUrl('/dashboard');
+      this.router.navigateByUrl('/dashboard').finally(() => {
+        window.location.reload();
+      });
     })
   }
 
