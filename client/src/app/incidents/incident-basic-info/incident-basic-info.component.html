@@ -94,10 +94,10 @@
             <mat-datepicker #picker5></mat-datepicker>
         </mat-form-field>
 
-        <button fxFlex="80" (click)="TakeToResolve()" [disabled]="this.takenToResolveToggle" mat-flat-button color="primary">Take To Resolve</button>
+        <button fxFlex="80" (click)="TakeToResolve()" *ngIf="userRole == 'Dispatcher'" [disabled]="this.takenToResolveToggle" mat-flat-button color="primary">Take To Resolve</button>
         
-        <button class="moveLower" [disabled]='!basicInfoForm.valid' fxFlex="30" mat-flat-button color="accent" type="submit">Save</button>
-        <button class="moveLower" fxFlex="30" mat-flat-button (click)="delete()" [disabled]="this.incidentId == 0" color="warn">Delete</button>
+        <button class="moveLower" *ngIf="userRole == 'Dispatcher'" [disabled]='!basicInfoForm.valid' fxFlex="30" mat-flat-button color="accent" type="submit">Save</button>
+        <button class="moveLower" *ngIf="userRole == 'Dispatcher'" fxFlex="30" mat-flat-button (click)="delete()" [disabled]="this.incidentId == 0" color="warn">Delete</button>
         <button class="moveLower" fxFlex="30" mat-flat-button color="warn" (click)="Cancel()" type="button">Cancel</button>
     </form>
 </div>

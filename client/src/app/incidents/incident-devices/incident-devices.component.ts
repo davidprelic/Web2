@@ -20,6 +20,7 @@ export class IncidentDevicesComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'type', 'address','latitude', 'longitude', 'map'];
   dataSource: MatTableDataSource<Device>;
   devices: Device[];
+  userRole: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -29,6 +30,9 @@ export class IncidentDevicesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    var user = JSON.parse(localStorage.getItem('user'));
+    this.userRole = user.userRole;
+
     this.incidentId = this.route.snapshot.params['id'];
     this.deviceService.getDevicesByIncidentId(this.incidentId).subscribe(response => {
       this.dataSource = new MatTableDataSource(response); 

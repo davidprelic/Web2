@@ -17,11 +17,15 @@ export class IncidentResolutionComponent implements OnInit {
   currentResolutionId: number;
   currentResolution: Resolution;
   resolutionForUpdate: Resolution;
+  userRole: string;
 
   constructor(private fb: FormBuilder, private resolutionService: ResolutionService,
               private incidentService: IncidentService, private route: ActivatedRoute, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
+    var user = JSON.parse(localStorage.getItem('user'));
+    this.userRole = user.userRole;
+
     this.incidentId = parseInt(this.route.snapshot.params['id']);
 
     if (this.incidentId != 0)
@@ -42,10 +46,10 @@ export class IncidentResolutionComponent implements OnInit {
 
   initializeForm() {
     this.resolutionForm = this.fb.group({
-      cause: [ this.incidentId ? this.currentResolution.cause : null, Validators.required],
-      subcause: [ this.incidentId ? this.currentResolution.subcause : null, Validators.required],
-      constructionType: [ this.incidentId ? this.currentResolution.constructionType : null, Validators.required],
-      material: [ this.incidentId ? this.currentResolution.material : null, Validators.required]
+      cause: [ { value: this.incidentId ? this.currentResolution.cause : null, disabled: (this.userRole != "Dispatcher") ? true : false}, Validators.required],
+      subcause: [{value: this.incidentId ? this.currentResolution.subcause : null, disabled: (this.userRole != "Dispatcher") ? true : false }, Validators.required],
+      constructionType: [ {value:this.incidentId ? this.currentResolution.constructionType : null, disabled: (this.userRole != "Dispatcher") ? true : false}, Validators.required],
+      material: [ {value: this.incidentId ? this.currentResolution.material : null, disabled: (this.userRole != "Dispatcher") ? true : false}, Validators.required]
     })
   }
 

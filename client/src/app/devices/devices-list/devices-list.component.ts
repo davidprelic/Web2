@@ -30,6 +30,7 @@ export class DevicesListComponent implements OnInit {
     this.deviceService.getDevices().subscribe(response => {
       this.dataSource = new MatTableDataSource(response); 
       this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     });
 
   }
@@ -42,11 +43,6 @@ export class DevicesListComponent implements OnInit {
       latitude: [''],
       longitude: [''],
     })
-  }
-
-  ngAfterViewInit() {
-    // this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   applySearch() {

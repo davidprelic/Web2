@@ -1,5 +1,5 @@
 <div fxLayoutAlign="space-around center">
-    <button id="addNew" routerLink="/dashboard/work-plans/0"  mat-raised-button>
+    <button id="addNew" *ngIf="userRole == 'Dispatcher'" routerLink="/dashboard/work-plans/0"  mat-raised-button>
       <mat-icon>add_circle</mat-icon> New
     </button>
   

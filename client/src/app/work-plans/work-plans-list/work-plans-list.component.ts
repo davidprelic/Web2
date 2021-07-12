@@ -15,6 +15,7 @@ import { WorkPlanService } from 'src/app/_services/work-plan.service';
 export class WorkPlansListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'status', 'address', 'workRequestId', 'incidentId', 'dateTimeCreated'];
   dataSource: MatTableDataSource<WorkPlan>;
+  userRole: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -24,6 +25,9 @@ export class WorkPlansListComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    var user = JSON.parse(localStorage.getItem('user'));
+    this.userRole = user.userRole;
+
     this.workPlanService.getWorkPlans().subscribe(response => {
       this.dataSource = new MatTableDataSource(response);
     })
