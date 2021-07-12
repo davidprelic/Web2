@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ThemePalette } from '@angular/material/core';import { MatSnackBar } from '@angular/material/snack-bar';
- import { ActivatedRoute, Router } from '@angular/router';
+import { ThemePalette } from '@angular/material/core'; import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Incident } from 'src/app/_models/incident';
 import { WorkRequest } from 'src/app/_models/work-request';
 import { AccountService } from 'src/app/_services/account.service';
@@ -23,6 +23,7 @@ export class WorkRequestBasicInfoComponent implements OnInit {
   sendWorkRequest: WorkRequest;
   incidents: Incident[];
   emptyForm: boolean;
+  userRole: string;
 
 
   constructor(private fb: FormBuilder, private incidentService: IncidentService, private router: Router, private http: HttpClient,
@@ -30,6 +31,9 @@ export class WorkRequestBasicInfoComponent implements OnInit {
     private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
+    var user = JSON.parse(localStorage.getItem('user'));
+    this.userRole = user.userRole;
+
     this.workRequestId = parseInt(this.route.snapshot.params['id']);
 
     this.incidentService.getIncidents().subscribe(response => {
@@ -52,20 +56,20 @@ export class WorkRequestBasicInfoComponent implements OnInit {
     var user = JSON.parse(localStorage.getItem('user'));
     this.basicInfoForm = this.fb.group({
       id: [{ value: this.workRequestId ? this.currentWorkRequest.id : 0, disabled: true }],
-      incidentId: [this.workRequestId ? this.currentWorkRequest.incidentId : 0],
+      incidentId: [{ value: this.workRequestId ? this.currentWorkRequest.incidentId : 0, disabled: (this.userRole != "Dispatcher") ? true : false }],
       address: [{ value: this.workRequestId ? this.currentWorkRequest.address : '', disabled: true }, Validators.required],
       latitude: [{ value: this.workRequestId ? this.currentWorkRequest.latitude : 0, disabled: true }],
       longitude: [{ value: this.workRequestId ? this.currentWorkRequest.longitude : 0, disabled: true }],
-      type: [{ value: this.workRequestId ? this.currentWorkRequest.type : '', disabled: false }, Validators.required],
-      startDateTime: [this.workRequestId ? this.currentWorkRequest.startDateTime : '', Validators.required],
-      endDateTime: [this.workRequestId ? this.currentWorkRequest.endDateTime : '', Validators.required],
+      type: [{ value: this.workRequestId ? this.currentWorkRequest.type : '', disabled: (this.userRole != "Dispatcher") ? true : false }, Validators.required],
+      startDateTime: [{ value: this.workRequestId ? this.currentWorkRequest.startDateTime : '', disabled: (this.userRole != "Dispatcher") ? true : false }, Validators.required],
+      endDateTime: [{ value: this.workRequestId ? this.currentWorkRequest.endDateTime : '', disabled: (this.userRole != "Dispatcher") ? true : false }, Validators.required],
       createdBy: [{ value: this.workRequestId ? this.currentWorkRequest.createdBy : user.username, disabled: true }],
-      purpose: [this.workRequestId ? this.currentWorkRequest.purpose : '', Validators.required],
-      notes: [this.workRequestId ? this.currentWorkRequest.notes : ''],
-      emergencyWork: [this.workRequestId ? this.currentWorkRequest.emergencyWork : false],
-      company: [this.workRequestId ? this.currentWorkRequest.company : ''],
-      phoneNumber: [this.workRequestId ? this.currentWorkRequest.phoneNumber : ''],
-      status: [{ value: this.workRequestId ? this.currentWorkRequest.status : 'Draft', disabled: false }],
+      purpose: [{ value: this.workRequestId ? this.currentWorkRequest.purpose : '', disabled: (this.userRole != "Dispatcher") ? true : false }, Validators.required],
+      notes: [{ value: this.workRequestId ? this.currentWorkRequest.notes : '', disabled: (this.userRole != "Dispatcher") ? true : false }],
+      emergencyWork: [{ value: this.workRequestId ? this.currentWorkRequest.emergencyWork : false, disabled: (this.userRole != "Dispatcher") ? true : false }],
+      company: [{ value: this.workRequestId ? this.currentWorkRequest.company : '', disabled: (this.userRole != "Dispatcher") ? true : false }],
+      phoneNumber: [{ value: this.workRequestId ? this.currentWorkRequest.phoneNumber : '', disabled: (this.userRole != "Dispatcher") ? true : false }],
+      status: [{ value: this.workRequestId ? this.currentWorkRequest.status : 'Draft', disabled: true }],
       dateTimeCreated: [{ value: this.workRequestId ? this.currentWorkRequest.dateTimeCreated : new Date(), disabled: true }]
     });
   }
@@ -77,7 +81,7 @@ export class WorkRequestBasicInfoComponent implements OnInit {
           duration: 2000,
           horizontalPosition: 'end',
           panelClass: ['mat-toolbar', 'mat-accent']
-        } );
+        });
         this.router.navigateByUrl('/dashboard/work-requests');
       });
     }
@@ -87,7 +91,7 @@ export class WorkRequestBasicInfoComponent implements OnInit {
           duration: 2000,
           horizontalPosition: 'end',
           panelClass: ['mat-toolbar', 'mat-accent']
-        } );
+        });
         this.router.navigateByUrl('/dashboard/work-requests');
       });
     }
@@ -100,7 +104,7 @@ export class WorkRequestBasicInfoComponent implements OnInit {
           duration: 2000,
           horizontalPosition: 'end',
           panelClass: ['mat-toolbar', 'mat-accent']
-        } );
+        });
         this.router.navigateByUrl('/dashboard/work-requests');
       });
     }

@@ -9,6 +9,8 @@ namespace backend.Interfaces
     {
         IConsumerRepository ConsumerRepository { get; }
 
+        ICrewRepository CrewRepository { get; }
+
         IWorkPlanRepository WorkPlanRepository { get; }
 
         IIncidentRepository IncidentRepository { get; }
