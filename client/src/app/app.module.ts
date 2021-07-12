@@ -67,6 +67,7 @@ import { IncidentCrewComponent } from './incidents/incident-crew/incident-crew.c
 import { IncidentMultimediaComponent } from './incidents/incident-multimedia/incident-multimedia.component';
 import { IncidentEquipmentComponent } from './incidents/incident-equipment/incident-equipment.component';
 import { ToastrModule } from 'ngx-toastr';
+import { ChangeUserStatusComponent } from './change-user-status/change-user-status.component';
 
 @NgModule({
   declarations: [
@@ -127,6 +128,7 @@ import { ToastrModule } from 'ngx-toastr';
     DeviceDetailsComponent,
     CrewDetailsComponent,
     ConsumerDetailsComponent,
+    ChangeUserStatusComponent,
 
 
   ],

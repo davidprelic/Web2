@@ -31,6 +31,7 @@ import { IncidentBasicInfoComponent } from './incidents/incident-basic-info/inci
 import { IncidentDevicesComponent } from './incidents/incident-devices/incident-devices.component';
 import { IncidentResolutionComponent } from './incidents/incident-resolution/incident-resolution.component';
 import { IncidentCallsComponent } from './incidents/incident-calls/incident-calls.component';
+import { ChangeUserStatusComponent } from './change-user-status/change-user-status.component';
 
 
 const routes: Routes = [
@@ -62,6 +63,7 @@ const routes: Routes = [
       {path: 'dashboard/work-plans/:id', component: NewWorkPlansComponent},
       {path: 'dashboard/work-requests', component: WorkRequestListComponent},
       {path: 'dashboard/work-requests/:id', component: WorkRequestComponent},
+      {path: 'changeuserstatus', component: ChangeUserStatusComponent},
     ]
   },
   
