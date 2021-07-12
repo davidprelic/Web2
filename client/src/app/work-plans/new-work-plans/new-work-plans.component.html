@@ -3,13 +3,10 @@
     <mat-tab label="Basic info">
         <app-new-work-plans-basic-info></app-new-work-plans-basic-info>
     </mat-tab>
-    <mat-tab [disabled]="this.workPlanId == 0" label="History of state changes">
+    <mat-tab [disabled]="this.workPlanId == 0"  label="History of state changes">
         <app-new-work-plans-history></app-new-work-plans-history>
     </mat-tab>
     <mat-tab [disabled]="this.workPlanId == 0" label="Multimedia attachments">
         <app-new-work-plans-multimedia></app-new-work-plans-multimedia>
-    </mat-tab>
-    <mat-tab [disabled]="this.workPlanId == 0" label="Switching instructions">
-        <app-new-work-plans-switching-instructions></app-new-work-plans-switching-instructions>
     </mat-tab>
   </mat-tab-group>
