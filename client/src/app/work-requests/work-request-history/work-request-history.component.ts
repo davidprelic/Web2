@@ -25,6 +25,7 @@ export class WorkRequestHistoryComponent implements OnInit {
   currentWorkRequest: WorkRequest;
   newHistoryWorkRequest: HistoryWorkRequest;
   currentUserId: number;
+  userRole: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -36,6 +37,7 @@ export class WorkRequestHistoryComponent implements OnInit {
   ngOnInit(): void {
     this.workRequestId = parseInt(this.route.snapshot.params['id']);
     var user = JSON.parse(localStorage.getItem('user'));
+    this.userRole = user.userRole;
 
     this.accountService.getAccount(user.username).subscribe(response => {
       this.currentUserId = response.id;

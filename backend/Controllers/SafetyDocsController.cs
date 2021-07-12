@@ -25,16 +25,16 @@ namespace backend.Controllers
 
         [HttpPost]
         public async Task<ActionResult<SafetyDocDto>> CreateSafetyDoc(SafetyDocDto safetyDocDto)
-        {   
+        {
             int? crewId = null;
             int? workPlanId = null;
-            
-            if(safetyDocDto.CrewId != 0)
+
+            if (safetyDocDto.CrewId != 0)
             {
                 crewId = safetyDocDto.CrewId;
             }
 
-            if(safetyDocDto.WorkPlanId != 0)
+            if (safetyDocDto.WorkPlanId != 0)
             {
                 workPlanId = safetyDocDto.WorkPlanId;
             }
@@ -61,7 +61,17 @@ namespace backend.Controllers
             safetyDoc.CreatedBy = temp.Id;
 
             _unitOfWork.SafetyDocRepository.AddSafetyDoc(safetyDoc);
-            if (await _unitOfWork.SafetyDocRepository.SaveAllAsync()) return Ok(_mapper.Map<SafetyDocDto>(safetyDoc));
+            if (await _unitOfWork.SafetyDocRepository.SaveAllAsync())
+            {
+                await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                {
+                    Id = 0,
+                    Type = "Success",
+                    Content = "You have created new safety doc: " + safetyDoc.Id,
+                    DateTimeCreated = DateTime.Now,
+                }, temp.Id);
+                return Ok(_mapper.Map<SafetyDocDto>(safetyDoc));
+            }
 
             return BadRequest("Failed to add safetyDoc");
 
@@ -93,7 +103,7 @@ namespace backend.Controllers
         public async Task<ActionResult<SafetyDocDto>> GetSafetyDoc(int id)
         {
             var safetyDoc = await _unitOfWork.SafetyDocRepository.GetSafetyDocByIdAsync(id);
-            
+
             var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.Id == safetyDoc.CreatedBy);
 
             SafetyDocDto finalSafetyDoc = _mapper.Map<SafetyDocDto>(safetyDoc);
@@ -102,9 +112,10 @@ namespace backend.Controllers
             return Ok(_mapper.Map<SafetyDocDto>(finalSafetyDoc));
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteSafetyDoc(int id)
+        [HttpDelete("{id}/{username}")]
+        public async Task<ActionResult> DeleteSafetyDoc(int id, string username)
         {
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username.ToLower());
             var safetyDoc = await _unitOfWork.SafetyDocRepository.GetSafetyDocByIdAsync(id);
 
             var checklist = await _unitOfWork.ChecklistRepository.GetChecklistByIdAsync(safetyDoc.ChecklistId);
@@ -120,16 +131,27 @@ namespace backend.Controllers
                 _unitOfWork.HistorySafetyDocRepository.DeleteHistorySafetyDoc(hist);
             }
 
-            if (await _unitOfWork.SaveAsync()) return Ok();
+            if (await _unitOfWork.SaveAsync())
+            {
+                await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                {
+                    Id = 0,
+                    Type = "Warning",
+                    Content = "You have deleted safety doc: " + safetyDoc.Id,
+                    DateTimeCreated = DateTime.Now,
+                }, temp.Id);
+                return Ok();
+            }
 
             return BadRequest("Problem with deleting safetyDoc");
         }
 
-        [HttpPut]
-        public async Task<ActionResult> UpdateSafetyDoc(SafetyDocDto safetyDocDto)
+        [HttpPut("{username}")]
+        public async Task<ActionResult> UpdateSafetyDoc(SafetyDocDto safetyDocDto, string username)
         {
             var safetyDoc = await _unitOfWork.SafetyDocRepository.GetSafetyDocByIdAsync(safetyDocDto.Id);
 
+            var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username.ToLower());
 
             int? crewId = null;
             int? workPlanId = null;
@@ -156,7 +178,18 @@ namespace backend.Controllers
 
             _unitOfWork.SafetyDocRepository.Update(safetyDoc);
 
-            if (await _unitOfWork.SafetyDocRepository.SaveAllAsync()) return NoContent();
+            if (await _unitOfWork.SafetyDocRepository.SaveAllAsync())
+            {
+                await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                {
+                    Id = 0,
+                    Type = "Success",
+                    Content = "You have updated safety doc: " + safetyDoc.Id,
+                    DateTimeCreated = DateTime.Now,
+                }, temp.Id);
+
+                return NoContent();
+            }
 
             return BadRequest("Failed to update safetyDoc");
         }

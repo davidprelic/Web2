@@ -59,6 +59,9 @@ namespace backend.Data
         public IHistoryOfWorkRequestRepository HistoryWorkRequest =>
             new HistoryOfWorkRequestRepository(dc);
 
+        public ICrewRepository CrewRepository =>
+            new CrewRepository(dc);
+
         public async Task<bool> SaveAsync()
         {
             return await dc.SaveChangesAsync() > 0;

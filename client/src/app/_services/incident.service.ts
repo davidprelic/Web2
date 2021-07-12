@@ -28,11 +28,13 @@ export class IncidentService {
   }
 
   updateIncident(incident: Incident) {
-    return this.http.put(this.baseUrl + 'incidents', incident);
+    var user = JSON.parse(localStorage.getItem('user'));
+    return this.http.put(this.baseUrl + 'incidents/' + user.username, incident);
   }
 
   deleteIncident(id: number) {
-    return this.http.delete(this.baseUrl + 'incidents/' + id);
+    var user = JSON.parse(localStorage.getItem('user'));
+    return this.http.delete(this.baseUrl + 'incidents/' + id + "/" + user.username);
   }
 
 }

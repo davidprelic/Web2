@@ -94,11 +94,12 @@
 
         <mat-checkbox fxFlex="45" appearance="fill" formControlName='emergencyWork'>Emergency work</mat-checkbox>
 
-        <div fxFlex="80" fxLayout fxLayoutAlign="space-between center">
-            <button [disabled]='!basicInfoForm.valid' fxFlex="30" mat-flat-button color="accent"
-                type="submit">Save</button>
-            <button fxFlex="30" mat-flat-button (click)="Delete()" [disabled]="this.workRequestId == 0" color="warn">Delete</button>
-            <button fxFlex="30" mat-flat-button color="basic" (click)="Cancel()" type="submit">Cancel</button>
-        </div>
+        
+            <button class="moveLower" [disabled]='!basicInfoForm.valid' fxFlex="30" mat-flat-button color="accent"
+                *ngIf="userRole == 'Dispatcher'" type="submit">Save</button>
+            <button class="moveLower" fxFlex="30" mat-flat-button (click)="Delete()" *ngIf="userRole == 'Dispatcher'"
+                [disabled]="this.workRequestId == 0" color="warn">Delete</button>
+            <button class="moveLower" fxFlex="30" mat-flat-button color="basic" (click)="Cancel()" type="submit">Cancel</button>
+        
     </form>
 </div>
