@@ -67,20 +67,25 @@ namespace backend.Controllers
                         }
                     }
 
-                    await _unitOfWork.NotificationRepository.NewNotification(new Notification()
-                    {
-                        Type = "Success",
-                        Content = "You have reported an outage on location " + callDto.Location,
-                        DateTimeCreated = DateTime.Now,
-                    }, temp.Id);
-
                     call.IncidentId = incident.Id;
                     incident.NumberOfCalls++;
                     _unitOfWork.IncidentRepository.Update(incident);
                     _unitOfWork.CallRepository.AddCall(call);
 
 
-                    if (await _unitOfWork.SaveAsync()) return Ok(_mapper.Map<CallDto>(call));
+                    if (await _unitOfWork.SaveAsync())
+                    {
+                        if (temp != null)
+                        {
+                            await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                            {
+                                Type = "Success",
+                                Content = "You have reported an outage on location " + callDto.Location,
+                                DateTimeCreated = DateTime.Now,
+                            }, temp.Id);
+                        }
+                        return Ok(_mapper.Map<CallDto>(call));
+                    }
 
                     return BadRequest("Failed to add call");
                 }
@@ -121,15 +126,22 @@ namespace backend.Controllers
 
             _unitOfWork.CallRepository.AddCall(call);
 
-            await _unitOfWork.NotificationRepository.NewNotification(new Notification()
-            {
-                Id = 0,
-                Type = "Success",
-                Content = "You have reported an outage on location " + callDto.Location,
-                DateTimeCreated = DateTime.Now,
-            }, temp.Id) ;
 
-            if (await _unitOfWork.CallRepository.SaveAllAsync()) return Ok(_mapper.Map<CallDto>(call));
+
+            if (await _unitOfWork.CallRepository.SaveAllAsync())
+            {
+                if (temp != null)
+                {
+                    await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                    {
+                        Id = 0,
+                        Type = "Success",
+                        Content = "You have reported an outage on location " + callDto.Location,
+                        DateTimeCreated = DateTime.Now,
+                    }, temp.Id);
+                }
+                return Ok(_mapper.Map<CallDto>(call));
+            }
 
             return BadRequest("Failed to add call");
         }
