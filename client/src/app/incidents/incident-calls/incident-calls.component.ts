@@ -4,7 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Call } from 'src/app/_models/call';
 import { CallService } from 'src/app/_services/call.service';
 import { AddCallDialogComponent } from '../add-call-dialog/add-call-dialog.component';
@@ -17,7 +17,7 @@ import { AddCallDialogComponent } from '../add-call-dialog/add-call-dialog.compo
 })
 export class IncidentCallsComponent implements OnInit {
   incidentId: number;
-  displayedColumns: string[] = ['id', 'reason', 'hazard', 'comment', 'map'];
+  displayedColumns: string[] = ['id', 'reason', 'hazard', 'comment'];
   dataSource: MatTableDataSource<Call>;
   calls: Call[];
   userRole: string;
@@ -27,7 +27,7 @@ export class IncidentCallsComponent implements OnInit {
 
 
   constructor(public dialog: MatDialog, private route: ActivatedRoute, 
-              private callService: CallService, private _snackBar: MatSnackBar) { 
+              private callService: CallService, private _snackBar: MatSnackBar, private router: Router) { 
   }
 
   ngOnInit(): void {
@@ -49,6 +49,10 @@ export class IncidentCallsComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  cancel() {
+    this.router.navigateByUrl('/dashboard/incidents');
   }
 
   openDialog() {

@@ -5,6 +5,7 @@ import { ThemePalette } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Incident } from 'src/app/_models/incident';
+import { User } from 'src/app/_models/user';
 import { AccountService } from 'src/app/_services/account.service';
 import { IncidentService } from 'src/app/_services/incident.service';
 
@@ -22,6 +23,7 @@ export class IncidentBasicInfoComponent implements OnInit {
   requestLatLonString: string;
   takenToResolveToggle: boolean;
   userRole: string;
+  incUsername: string;
 
   constructor(private fb: FormBuilder, private router: Router, private http: HttpClient, 
               private route: ActivatedRoute, private incidentService: IncidentService,
@@ -29,6 +31,7 @@ export class IncidentBasicInfoComponent implements OnInit {
 
   ngOnInit(): void {
     var user = JSON.parse(localStorage.getItem('user'));
+    this.incUsername = user.username;
     this.userRole = user.userRole;
 
     this.takenToResolveToggle = false;
@@ -56,18 +59,18 @@ export class IncidentBasicInfoComponent implements OnInit {
     this.basicInfoForm = this.fb.group({
       id: [{value: this.incidentId ? this.currentIncident.id : 0, disabled: true}],
       affectedCustomers: [{value: this.incidentId ? this.currentIncident.affectedCustomers : null, disabled: true}],
-      type: [ {value: this.incidentId ? this.currentIncident.type : '', disabled: (this.userRole != "Dispatcher") ? true : false}, Validators.required],
-      outageTime: [{value: this.incidentId ? this.currentIncident.outageTime : '', disabled: (this.userRole != "Dispatcher") ? true : false}, Validators.required],
+      type: [ {value: this.incidentId ? this.currentIncident.type : '', disabled: this.incidentId ? ((this.userRole != "Dispatcher" || (this.currentIncident.userId != user.username && this.currentIncident.userId != null)) ? true : false) : false}, Validators.required],
+      outageTime: [{value: this.incidentId ? this.currentIncident.outageTime : '', disabled: this.incidentId ? ( (this.userRole != "Dispatcher" || (this.currentIncident.userId != user.username && this.currentIncident.userId != null)) ? true : false) : false}, Validators.required],
       priority: [{value: this.incidentId ? this.currentIncident.priority : null, disabled: true}],
-      estimatedTimetoRestore: [ {value: this.incidentId ? this.currentIncident.estimatedTimetoRestore : null, disabled: (this.userRole != "Dispatcher") ? true : false}],
-      isConfirmed: [ {value: this.incidentId ? this.currentIncident.isConfirmed : false, disabled: (this.userRole != "Dispatcher") ? true : false}],
+      estimatedTimetoRestore: [ {value: this.incidentId ? this.currentIncident.estimatedTimetoRestore : null, disabled: this.incidentId ? ( (this.userRole != "Dispatcher" || (this.currentIncident.userId != user.username && this.currentIncident.userId != null)) ? true : false) : false}],
+      isConfirmed: [ {value: this.incidentId ? this.currentIncident.isConfirmed : false, disabled: this.incidentId ? ( (this.userRole != "Dispatcher" || (this.currentIncident.userId != user.username && this.currentIncident.userId != null)) ? true : false) : false}],
       numberOfCalls: [{value: this.incidentId ? this.currentIncident.numberOfCalls : null, disabled: true}],
-      status: [{value: this.incidentId ? this.currentIncident.status : 'Draft', disabled: (this.userRole != "Dispatcher") ? true : false}],
-      location: [{value: this.incidentId ? this.currentIncident.location : '', disabled: (this.userRole != "Dispatcher") ? true : false}, Validators.required],
-      voltage: [ {value :this.incidentId ? this.currentIncident.voltage : null, disabled: (this.userRole != "Dispatcher") ? true : false}],
-      estimatedTimeOfTheCrewArrival: [ {value: this.incidentId ? this.currentIncident.estimatedTimeOfTheCrewArrival : null, disabled: (this.userRole != "Dispatcher") ? true : false}],
-      actualTimeOfTheCrewArrival: [{value: this.incidentId ? this.currentIncident.actualTimeOfTheCrewArrival : null, disabled: (this.userRole != "Dispatcher") ? true : false}],
-      scheduledTime: [{value: this.incidentId ? this.currentIncident.scheduledTime : null, disabled: (this.userRole != "Dispatcher") ? true : false}],
+      status: [{value: this.incidentId ? this.currentIncident.status : 'Draft', disabled: this.incidentId ? ( (this.userRole != "Dispatcher" || (this.currentIncident.userId != user.username && this.currentIncident.userId != null)) ? true : false) : false}],
+      location: [{value: this.incidentId ? this.currentIncident.location : '', disabled: this.incidentId ? ( (this.userRole != "Dispatcher" || (this.currentIncident.userId != user.username && this.currentIncident.userId != null)) ? true : false) : false}, Validators.required],
+      voltage: [ {value :this.incidentId ? this.currentIncident.voltage : null, disabled: this.incidentId ? ( (this.userRole != "Dispatcher" || (this.currentIncident.userId != user.username && this.currentIncident.userId != null)) ? true : false) : false}],
+      estimatedTimeOfTheCrewArrival: [ {value: this.incidentId ? this.currentIncident.estimatedTimeOfTheCrewArrival : null, disabled: this.incidentId ? ( (this.userRole != "Dispatcher" || (this.currentIncident.userId != user.username && this.currentIncident.userId != null)) ? true : false) : false}],
+      actualTimeOfTheCrewArrival: [{value: this.incidentId ? this.currentIncident.actualTimeOfTheCrewArrival : null, disabled: this.incidentId ? ( (this.userRole != "Dispatcher" || (this.currentIncident.userId != user.username && this.currentIncident.userId != null)) ? true : false) : false}],
+      scheduledTime: [{value: this.incidentId ? this.currentIncident.scheduledTime : null, disabled: this.incidentId ? ( (this.userRole != "Dispatcher" || (this.currentIncident.userId != user.username && this.currentIncident.userId != null)) ? true : false) : false}],
       latitude: [this.incidentId ? this.currentIncident.latitude : null],
       longitude: [this.incidentId ? this.currentIncident.longitude : null],
       userId: [ this.incidentId ? this.currentIncident.userId : null],

@@ -4,7 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Device } from 'src/app/_models/device';
 import { DeviceService } from 'src/app/_services/device.service';
 import { DeviceListDialogComponent } from '../device-list-dialog/device-list-dialog.component';
@@ -17,16 +17,17 @@ import { DeviceListDialogComponent } from '../device-list-dialog/device-list-dia
 })
 export class IncidentDevicesComponent implements OnInit {
   incidentId: number;
-  displayedColumns: string[] = ['id', 'name', 'type', 'address','latitude', 'longitude', 'map'];
+  displayedColumns: string[] = ['id', 'name', 'type', 'address','latitude', 'longitude'];
   dataSource: MatTableDataSource<Device>;
   devices: Device[];
   userRole: string;
+  selectedDeviceId: number = 0;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(public dialog: MatDialog, private deviceService: DeviceService,
-              private route: ActivatedRoute, private _snackBar: MatSnackBar) { 
+              private route: ActivatedRoute, private _snackBar: MatSnackBar, private router: Router) { 
   }
 
   ngOnInit(): void {
@@ -49,6 +50,37 @@ export class IncidentDevicesComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  selectDevice(devId: number) {
+    this.selectedDeviceId = devId;
+  }
+
+  removeDevice() {
+    this.deviceService.getDeviceById(this.selectedDeviceId).subscribe(res => {
+      res.incidentId = null;
+
+      this.deviceService.updateDevice(res).subscribe(response => {
+        this._snackBar.open("Device removed from incident!", "Succes", {
+          duration: 2000,
+          horizontalPosition: 'end',
+          panelClass: ['mat-toolbar', 'mat-accent']
+        });
+
+        this.deviceService.getDevicesByIncidentId(this.incidentId).subscribe(response => {
+          this.dataSource = new MatTableDataSource(response); 
+          this.dataSource.data = [...this.dataSource.data];
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        });
+      });
+
+    })
+
+  }
+
+  cancel() {
+    this.router.navigateByUrl('/dashboard/incidents');
   }
 
   openDialog() {
