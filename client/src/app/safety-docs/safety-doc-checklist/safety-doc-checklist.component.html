@@ -5,7 +5,7 @@
         <mat-slide-toggle fxFlex="100" formControlName="tagsRemoved">All tags removed?</mat-slide-toggle>
         <mat-slide-toggle fxFlex="100" formControlName="groundingRemoved">Grounding removed?</mat-slide-toggle>
         <mat-slide-toggle fxFlex="100" formControlName="readyForService">Ready for service?</mat-slide-toggle>
-        <button [disabled]='!checklistForm.dirty' fxFlex="30" mat-flat-button color="accent" type="submit">Save</button>
+        <button [disabled]='!checklistForm.dirty' *ngIf="userRole == 'Dispatcher'" fxFlex="30" mat-flat-button color="accent" type="submit">Save</button>
         <button fxFlex="30" mat-flat-button color="warn" type="button">Cancel</button>
     </form>
 </div>

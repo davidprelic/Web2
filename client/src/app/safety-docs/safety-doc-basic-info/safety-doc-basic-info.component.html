@@ -58,8 +58,8 @@
             </mat-select>
         </mat-form-field>
         
-        <button [disabled]='!basicInfoForm.valid' fxFlex="30" mat-flat-button color="accent" type="submit">Save</button>
-        <button fxFlex="30" mat-flat-button (click)="delete()" [disabled]="this.safetyDocId == 0" color="warn">Delete</button>
+        <button [disabled]='!basicInfoForm.valid' fxFlex="30" *ngIf="userRole == 'Dispatcher'" mat-flat-button color="accent" type="submit">Save</button>
+        <button fxFlex="30" *ngIf="userRole == 'Dispatcher'" mat-flat-button (click)="delete()" [disabled]="this.safetyDocId == 0" color="warn">Delete</button>
         <button fxFlex="30" mat-flat-button color="warn" (click)="Cancel()" type="button">Cancel</button>
     </form>
 </div>

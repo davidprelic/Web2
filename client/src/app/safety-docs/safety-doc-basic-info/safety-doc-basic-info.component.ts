@@ -23,6 +23,7 @@ export class SafetyDocBasicInfoComponent implements OnInit {
   currentSafetyDoc: SafetyDocument;
   crews: Crew[];
   workPlans: WorkPlan[];
+  userRole: string;
 
   constructor(private fb: FormBuilder, private router: Router, private http: HttpClient,
               private route: ActivatedRoute, private safetyDocService: SafetyDocService,
@@ -30,6 +31,9 @@ export class SafetyDocBasicInfoComponent implements OnInit {
               private workPlanService: WorkPlanService) { }
 
   ngOnInit(): void {
+    var user = JSON.parse(localStorage.getItem('user'));
+    this.userRole = user.userRole;
+
     this.safetyDocId = parseInt(this.route.snapshot.params['id']);
 
     this.crewService.getCrews().subscribe(response =>{
@@ -56,15 +60,15 @@ export class SafetyDocBasicInfoComponent implements OnInit {
     var user = JSON.parse(localStorage.getItem('user'));
     this.basicInfoForm = this.fb.group({
       id: [{value: this.safetyDocId ? this.currentSafetyDoc.id : 0, disabled: true}],
-      type: [ this.safetyDocId ? this.currentSafetyDoc.type : '', Validators.required],
+      type: [ {value :this.safetyDocId ? this.currentSafetyDoc.type : '', disabled: (this.userRole != "Dispatcher") ? true : false}, Validators.required],
       status: [{value: this.safetyDocId ? this.currentSafetyDoc.status : 'Draft', disabled: true}],
       createdBy: [{value: this.safetyDocId ? this.currentSafetyDoc.createdBy : user.username, disabled: true}],
-      details: [{value: this.safetyDocId ? this.currentSafetyDoc.details : '', disabled: false}],
-      notes: [{value: this.safetyDocId ? this.currentSafetyDoc.notes : '', disabled: false}],
-      phoneNumber: [{value: this.safetyDocId ? this.currentSafetyDoc.phoneNumber : '', disabled: false}],
+      details: [{value: this.safetyDocId ? this.currentSafetyDoc.details : '', disabled: (this.userRole != "Dispatcher") ? true : false}],
+      notes: [{value: this.safetyDocId ? this.currentSafetyDoc.notes : '', disabled: (this.userRole != "Dispatcher") ? true : false}],
+      phoneNumber: [{value: this.safetyDocId ? this.currentSafetyDoc.phoneNumber : '', disabled: (this.userRole != "Dispatcher") ? true : false}],
       dateTimeCreated: [{value: this.safetyDocId ? this.currentSafetyDoc.dateTimeCreated : null, disabled: true}],
-      workPlanId: [this.safetyDocId ? this.currentSafetyDoc.workPlanId : 0],
-      crewId: [this.safetyDocId ? this.currentSafetyDoc.crewId: 0]
+      workPlanId: [{value: this.safetyDocId ? this.currentSafetyDoc.workPlanId : 0, disabled: (this.userRole != "Dispatcher") ? true : false}],
+      crewId: [{value: this.safetyDocId ? this.currentSafetyDoc.crewId: 0, disabled: (this.userRole != "Dispatcher") ? true : false}]
     })
   }
 

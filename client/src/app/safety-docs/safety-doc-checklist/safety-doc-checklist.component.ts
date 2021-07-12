@@ -17,11 +17,15 @@ export class SafetyDocChecklistComponent implements OnInit {
   currentChecklistId: number;
   currentChecklist: Checklist;
   checklistForUpdate: Checklist;
+  userRole: string;
 
   constructor(private fb: FormBuilder, private checklistService: ChecklistService,
               private safetyDocService: SafetyDocService, private route: ActivatedRoute, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
+    var user = JSON.parse(localStorage.getItem('user'));
+    this.userRole = user.userRole;
+
     this.safetyDocId = parseInt(this.route.snapshot.params['id']);
 
     if (this.safetyDocId != 0)
@@ -42,10 +46,10 @@ export class SafetyDocChecklistComponent implements OnInit {
 
   initializeForm() {
     this.checklistForm = this.fb.group({
-      workOperationsCompleted: [ this.safetyDocId ? this.currentChecklist.workOperationsCompleted : null],
-      tagsRemoved: [ this.safetyDocId ? this.currentChecklist.tagsRemoved : null],
-      groundingRemoved: [ this.safetyDocId ? this.currentChecklist.groundingRemoved : null],
-      readyForService: [ this.safetyDocId ? this.currentChecklist.readyForService : null],
+      workOperationsCompleted: [ {value: this.safetyDocId ? this.currentChecklist.workOperationsCompleted : null, disabled: (this.userRole != "Dispatcher") ? true : false}],
+      tagsRemoved: [ {value: this.safetyDocId ? this.currentChecklist.tagsRemoved : null, disabled: (this.userRole != "Dispatcher") ? true : false}],
+      groundingRemoved: [ {value: this.safetyDocId ? this.currentChecklist.groundingRemoved : null, disabled: (this.userRole != "Dispatcher") ? true : false}],
+      readyForService: [ {value: this.safetyDocId ? this.currentChecklist.readyForService : null, disabled: (this.userRole != "Dispatcher") ? true : false}],
     })
   }
 

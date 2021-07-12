@@ -25,6 +25,7 @@ export class SafetyDocHistoryComponent implements OnInit {
   currentSafetyDoc: SafetyDocument;
   newHistorySafetyDoc: HistorySafetyDoc;
   currentUserId: number;
+  userRole: string;
   
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -34,8 +35,10 @@ export class SafetyDocHistoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.safetyDocId = parseInt(this.route.snapshot.params['id']);
     var user = JSON.parse(localStorage.getItem('user'));
+    this.userRole = user.userRole;
+
+    this.safetyDocId = parseInt(this.route.snapshot.params['id']);
 
     this.accountService.getAccount(user.username).subscribe(response => {
       this.currentUserId = response.id;

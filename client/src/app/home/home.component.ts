@@ -38,7 +38,9 @@ export class HomeComponent implements OnInit {
 
   login() {
     this.accountService.login(this.model).subscribe(response => {
-      this.router.navigateByUrl('/dashboard');
+      this.router.navigateByUrl('/dashboard').finally(() => {
+        window.location.reload();
+      });
       this.toastrService.success('You logged in');
     })
   }

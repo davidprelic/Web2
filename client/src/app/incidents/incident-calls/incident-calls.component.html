@@ -1,6 +1,6 @@
 
 <div fxLayoutAlign="space-around center">
-  <button mat-button (click)="openDialog()">
+  <button mat-button *ngIf="userRole == 'Dispatcher'" (click)="openDialog()">
     <mat-icon>add_circle</mat-icon> Add
   </button>
 

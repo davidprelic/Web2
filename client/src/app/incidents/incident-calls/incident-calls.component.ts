@@ -20,6 +20,7 @@ export class IncidentCallsComponent implements OnInit {
   displayedColumns: string[] = ['id', 'reason', 'hazard', 'comment', 'map'];
   dataSource: MatTableDataSource<Call>;
   calls: Call[];
+  userRole: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -30,6 +31,9 @@ export class IncidentCallsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    var user = JSON.parse(localStorage.getItem('user'));
+    this.userRole = user.userRole;
+
     this.incidentId = this.route.snapshot.params['id'];
     this.callService.getCallsByIncidentId(this.incidentId).subscribe(response => {
       this.dataSource = new MatTableDataSource(response); 

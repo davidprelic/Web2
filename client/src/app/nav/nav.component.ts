@@ -9,10 +9,13 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit {
-
+  userRole: string;
+  
   constructor(public toastrService: ToastrService, public accountService: AccountService, private router: Router) { }
 
   ngOnInit(): void {
+    var user = JSON.parse(localStorage.getItem('user'));
+    this.userRole = user.userRole;
   }
 
   logout() {

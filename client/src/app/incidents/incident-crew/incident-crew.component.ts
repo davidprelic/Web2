@@ -18,11 +18,15 @@ export class IncidentCrewComponent implements OnInit {
   incidentId: number;
   crewInfoForm: FormGroup;
   currentCrew: Crew;
+  userRole: string;
 
   constructor(public dialog: MatDialog, private fb: FormBuilder, private route: ActivatedRoute,
     private incidentService: IncidentService, private crewService: CrewService, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
+    var user = JSON.parse(localStorage.getItem('user'));
+    this.userRole = user.userRole;
+
     this.incidentId = this.route.snapshot.params['id'];
 
     if (this.incidentId != 0) {

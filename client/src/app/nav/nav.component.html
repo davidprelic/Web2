@@ -1,4 +1,4 @@
-<mat-toolbar>
+<mat-toolbar *ngIf="userRole">
     <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
       <mat-icon>emoji_objects</mat-icon>
     </button>
@@ -24,12 +24,15 @@
       <button mat-icon-button class="example-icon" routerLinkActive='active' routerLink="/devices" aria-label="Example icon-button with heart icon">
         <mat-icon>search</mat-icon>
       </button>
-      <button mat-button [matMenuTriggerFor]="menu"><mat-icon>add_box</mat-icon></button>
-      <mat-menu #menu="matMenu">
-        <button routerLink="/devices" mat-menu-item>add devices</button>
-        <button routerLink="/crews" mat-menu-item>add crews</button>
-        <button routerLink="/consumers" mat-menu-item>add consumers</button>
-      </mat-menu>
+      <button mat-button *ngIf="userRole == 'Admin'" [matMenuTriggerFor]="menu"><mat-icon>add_box</mat-icon>
+        <mat-menu #menu="matMenu">
+          <button routerLink="/devices" mat-menu-item>add devices</button>
+          <button routerLink="/crews" mat-menu-item>add crews</button>
+          <button routerLink="/consumers" mat-menu-item>add consumers</button>
+        </mat-menu>
+      </button>
+      
+      
   
       <button (click)="logout()" mat-icon-button class="example-icon" routerLink="/" aria-label="Example icon-button with heart icon">
         <mat-icon>logout</mat-icon>

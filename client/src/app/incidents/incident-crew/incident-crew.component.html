@@ -1,8 +1,8 @@
 <div fxLayoutAlign="center center">
-    <button mat-button [disabled]="currentCrew != undefined" (click)="openDialog()">
+    <button mat-button *ngIf="userRole == 'Dispatcher'" [disabled]="currentCrew != undefined" (click)="openDialog()">
         <mat-icon>add_circle</mat-icon> Add Crew
     </button>
-    <button mat-button [disabled]="currentCrew == undefined" (click)="removeCrew()">
+    <button mat-button *ngIf="userRole == 'Dispatcher'" [disabled]="currentCrew == undefined" (click)="removeCrew()">
         <mat-icon>delete</mat-icon> Remove Crew
     </button>
 </div>

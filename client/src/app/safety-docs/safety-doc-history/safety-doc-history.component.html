@@ -1,6 +1,6 @@
 <div>
     <span fxFlex="40">Current state: {{this.currentState}} </span>
-    <span fxFlex="40">Document state options:&nbsp;&nbsp; 
+    <span *ngIf="userRole == 'Dispatcher'" fxFlex="40">Document state options:&nbsp;&nbsp; 
         <button fxFlex="20" [disabled]='this.currentState === "Approved"' mat-flat-button color="accent" (click)="Approve()" type="button">Approve</button>
         <button fxFlex="20" [disabled]='this.currentState === "Issued"' mat-flat-button color="primary" (click)="Issue()" type="button">Issue</button>
         <button fxFlex="20" [disabled]='this.currentState === "Denied"' mat-flat-button color="warn" (click)="Deny()" type="button">Deny</button>
