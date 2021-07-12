@@ -93,6 +93,17 @@ namespace backend.Controllers
             unitOfWork.WorkRequestRepository.DeleteWorkRequest(workRequest);
             var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username.ToLower());
 
+            var workPlans = await unitOfWork.WorkPlanRepository.GetWorkPlanAsync();
+
+            foreach (var item in workPlans)
+            {
+                if (item.WorkRequestId == workRequest.Id)
+                {
+                    item.WorkRequestId = null;
+                    unitOfWork.WorkPlanRepository.Update(item);
+                }
+            }
+
             if (await unitOfWork.SaveAsync())
             {
                 await unitOfWork.NotificationRepository.NewNotification(new Notification()

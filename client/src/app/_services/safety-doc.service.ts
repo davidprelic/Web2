@@ -28,11 +28,13 @@ export class SafetyDocService {
   }
 
   updateSafetyDoc(safetyDoc: SafetyDocument) {
-    return this.http.put(this.baseUrl + 'safetydocs', safetyDoc);
+    var user = JSON.parse(localStorage.getItem('user'));
+    return this.http.put(this.baseUrl + 'safetydocs/' + user.username, safetyDoc);
   }
 
   deleteSafetyDoc(id: number) {
-    return this.http.delete(this.baseUrl + 'safetydocs/' + id);
+    var user = JSON.parse(localStorage.getItem('user'));
+    return this.http.delete(this.baseUrl + 'safetydocs/' + id + "/" + user.username);
   }
   
 }

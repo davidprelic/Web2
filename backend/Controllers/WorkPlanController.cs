@@ -102,6 +102,17 @@ namespace backend.Controllers
 
             var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username.ToLower());
 
+            var safetyDocs = await uow.SafetyDocRepository.GetSafetyDocsAsync();
+
+            foreach (var item in safetyDocs)
+            {
+                if (item.WorkPlanId == workPlan.Id)
+                {
+                    item.WorkPlanId = null;
+                    uow.SafetyDocRepository.Update(item);
+                }
+            }
+
             uow.WorkPlanRepository.DeleteWorkPlan(workPlan);
             if (await uow.SaveAsync())
             {

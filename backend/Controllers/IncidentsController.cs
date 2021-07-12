@@ -131,9 +131,11 @@ namespace backend.Controllers
             return Ok(finalIncDto);
         }
 
-        [HttpPut]
-        public async Task<ActionResult> UpdateIncident(IncidentDto incidentUpdateDto)
+        [HttpPut("{username}")]
+        public async Task<ActionResult> UpdateIncident(IncidentDto incidentUpdateDto, string username)
         {
+            User user = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username);
+
             var incident = await _unitOfWork.IncidentRepository.GetIncidentByIdAsync(incidentUpdateDto.Id);
 
             incidentUpdateDto.ResolutionId = incident.ResolutionId;
@@ -163,14 +165,27 @@ namespace backend.Controllers
 
             _unitOfWork.IncidentRepository.Update(incident);
 
-            if (await _unitOfWork.IncidentRepository.SaveAllAsync()) return NoContent();
+            if (await _unitOfWork.IncidentRepository.SaveAllAsync())
+            {
+                await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                {
+                    Id = 0,
+                    Type = "Success",
+                    Content = "You have updated incident " + incident.Id,
+                    DateTimeCreated = DateTime.Now,
+                }, user.Id);
+
+                return NoContent();
+            }
 
             return BadRequest("Failed to update incident");
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteIncident(int id)
+        [HttpDelete("{id}/{username}")]
+        public async Task<ActionResult> DeleteIncident(int id, string username)
         {
+            User user = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username);
+
             var incident = await _unitOfWork.IncidentRepository.GetIncidentByIdAsync(id);
 
             var resolution = await _unitOfWork.ResolutionRepository.GetResolutionByIdAsync(incident.ResolutionId);
@@ -187,7 +202,47 @@ namespace backend.Controllers
                 _unitOfWork.DeviceRepository.Update(device);
             }
 
-            if (await _unitOfWork.SaveAsync()) return Ok();
+            var calls = await _unitOfWork.CallRepository.GetCallsByIncidentIdAsync(id);
+
+            foreach (var call in calls)
+            {
+                call.IncidentId = null;
+                _unitOfWork.CallRepository.Update(call);
+            }
+
+            var workRequests = await _unitOfWork.WorkRequestRepository.GetWorkRequestsAsync();
+
+            foreach (var workRequest in workRequests)
+            {
+                if (workRequest.IncidentId == incident.Id)
+                {
+                    workRequest.IncidentId = null;
+                    _unitOfWork.WorkRequestRepository.Update(workRequest);
+                }
+            }
+
+            var workPlans = await _unitOfWork.WorkPlanRepository.GetWorkPlanAsync();
+
+            foreach (var item in workPlans)
+            {
+                if(item.IncidentId == incident.Id)
+                {
+                    item.IncidentId = null;
+                    _unitOfWork.WorkPlanRepository.Update(item);
+                }
+            }
+
+            if (await _unitOfWork.SaveAsync())
+            {
+                await _unitOfWork.NotificationRepository.NewNotification(new Notification()
+                {
+                    Id = 0,
+                    Type = "Warning",
+                    Content = "You have deleted incident " + incident.Id,
+                    DateTimeCreated = DateTime.Now,
+                }, user.Id);
+                return Ok();
+            }
 
             return BadRequest("Problem with deleting incident");
         }
