@@ -17,6 +17,7 @@ export class SafetyDocsListComponent implements OnInit {
   dataSource: MatTableDataSource<SafetyDocument>;
   safetyDocs: SafetyDocument[];
   selectedSafetyDocFilter: string = "all";
+  userRole: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -25,6 +26,9 @@ export class SafetyDocsListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    var user = JSON.parse(localStorage.getItem('user'));
+    this.userRole = user.userRole;
+
     this.safetyDocService.getSafetyDocs().subscribe(response => {
       this.dataSource = new MatTableDataSource(response); 
       this.dataSource.paginator = this.paginator;

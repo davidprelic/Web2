@@ -15,6 +15,7 @@ import { WorkRequestService } from 'src/app/_services/work-request.service';
 export class WorkRequestListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'emergencyWork', 'status', 'address', 'incidentId', 'dateTimeCreated'];
   dataSource: MatTableDataSource<WorkRequest>;
+  userRole: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -26,6 +27,9 @@ export class WorkRequestListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    var user = JSON.parse(localStorage.getItem('user'));
+    this.userRole = user.userRole;
+
     this.workRequestService.getWorkRequests().subscribe(response => {
       this.dataSource = new MatTableDataSource(response);
       this.dataSource.paginator = this.paginator;

@@ -21,12 +21,16 @@ export class IncidentBasicInfoComponent implements OnInit {
   locationWords: string[];
   requestLatLonString: string;
   takenToResolveToggle: boolean;
+  userRole: string;
 
   constructor(private fb: FormBuilder, private router: Router, private http: HttpClient, 
               private route: ActivatedRoute, private incidentService: IncidentService,
               private accountService: AccountService, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
+    var user = JSON.parse(localStorage.getItem('user'));
+    this.userRole = user.userRole;
+
     this.takenToResolveToggle = false;
     this.incidentId = parseInt(this.route.snapshot.params['id']);
 
@@ -52,18 +56,18 @@ export class IncidentBasicInfoComponent implements OnInit {
     this.basicInfoForm = this.fb.group({
       id: [{value: this.incidentId ? this.currentIncident.id : 0, disabled: true}],
       affectedCustomers: [{value: this.incidentId ? this.currentIncident.affectedCustomers : null, disabled: true}],
-      type: [ this.incidentId ? this.currentIncident.type : '', Validators.required],
-      outageTime: [{value: this.incidentId ? this.currentIncident.outageTime : '', disabled: false}, Validators.required],
+      type: [ {value: this.incidentId ? this.currentIncident.type : '', disabled: (this.userRole != "Dispatcher") ? true : false}, Validators.required],
+      outageTime: [{value: this.incidentId ? this.currentIncident.outageTime : '', disabled: (this.userRole != "Dispatcher") ? true : false}, Validators.required],
       priority: [{value: this.incidentId ? this.currentIncident.priority : null, disabled: true}],
-      estimatedTimetoRestore: [ this.incidentId ? this.currentIncident.estimatedTimetoRestore : null],
-      isConfirmed: [ this.incidentId ? this.currentIncident.isConfirmed : false],
+      estimatedTimetoRestore: [ {value: this.incidentId ? this.currentIncident.estimatedTimetoRestore : null, disabled: (this.userRole != "Dispatcher") ? true : false}],
+      isConfirmed: [ {value: this.incidentId ? this.currentIncident.isConfirmed : false, disabled: (this.userRole != "Dispatcher") ? true : false}],
       numberOfCalls: [{value: this.incidentId ? this.currentIncident.numberOfCalls : null, disabled: true}],
-      status: [{value: this.incidentId ? this.currentIncident.status : 'Draft', disabled: false}],
-      location: [{value: this.incidentId ? this.currentIncident.location : '', disabled: false}, Validators.required],
-      voltage: [ this.incidentId ? this.currentIncident.voltage : null],
-      estimatedTimeOfTheCrewArrival: [ this.incidentId ? this.currentIncident.estimatedTimeOfTheCrewArrival : null],
-      actualTimeOfTheCrewArrival: [ this.incidentId ? this.currentIncident.actualTimeOfTheCrewArrival : null],
-      scheduledTime: [ this.incidentId ? this.currentIncident.scheduledTime : null],
+      status: [{value: this.incidentId ? this.currentIncident.status : 'Draft', disabled: (this.userRole != "Dispatcher") ? true : false}],
+      location: [{value: this.incidentId ? this.currentIncident.location : '', disabled: (this.userRole != "Dispatcher") ? true : false}, Validators.required],
+      voltage: [ {value :this.incidentId ? this.currentIncident.voltage : null, disabled: (this.userRole != "Dispatcher") ? true : false}],
+      estimatedTimeOfTheCrewArrival: [ {value: this.incidentId ? this.currentIncident.estimatedTimeOfTheCrewArrival : null, disabled: (this.userRole != "Dispatcher") ? true : false}],
+      actualTimeOfTheCrewArrival: [{value: this.incidentId ? this.currentIncident.actualTimeOfTheCrewArrival : null, disabled: (this.userRole != "Dispatcher") ? true : false}],
+      scheduledTime: [{value: this.incidentId ? this.currentIncident.scheduledTime : null, disabled: (this.userRole != "Dispatcher") ? true : false}],
       latitude: [this.incidentId ? this.currentIncident.latitude : null],
       longitude: [this.incidentId ? this.currentIncident.longitude : null],
       userId: [ this.incidentId ? this.currentIncident.userId : null],

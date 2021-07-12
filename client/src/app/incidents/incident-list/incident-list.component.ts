@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Incident } from 'src/app/_models/incident';
+import { User } from 'src/app/_models/user';
 import { IncidentService } from 'src/app/_services/incident.service';
 
 
@@ -19,6 +20,7 @@ export class IncidentListComponent implements OnInit {
   dataSource: MatTableDataSource<Incident>;
   incidents: Incident[];
   selectedIncidentFilter: string = "all";
+  userRole: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -28,6 +30,9 @@ export class IncidentListComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    var user = JSON.parse(localStorage.getItem('user'));
+    this.userRole = user.userRole;
+
     this.incidentService.getIncidents().subscribe(response => {
       this.dataSource = new MatTableDataSource(response); 
       this.dataSource.paginator = this.paginator;

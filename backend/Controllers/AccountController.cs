@@ -138,6 +138,7 @@ namespace backend.Controllers
             return new UserDto
             {
                 Username = user.UserName,
+                UserRole = user.UserRole,
                 Token = await _tokenService.CreateToken(user)
             };
         }
@@ -173,6 +174,7 @@ namespace backend.Controllers
             return new UserDto
             {
                 Username = user.UserName,
+                UserRole = user.UserRole,
                 Token = await _tokenService.CreateToken(user)
             };          
         }
