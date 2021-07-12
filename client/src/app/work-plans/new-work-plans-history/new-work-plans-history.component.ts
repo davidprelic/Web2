@@ -28,6 +28,7 @@ export class NewWorkPlansHistoryComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  userRole: any;
 
   constructor(private accountService: AccountService, private historyWorkPlanService: HistoryWorkPlanService, private route: ActivatedRoute, private workPlanService: WorkPlanService) {
     // Assign the data to the data source for the table to render
@@ -37,6 +38,9 @@ export class NewWorkPlansHistoryComponent implements OnInit {
 
   ngOnInit(): void 
   {
+    var user = JSON.parse(localStorage.getItem('user'));
+    this.userRole = user.userRole;
+
     var user = JSON.parse(localStorage.getItem('user'));
     this.accountService.getAccount(user.username).subscribe(response => {
       this.currentUserId = response.id;

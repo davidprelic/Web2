@@ -29,12 +29,16 @@ export class NewWorkPlansBasicInfoComponent implements OnInit {
   workRequests: WorkRequest[];
   crews: Crew[];
   emptyForm: boolean;
+  userRole: string;
 
 
   constructor(private workRequestService: WorkRequestService, private toastrService: ToastrService, private fb: FormBuilder, private incidentService: IncidentService, private crewService: CrewService, private router: Router, private http: HttpClient,
     private route: ActivatedRoute, private workPlanService: WorkPlanService, private accountService: AccountService) { }
 
   ngOnInit(): void {
+    var user = JSON.parse(localStorage.getItem('user'));
+    this.userRole = user.userRole;
+
     this.workPlanId = parseInt(this.route.snapshot.params['id']);
     this.crewService.getCrews().subscribe(response =>{
       this.crews = response;
@@ -68,22 +72,22 @@ export class NewWorkPlansBasicInfoComponent implements OnInit {
     var user = JSON.parse(localStorage.getItem('user'));
     this.basicInfoForm = this.fb.group({
       id: [{value: this.workPlanId ? this.currentWorkPlan.id : 0, disabled: true}],
-      incidentId: [this.workPlanId ? this.currentWorkPlan.incidentId : 0],  
+      incidentId: [{value: this.workPlanId ? this.currentWorkPlan.incidentId : 0, disabled: (this.userRole != "Dispatcher") ? true : false}],  
       address: [{value: this.workPlanId ? this.currentWorkPlan.address : '', disabled: true}],    
       latitude: [{value: this.workPlanId ? this.currentWorkPlan.latitude : 0, disabled: true}],
       longitude: [{value: this.workPlanId ? this.currentWorkPlan.longitude : 0, disabled: true}],
-      type: [{value: this.workPlanId ? this.currentWorkPlan.type : '', disabled: false}, Validators.required],
-      workRequestId: [this.workPlanId ? this.currentWorkPlan.workRequestId : 0],
-      startDateTime: [this.workPlanId ? this.currentWorkPlan.startDateTime : '', Validators.required],
-      endDateTime: [this.workPlanId ? this.currentWorkPlan.endDateTime : '', Validators.required],
+      type: [{value: this.workPlanId ? this.currentWorkPlan.type : '', disabled: (this.userRole != "Dispatcher") ? true : false}, Validators.required],
+      workRequestId: [{value: this.workPlanId ? this.currentWorkPlan.workRequestId : 0, disabled: (this.userRole != "Dispatcher") ? true : false}, Validators.required],
+      startDateTime: [{value: this.workPlanId ? this.currentWorkPlan.startDateTime : '',disabled: (this.userRole != "Dispatcher") ? true : false}, Validators.required],
+      endDateTime: [{value: this.workPlanId ? this.currentWorkPlan.endDateTime : '',disabled: (this.userRole != "Dispatcher") ? true : false}, Validators.required],
       createdBy: [{value: this.workPlanId ? this.currentWorkPlan.createdBy : user.username, disabled: true}],
-      purpose: [this.workPlanId ? this.currentWorkPlan.purpose : '', Validators.required],
-      notes: [this.workPlanId ? this.currentWorkPlan.notes : ''],
-      company: [this.workPlanId ? this.currentWorkPlan.company: ''],      
-      phoneNumber: [this.workPlanId ? this.currentWorkPlan.phoneNumber: ''],
-      status: [{value: this.workPlanId ? this.currentWorkPlan.status : 'Draft', disabled: false}],    
+      purpose: [{value: this.workPlanId ? this.currentWorkPlan.purpose : '',disabled: (this.userRole != "Dispatcher") ? true : false}, Validators.required],
+      notes: [{value: this.workPlanId ? this.currentWorkPlan.notes : '', disabled: (this.userRole != "Dispatcher") ? true : false}],
+      company: [{value: this.workPlanId ? this.currentWorkPlan.company: '', disabled: (this.userRole != "Dispatcher") ? true : false}],      
+      phoneNumber: [{value: this.workPlanId ? this.currentWorkPlan.phoneNumber: '', disabled: (this.userRole != "Dispatcher") ? true : false}],
+      status: [{value: this.workPlanId ? this.currentWorkPlan.status : 'Draft', disabled: true}],    
       dateTimeCreated: [{value: this.workPlanId ? this.currentWorkPlan.dateTimeCreated : new Date(), disabled: true}],
-      crewId: [this.workPlanId ? this.currentWorkPlan.crewId: 0]
+      crewId: [{value: this.workPlanId ? this.currentWorkPlan.crewId: 0, disabled: (this.userRole != "Dispatcher") ? true : false}]
     });
     console.log(this.basicInfoForm);
   }
