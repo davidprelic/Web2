@@ -20,15 +20,13 @@ namespace backend.Controllers
 
         private readonly UserManager<User> _userManager;
         private readonly IUnitOfWork _unitOfWork;
-        //private readonly IIncidentRepository incidentRepository;
 
-        public CrewController(IUnitOfWork unitOfWork, ICrewRepository crewRepository, IMapper mapper, UserManager<User> userManager/*, IIncidentRepository incidentRepository*/)
+        public CrewController(IUnitOfWork unitOfWork, ICrewRepository crewRepository, IMapper mapper, UserManager<User> userManager)
         {
             this.crewRepository = crewRepository;
             this.mapper = mapper;
             _userManager = userManager;
             _unitOfWork = unitOfWork;
-            //this.incidentRepository = incidentRepository;
         }
 
         [HttpPost("{username}")]
@@ -56,13 +54,13 @@ namespace backend.Controllers
         [HttpDelete("{id}/{username}")]
         public async Task<ActionResult> DeleteCrew(int id, string username)
         {
-            var crew = await crewRepository.GetCrewByIdAsync(id);
+            var crew = await _unitOfWork.CrewRepository.GetCrewByIdAsync(id);
             var temp = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username);
-            //var incidents = await incidentRepository.GetIncidentsAsync();
-            //var workPlans = await _unitOfWork.WorkPlanRepository.GetWorkPlanAsync();
-            //var safetyDocs = await _unitOfWork.SafetyDocRepository.GetSafetyDocsAsync();
+            var incidents = await _unitOfWork.IncidentRepository.GetIncidentsAsync();
+            var workPlans = await _unitOfWork.WorkPlanRepository.GetWorkPlanAsync();
+            var safetyDocs = await _unitOfWork.SafetyDocRepository.GetSafetyDocsAsync();
 
-           /* ICollection<Incident> incidents1 = new List<Incident>();
+            ICollection<Incident> incidents1 = new List<Incident>();
             foreach (var item in incidents)
             {
                 if (item.CrewId == id)
@@ -70,14 +68,14 @@ namespace backend.Controllers
                     item.CrewId = null;
                     incidents1.Add(item);
                 }
-            }*/
+            }
 
-            /*foreach (var item in incidents1)
+            foreach (var item in incidents1)
             {
-                incidentRepository.Update(item);
-            }*/
+                _unitOfWork.IncidentRepository.Update(item);
+            }
 
-            /*foreach (var item in workPlans)
+            foreach (var item in workPlans)
             {
                 if(item.CrewId == id)
                 {
@@ -93,7 +91,7 @@ namespace backend.Controllers
                     item.CrewId = null;
                     _unitOfWork.SafetyDocRepository.Update(item);
                 }
-            }*/
+            }
 
 
             ICollection<User> users = new List<User>();
@@ -112,10 +110,9 @@ namespace backend.Controllers
                 await _userManager.UpdateAsync(item);
             }
 
-            crewRepository.DeleteCrew(crew);
-            /*if (await incidentRepository.SaveAllAsync())
-            {*/
-            if (await crewRepository.SaveAllAsync() /*&& await _unitOfWork.WorkPlanRepository.SaveAllAsync() && await _unitOfWork.SafetyDocRepository.SaveAllAsync()*/)
+            _unitOfWork.CrewRepository.DeleteCrew(crew);
+            
+            if (await _unitOfWork.SaveAsync())
             {
                 await _unitOfWork.NotificationRepository.NewNotification(new Notification()
                 {
@@ -126,7 +123,6 @@ namespace backend.Controllers
 
                 return Ok();
             }
-            //}
 
             return BadRequest("Problem with deleting crew");
         }
